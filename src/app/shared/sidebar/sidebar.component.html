@@ -1,0 +1,22 @@
+<mat-sidenav-container class="mat-sidenav-container">
+  <mat-sidenav
+    #sidenav
+    [mode]="(isHandset | async) ? 'over' : 'side'"
+    [(opened)]="open"
+    (close)="open = false"
+  >
+    <mat-nav-list>
+      <a
+        mat-list-item
+        *ngFor="let link of urlMap | keyvalue"
+        [routerLink]="link.key"
+        routerLinkActive="active-sidebar"
+      >
+        <span matLine>{{ link.value }}</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content cdkscrollable>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

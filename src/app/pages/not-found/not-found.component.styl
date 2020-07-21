@@ -1,0 +1,83 @@
+@import "../../../assets/styles/vars"
+
+#notfound
+  display flex
+  width 100%
+  .notfound
+    position absolute
+    left 60%
+    top 54%
+    max-width 520px
+    width 100%
+    line-height 1.4
+    -webkit-transform translate(-50%, -50%)
+    -ms-transform translate(-50%, -50%)
+    transform translate(-50%, -50%)
+    a
+      font-family 'Poppins', sans-serif
+      display inline-block
+      font-weight 700
+      border-radius 15px
+      text-decoration none
+      color #57a3f8
+    h2
+      font-family 'Poppins', sans-serif
+      font-size 28px
+      font-weight 400
+      text-transform uppercase
+      color #222
+      margin-top 12px
+      margin-bottom 15px
+    .notfound-404
+      position absolute
+      left 0
+      top 0
+      height 150px
+      width 100%
+      z-index -1
+      h1
+        font-family 'Poppins', sans-serif
+        width 100%
+        font-size 238px
+        font-weight 700
+        margin 0px
+        color #e3e3e3
+        text-transform uppercase
+        letter-spacing 7px
+        position absolute
+        left 35%
+        top 50%
+        -webkit-transform translate(-50% , -60%)
+        -ms-transform translate(-50% , -60%)
+        transform translate(-50% , -60%)
+@media (max-width: md)
+  #notfound
+    .notfound
+      left 60%
+      top 62%
+      width 90%
+      h2
+        font-size 1.6em
+      .notfound-404
+        width 100%
+        height 100px
+        h1
+          font-size 14em
+          left 45%
+          -webkit-transform translate(-55%, -55%)
+          -ms-transform translate(-55%, -55%)
+          transform translate(-55%, -55%)
+@media (max-width: sm)
+  #notfound
+    .notfound
+      width 80%
+      h2
+        width 90%
+        font-size 1.3em
+      .notfound-404
+        h1
+          left 40%
+          font-size 8em
+          -webkit-transform translate(-50%, -50%)
+          -ms-transform translate(-50%, -50%)
+          transform translate(-50%, -50%)

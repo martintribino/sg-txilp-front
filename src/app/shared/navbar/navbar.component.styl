@@ -1,0 +1,92 @@
+@import "../../../assets/styles/vars"
+
+mat-toolbar
+  background-color transparent
+  color white
+.profile-navbar, .router-navbar
+  display flex
+  justify-content flex-end;
+.mat-icon-button
+  border 1px solid transparent
+.mat-toolbar-multiple-rows
+  min-height auto
+.mat-menu-trigger
+  box-shadow none
+.hamburguer-menu
+  .mat-button-wrapper
+    span
+      display flex
+      width 100%
+      justify-content space-between
+      align-items center
+
+.avatar-button
+  width auto
+  max-width unset
+  min-width unset
+  border-radius 50%
+  padding 0
+
+nav
+  align-items center
+  .mat-button
+    display flex 
+    margin 5px 10px
+    background-color transparent
+    color white
+    font-size 0.8em
+    font-weight normal
+    border 1px solid transparent
+    white-space nowrap
+    overflow hidden
+    text-overflow ellipsis
+    box-shadow 0 0
+    max-width 175px
+    @media screen and (max-width: md) and (min-width: sm)
+      max-width 140px
+      font-size 0.75em
+      margin 2px 4px
+    .mat-button-wrapper
+      white-space nowrap
+      overflow hidden
+      text-overflow ellipsis
+    &:hover
+      background-color rgba(#ffffff, 0.1)
+      border 1px solid rgba(#ffffff, 0.2)
+    &.active-navbar
+      background-color rgba(#3849c1, 0.1)
+      font-weight bold
+      font-size 0.8em
+      border 1px solid rgba(#ffffff, 0.3)
+
+@media screen and (max-width: lm)
+  .masc-toolbar
+    .mat-toolbar-row
+      height auto
+
+@media screen and (max-width: md)
+  nav
+    .mat-button
+      max-width 140px
+  .router-navbar
+    button
+      font-size 0.8em
+      padding 0 8px
+      margin: 4px 8px;
+      justify-content: center;
+      .mat-button-wrapper
+        display flex
+        align-items center
+
+@media screen and (max-width: sm )
+  mat-toolbar-row 
+    display flex
+    flex-direction row
+    width 100%
+    height auto
+    nav
+      .mat-button
+        font-size 0.7em
+        padding 0 4px
+        margin 0 4px        
+        justify-content center

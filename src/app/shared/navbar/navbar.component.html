@@ -1,0 +1,25 @@
+<mat-toolbar color="transparent" class="masc-toolbar">
+  <mat-toolbar-row>
+    <button
+      mat-icon-button
+      (click)="toggleSidebar()"
+      aria-label="vertical three dot icon"
+    >
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <h2 class="title-navbar">Festivales</h2>
+    <nav class="router-navbar">
+      <div class="desktop">
+        <button
+          mat-button
+          *ngFor="let link of urlMap | keyvalue"
+          [routerLink]="link.key"
+          routerLinkActive="active-navbar"
+          class="link"
+        >
+          {{ link.value }}
+        </button>
+      </div>
+    </nav>
+  </mat-toolbar-row>
+</mat-toolbar>

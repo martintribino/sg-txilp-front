@@ -1,0 +1,128 @@
+<h4>Datos del usuario</h4>
+<mat-dialog-content>
+  <form [formGroup]="usuariosForm" class="dialog">
+    <mat-form-field>
+      <mat-label>Nombre de Usuario</mat-label>
+      <input
+        matInput
+        type="text"
+        formControlName="nombreUsuario"
+        autocomplete="off"
+        maxlength="50"
+        minlength="4"
+        required
+      />
+      <mat-hint>Nombre</mat-hint>
+      <mat-error *ngIf="crearUsuarioForm.nombreUsuario?.errors?.minlength"
+        >El campo debe tener al menos 4 caracteres
+      </mat-error>
+      <mat-error *ngIf="crearUsuarioForm.nombreUsuario?.errors?.maxlength"
+        >El campo debe tener como máximo 50 caracteres
+      </mat-error>
+      <mat-error *ngIf="crearUsuarioForm.nombreUsuario?.errors?.required"
+        >Campo requerido</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Nombre</mat-label>
+      <input
+        matInput
+        type="text"
+        formControlName="nombre"
+        autocomplete="off"
+        maxlength="100"
+        minlength="2"
+        required
+      />
+      <mat-hint>Nombre</mat-hint>
+      <mat-error *ngIf="crearUsuarioForm.nombre?.errors?.minlength"
+        >El campo debe tener al menos 2 caracteres
+      </mat-error>
+      <mat-error *ngIf="crearUsuarioForm.nombre?.errors?.maxlength"
+        >El campo debe tener como máximo 100 caracteres
+      </mat-error>
+      <mat-error *ngIf="crearUsuarioForm.nombre?.errors?.required"
+        >Campo requerido</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Apellido</mat-label>
+      <input
+        matInput
+        type="text"
+        formControlName="apellido"
+        autocomplete="off"
+        required
+      />
+      <mat-hint>Apellido</mat-hint>
+      <mat-error *ngIf="crearUsuarioForm.apellido?.required"
+        >Campo requerido</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Dni</mat-label>
+      <input
+        matInput
+        type="number"
+        formControlName="dni"
+        autocomplete="off"
+        required
+      />
+      <mat-hint>Dni</mat-hint>
+      <mat-error *ngIf="crearUsuarioForm.dni?.errors?.required"
+        >Campo requerido</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input
+        matInput
+        type="email"
+        formControlName="email"
+        autocomplete="off"
+        email
+        required
+      />
+      <mat-hint>Email</mat-hint>
+      <mat-error *ngIf="crearUsuarioForm.email?.errors?.email"
+        >Campo no válido</mat-error
+      >
+      <mat-error *ngIf="crearUsuarioForm.email?.errors?.required"
+        >Campo requerido</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Teléfono</mat-label>
+      <input
+        matInput
+        type="number"
+        formControlName="telefono"
+        autocomplete="off"
+      />
+      <mat-hint>Teléfono</mat-hint>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Rol</mat-label>
+      <mat-select formControlName="rol" required>
+        <mat-option *ngFor="let rol of roles" [value]="rol">
+          {{ rol.nombre }}
+        </mat-option>
+      </mat-select>
+      <mat-hint>Rol</mat-hint>
+      <mat-error *ngIf="crearUsuarioForm.rol?.errors?.required"
+        >Campo requerido</mat-error
+      >
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button
+    type="submit"
+    class="submit-button"
+    [mat-dialog-close]="usuario"
+    (click)="onSubmit()"
+    [disabled]="usuariosForm.invalid"
+  >
+    Enviar
+  </button>
+</mat-dialog-actions>
