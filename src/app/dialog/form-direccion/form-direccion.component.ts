@@ -1,6 +1,6 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { IDireccion } from 'src/app/interface/interface.model';
+import { IDireccion, ICoordinadas } from 'src/app/interface/interface.model';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
@@ -13,15 +13,11 @@ export class FormDireccionComponent {
     calle: new FormControl(''),
     ciudad: new FormControl(''),
     estado: new FormControl(''),
-    cp: new FormControl(''),
-    latitud: new FormControl(''),
-    longitud: new FormControl(''),
+    codigoPostal: new FormControl(null),
+    latitud: new FormControl(null),
+    longitud: new FormControl(null),
   });
   direccion: IDireccion;
-  // Configuración de Google Maps
-  //center = { lat: 24, lng: 12 };
-  //zoom = 15;
-  //display?: google.maps.LatLngLiteral;
 
   constructor(
     public dialogRef: MatDialogRef<FormDireccionComponent>,
@@ -31,23 +27,39 @@ export class FormDireccionComponent {
       calle: new FormControl(''),
       ciudad: new FormControl(''),
       estado: new FormControl(''),
-      cp: new FormControl(''),
-      latitud: new FormControl(''),
-      longitud: new FormControl(''),
+      codigoPostal: new FormControl(null),
+      latitud: new FormControl(0),
+      longitud: new FormControl(0),
     });
     this.direccion = data;
     if (this.direccion != null) {
       this.crearDireccionForm.calle.setValue(this.direccion.calle);
       this.crearDireccionForm.ciudad.setValue(this.direccion.ciudad);
       this.crearDireccionForm.estado.setValue(this.direccion.estado);
-      this.crearDireccionForm.cp.setValue(this.direccion.cp);
+      this.crearDireccionForm.codigoPostal.setValue(
+        this.direccion.codigoPostal
+      );
       this.crearDireccionForm.latitud.setValue(this.direccion.latitud);
       this.crearDireccionForm.longitud.setValue(this.direccion.longitud);
+    } else {
+      this.direccion = {
+        calle: '',
+        ciudad: '',
+        estado: '',
+        codigoPostal: 0,
+        latitud: 0,
+        longitud: 0,
+      };
     }
   }
 
   onSubmit() {
     this.dialogRef.close(this.direccionForm.value);
+  }
+
+  onClickMap(coordinadas: ICoordinadas) {
+    this.crearDireccionForm.latitud.setValue(coordinadas.latitud);
+    this.crearDireccionForm.longitud.setValue(coordinadas.longitud);
   }
 
   clean() {

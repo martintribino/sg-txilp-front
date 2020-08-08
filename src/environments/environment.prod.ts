@@ -1,13 +1,17 @@
 export const environment = {
   production: true,
   port: 4200,
-  baseLocalUrl: 'http://localhost:4200/',
-  baseApiUrl: 'http://localhost:8080/festivales/api',
+  baseLocalUrl: 'http://java.linti.unlp.edu.ar/',
+  baseApiUrl: 'http://java.linti.unlp.edu.ar/jyaa20_g12_en5et2/rest',
   endpoints: {
     //publicos - sin /api
-    //por ahora todos
-    usuarios: 'http://localhost:8080/festivales/api/usuarios/',
+    login: 'http://java.linti.unlp.edu.ar/jyaa20_g12_en5et2/rest/login/',
     //privados - con /api/
-    //por ahora ninguno
+    artistas:
+      'http://java.linti.unlp.edu.ar/jyaa20_g12_en5et2/rest/api/artistas/',
+    usuarios:
+      'http://java.linti.unlp.edu.ar/jyaa20_g12_en5et2/rest/api/usuarios/',
+    checkToken:
+      'http://java.linti.unlp.edu.ar/jyaa20_g12_en5et2/rest/api/check-token/',
   },
 };

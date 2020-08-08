@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { NavbarModule } from './navbar/navbar.module';
 import { SidebarModule } from './sidebar/sidebar.module';
-import { NavbarComponent } from './navbar/navbar.component';
+import { MapModule } from './map/map.module';
 
 @NgModule({
-  imports: [NavbarModule, SidebarModule],
-  exports: [NavbarModule, SidebarModule],
+  imports: [NavbarModule, SidebarModule, MapModule],
+  exports: [NavbarModule, SidebarModule, MapModule],
   declarations: [],
 })
 export class SharedModule {}

@@ -8,11 +8,21 @@
     <mat-nav-list>
       <a
         mat-list-item
+        *ngFor="let linkf of urlFixedMap | keyvalue: originalOrder"
+        [routerLink]="linkf.key"
+        routerLinkActive="active-sidebar"
+      >
+        <span matLine>{{ linkf.value }}</span>
+        <mat-divider></mat-divider>
+      </a>
+      <a
+        mat-list-item
         *ngFor="let link of urlMap | keyvalue"
         [routerLink]="link.key"
         routerLinkActive="active-sidebar"
       >
         <span matLine>{{ link.value }}</span>
+        <mat-divider></mat-divider>
       </a>
     </mat-nav-list>
   </mat-sidenav>

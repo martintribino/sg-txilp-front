@@ -12,7 +12,7 @@
       <div class="desktop">
         <button
           mat-button
-          *ngFor="let link of urlMap | keyvalue"
+          *ngFor="let link of urlMap | keyvalue: originalOrder"
           [routerLink]="link.key"
           routerLinkActive="active-navbar"
           class="link"

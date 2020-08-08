@@ -1,0 +1,68 @@
+<div class="login-comp">
+  <h3>Ingrese sus datos</h3>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+    <mat-form-field appearance="standard">
+      <mat-label>Nombre de usuario</mat-label>
+      <input
+        matInput
+        type="text"
+        formControlName="nombreUsuario"
+        autocomplete="off"
+        placeholder="Nombre de usuario"
+        maxlength="50"
+        minlength="2"
+        required
+        autofocus
+      />
+      <mat-hint>Nombre de usuario</mat-hint>
+      <mat-error *ngIf="loginF.nombreUsuario?.errors?.minlength"
+        >El campo debe tener al menos 2 caracteres
+      </mat-error>
+      <mat-error *ngIf="loginF.nombreUsuario?.errors?.maxlength"
+        >El campo debe tener como máximo 50 caracteres
+      </mat-error>
+      <mat-error *ngIf="loginF.nombreUsuario?.errors?.required"
+        >Campo requerido</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field appearance="standard">
+      <mat-label>Clave</mat-label>
+      <input
+        matInput
+        [type]="hide ? 'password' : 'text'"
+        formControlName="clave"
+        placeholder=""
+        maxlength="50"
+        minlength="4"
+        required
+      />
+      <button
+        mat-icon-button
+        matSuffix
+        class="visibility-button"
+        (click)="visibilityClick($event)"
+        [attr.aria-label]="'Hide password'"
+        [attr.aria-pressed]="hide"
+      >
+        <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+      </button>
+      <mat-hint>Clave</mat-hint>
+      <mat-error *ngIf="loginF.clave?.errors?.minlength"
+        >El campo debe tener al menos 4 caracteres</mat-error
+      >
+      <mat-error *ngIf="loginF.clave?.errors?.maxlength"
+        >El campo debe tener como máximo 50
+      </mat-error>
+      <mat-error *ngIf="loginF.clave?.errors?.required"
+        >Campo requerido</mat-error
+      >
+    </mat-form-field>
+    <button
+      type="submit"
+      class="submit-button"
+      [disabled]="loginForm.invalid || isSubmiting"
+    >
+      Submit
+    </button>
+  </form>
+</div>

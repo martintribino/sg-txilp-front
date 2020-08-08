@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { IUsuario } from '../interface/interface.model';
+import { environment } from 'src/environments/environment';
+//import { environment } from 'src/environments/environment.prod';
 
 @Injectable({
   providedIn: 'root',
@@ -23,6 +24,14 @@ export class UsuariosService {
     return this.http.get<Array<IUsuario>>(url, options);
   }
 
+  getUsuario(username: string): Observable<IUsuario> {
+    let url = `${this.endpoints.usuarios}${username}`,
+      options = {
+        headers: this.headers,
+      };
+    return this.http.get<IUsuario>(url, options);
+  }
+
   crearUsuario(usuario: IUsuario): Observable<Array<IUsuario>> {
     let url = this.endpoints.usuarios,
       options = {
@@ -37,5 +46,13 @@ export class UsuariosService {
         headers: this.headers,
       };
     return this.http.put<Array<IUsuario>>(url, usuario, options);
+  }
+
+  eliminarUsuario(usuario: IUsuario): Observable<Array<IUsuario>> {
+    let url = `${this.endpoints.usuarios}${usuario.nombreUsuario}`,
+      options = {
+        headers: this.headers,
+      };
+    return this.http.delete<Array<IUsuario>>(url, options);
   }
 }

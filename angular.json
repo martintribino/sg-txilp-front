@@ -24,7 +24,7 @@
             "tsConfig": "tsconfig.app.json",
             "aot": false,
             "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.styl"],
+            "styles": ["src/styles.styl", "node_modules/ol/ol.css"],
             "scripts": []
           },
           "configurations": {
@@ -84,7 +84,7 @@
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.styl"],
+            "styles": ["src/styles.styl", "node_modules/ol/ol.css"],
             "scripts": []
           }
         },

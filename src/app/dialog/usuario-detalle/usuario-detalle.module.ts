@@ -10,9 +10,9 @@ import { UsuarioDetalleComponent } from './usuario-detalle.component';
 import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
-  imports: [CommonModule, MatDialogModule, MatIconModule, MatCardModule],
-  declarations: [UsuarioDetalleComponent],
-  exports: [UsuarioDetalleComponent],
+  imports: [CommonModule, MatCardModule],
+  declarations: [],
+  exports: [],
   entryComponents: [UsuarioDetalleComponent],
   providers: [
     { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher },

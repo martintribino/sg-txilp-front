@@ -9,7 +9,6 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
-import { FormUsuarioModule } from 'src/app/dialog/form-usuario/form-usuario.module';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -31,7 +30,6 @@ import { MatMenuModule } from '@angular/material/menu';
     MatExpansionModule,
     MatProgressSpinnerModule,
     MatMenuModule,
-    FormUsuarioModule,
   ],
   declarations: [UsuariosComponent],
   providers: [],

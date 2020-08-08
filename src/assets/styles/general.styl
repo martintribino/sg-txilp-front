@@ -58,13 +58,14 @@ app-sidebar
   display flex
   width 100%
   height 100%
+  overflow auto
 
 app-usuarios
   display flex
   flex-direction column
   width 100%
 
-app-not-found, app-not-allowed
+app-not-found, app-not-allowed, app-map
   display flex
   width 100%
   justify-content center
@@ -113,6 +114,26 @@ button
     color backRed
     &:hover
       color borderRed
+  &.visibility-button
+    display flex
+    align-items center
+    box-shadow none
+    border none
+    background-color transparent
+    color primaryBack
+    padding 0
+    font-size 1.2em
+    .mat-icon
+      border none
+      box-shadow none
+      font-size 1.2em
+      height 100%
+      width 100%
+    &:hover
+      color primaryBack
+    &.top-right
+      top 10%
+      right 5%
 
 .desktop
   display flex
@@ -120,8 +141,25 @@ button
 .mobile
   display none
 
+.mat-button,
+.mat-icon-button
+  &.cdk-focused,
+  &.cdk-program-focused
+    background-color none !important
+    .mat-button-focus-overlay
+      display none !important
+
+.mat-dialog-content
+  form
+    .mat-form-field
+      width 40%
+
 @media screen and (max-width: sm)
   .desktop
     display none
   .mobile
     display flex
+  .mat-dialog-content
+    form
+      .mat-form-field
+        width 90%

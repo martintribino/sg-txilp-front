@@ -13,7 +13,13 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { BehaviorSubject } from 'rxjs';
 
-import { IUsuario, IDictionary } from 'src/app/interface/interface.model';
+import {
+  IUsuario,
+  IDictionary,
+  MSGTIME,
+  ActionTipo,
+  IDireccion,
+} from 'src/app/interface/interface.model';
 import { UsuariosService } from 'src/app/services/usuarios.service';
 import { FormUsuarioComponent } from 'src/app/dialog/form-usuario/form-usuario.component';
 import {
@@ -56,7 +62,7 @@ export class UsuariosComponent implements AfterViewInit {
   private dataSource: MatTableDataSource<IUsuario>;
   private usuariosSubject = new BehaviorSubject<Array<IUsuario>>([]);
   private usuarios = this.usuariosSubject.asObservable();
-  private obs: BehaviorSubject<Array<IUsuario>>;
+  obs: BehaviorSubject<Array<IUsuario>>;
   private pageSize: number = 5;
   private pageSizeOptions: number[] = [5, 10, 20];
   private loadingDict: Array<IDictionary<boolean>>;
@@ -97,6 +103,7 @@ export class UsuariosComponent implements AfterViewInit {
     result.map((usu) => {
       this.loadingDict[usu.nombreUsuario] = false;
     });
+    this.usuariosSubject.next(result);
     this.changeDataSource(result);
   }
 
@@ -126,12 +133,13 @@ export class UsuariosComponent implements AfterViewInit {
       rol: null,
       direccion: null,
     };
-    const dialogRef = this.dialog.open(FormUsuarioComponent, {
-      maxWidth: '550px',
-      maxHeight: '100%',
-      height: 'auto',
-      data: usuario,
-    });
+    const body = { action: ActionTipo.crear, data: usuario },
+      dialogRef = this.dialog.open(FormUsuarioComponent, {
+        maxWidth: '550px',
+        maxHeight: '100%',
+        height: 'auto',
+        data: body,
+      });
     dialogRef.afterClosed().subscribe((result) => {
       let usu: IUsuario = result;
       if (usu != null) {
@@ -163,55 +171,96 @@ export class UsuariosComponent implements AfterViewInit {
     });
   }
 
-  onEditDireccion(usuario: IUsuario) {
-    console.log('onEditDireccion');
-    console.log(usuario);
-    /*
-    TODO - integrating map with coordinates
-    const dialogRef = this.dialog.open(FormDireccionComponent, {
-      maxWidth: '550px',
-      maxHeight: '100%',
-      height: 'auto',
-      data: usuario.direccion,
-    });
+  onEditDireccion(usu: IUsuario) {
+    if (usu != null) {
+      console.log(usu);
+      const dialogRef = this.dialog.open(FormDireccionComponent, {
+        maxWidth: '550px',
+        maxHeight: '100%',
+        height: 'auto',
+        data: usu.direccion,
+      });
+      dialogRef.afterClosed().subscribe((result) => {
+        let direccion: IDireccion = result;
+        if (direccion != null) {
+          usu.direccion = direccion;
+          this.usuService.actualizarUsuario(usu).subscribe(
+            () => {
+              this.mostrarMensaje(
+                `Se ha actualizado correctamente la dirección del usuario ${usu.nombreUsuario}`,
+                'success'
+              );
+            },
+            () => {
+              this.mostrarMensaje(
+                `No se ha podido actualizar la dirección del usuario ${usu.nombreUsuario}`,
+                'error'
+              );
+            }
+          );
+        }
+      });
+    }
+  }
+
+  onDelete(usuario: IUsuario) {
+    if (usuario != null) {
+      this.usuService.eliminarUsuario(usuario).subscribe(
+        () => {
+          this.mostrarMensaje(
+            `Se ha dado de baja correctamente al usuario ${usuario.nombreUsuario}`,
+            'success'
+          );
+          this.ngAfterViewInit();
+        },
+        () => {
+          this.mostrarMensaje(
+            `No se ha podido dar de baja el usuario ${usuario.nombreUsuario}`,
+            'error'
+          );
+        }
+      );
+    }
+  }
+
+  onEdit(usuario: IUsuario) {
+    const body = { action: ActionTipo.editar, data: usuario },
+      dialogRef = this.dialog.open(FormUsuarioComponent, {
+        maxWidth: '550px',
+        maxHeight: '100%',
+        height: 'auto',
+        data: body,
+      });
     dialogRef.afterClosed().subscribe((result) => {
-      let direccion: IDireccion = result;
-      if (direccion != null) {
-        usuario.direccion = direccion;
-        this.usuService.actualizarUsuario(usuario).subscribe(
+      let usu: IUsuario = result;
+      if (usu != null) {
+        //no queremos cambiar el nombre de usuario
+        usu.nombreUsuario = usuario.nombreUsuario;
+        //queremos actualizar la direccion aparte
+        usu.direccion = null;
+        this.usuService.actualizarUsuario(usu).subscribe(
           () => {
             this.mostrarMensaje(
-              `Se ha actualizado correctamente el usuario ${usuario.nombreUsuario}`,
+              `Se ha editado correctamente el usuario ${usu.nombreUsuario}`,
               'success'
             );
             this.ngAfterViewInit();
           },
           () => {
             this.mostrarMensaje(
-              `No se ha podido actualizar el usuario ${usuario.nombreUsuario}`,
+              `No se ha podido actualizar el usuario ${usu.nombreUsuario}`,
               'error'
             );
           }
         );
       }
     });
-    */
-  }
-
-  onDelete(usuario: IUsuario) {
-    console.log('onDelete');
-    console.log(usuario);
-  }
-
-  onEdit(usuario: IUsuario) {
-    console.log('onEdit');
-    console.log(usuario);
   }
 
   private mostrarMensaje(
     strError: string,
     clase: string = '',
-    time: number = 2000,
+    time: number = MSGTIME,
     pos: MatSnackBarVerticalPosition = 'bottom'
   ) {
     this.snackBar.open(strError, '', {

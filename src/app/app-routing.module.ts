@@ -3,6 +3,9 @@ import { Routes, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { NotAllowedComponent } from './pages/not-allowed/not-allowed.component';
+import { RolGuard } from './auth/rol.guard';
+import { Usuario } from 'src/model/usuario';
+import { RolTipo } from './interface/interface.model';
 
 const routes: Routes = [
   {
@@ -11,6 +14,10 @@ const routes: Routes = [
       import('./pages/actividades/actividades.module').then(
         (mod) => mod.ActividadesModule
       ),
+    canLoad: [RolGuard],
+    data: {
+      allowedRoles: [RolTipo.Administrador, RolTipo.Operador],
+    },
   },
   {
     path: 'artistas',
@@ -18,6 +25,10 @@ const routes: Routes = [
       import('./pages/artistas/artistas.module').then(
         (mod) => mod.ArtistasModule
       ),
+    canLoad: [RolGuard],
+    data: {
+      allowedRoles: [RolTipo.Administrador],
+    },
   },
   {
     path: 'ediciones',
@@ -25,6 +36,10 @@ const routes: Routes = [
       import('./pages/ediciones/ediciones.module').then(
         (mod) => mod.EdicionesModule
       ),
+    canLoad: [RolGuard],
+    data: {
+      allowedRoles: [RolTipo.Administrador],
+    },
   },
   {
     path: 'espacios',
@@ -32,6 +47,10 @@ const routes: Routes = [
       import('./pages/espacios/espacios.module').then(
         (mod) => mod.EspaciosModule
       ),
+    canLoad: [RolGuard],
+    data: {
+      allowedRoles: [RolTipo.Administrador],
+    },
   },
   {
     path: 'etiquetas',
@@ -39,17 +58,57 @@ const routes: Routes = [
       import('./pages/etiquetas/etiquetas.module').then(
         (mod) => mod.EtiquetasModule
       ),
+    canLoad: [RolGuard],
+    data: {
+      allowedRoles: [RolTipo.Administrador, RolTipo.Operador],
+    },
   },
   {
     path: 'obras',
     loadChildren: () =>
       import('./pages/obras/obras.module').then((mod) => mod.ObrasModule),
+    canLoad: [RolGuard],
+    data: {
+      allowedRoles: [RolTipo.Administrador],
+    },
   },
   {
     path: 'usuarios',
     loadChildren: () =>
       import('./pages/usuarios/usuarios.module').then(
         (mod) => mod.UsuariosModule
+      ),
+    canLoad: [RolGuard],
+    data: {
+      allowedRoles: [RolTipo.Administrador],
+    },
+  },
+  {
+    path: 'perfil',
+    loadChildren: () =>
+      import('./pages/perfil/perfil.module').then((mod) => mod.PerfilModule),
+    canLoad: [RolGuard],
+    data: {
+      allowedRoles: [
+        RolTipo.Administrador,
+        RolTipo.Operador,
+        RolTipo.Participante,
+        RolTipo.Visitante,
+      ],
+    },
+  },
+  {
+    path: 'iniciar-sesion',
+    loadChildren: () =>
+      import('./pages/iniciar-sesion/iniciar-sesion.module').then(
+        (mod) => mod.IniciarSesionModule
+      ),
+  },
+  {
+    path: 'cerrar-sesion',
+    loadChildren: () =>
+      import('./pages/cerrar-sesion/cerrar-sesion.module').then(
+        (mod) => mod.CerrarSesionModule
       ),
   },
   {

@@ -8,10 +8,31 @@ import { SharedModule } from './shared';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { NotAllowedComponent } from './pages/not-allowed/not-allowed.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthenticationService } from './services/auth.service';
+import { AuthInterceptor } from './auth/auth.interceptor';
+import { MatPaginatorIntl } from '@angular/material/paginator';
+import { getEsPaginatorIntl } from './helpers/es-paginator-intl';
+import { FormDireccionComponent } from './dialog/form-direccion/form-direccion.component';
+import { FormUsuarioComponent } from './dialog/form-usuario/form-usuario.component';
+import { UsuarioDetalleComponent } from './dialog/usuario-detalle/usuario-detalle.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatOptionModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
+import { MatIconModule } from '@angular/material/icon';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [AppComponent, NotFoundComponent, NotAllowedComponent],
+  declarations: [
+    AppComponent,
+    NotFoundComponent,
+    NotAllowedComponent,
+    FormDireccionComponent,
+    FormUsuarioComponent,
+    UsuarioDetalleComponent,
+  ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
     SharedModule,
@@ -19,8 +40,24 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserAnimationsModule,
     MatSidenavModule,
     HttpClientModule,
+    MatDialogModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatOptionModule,
+    MatSelectModule,
+    MatIconModule,
+    ReactiveFormsModule,
   ],
-  providers: [],
+  entryComponents: [
+    FormDireccionComponent,
+    FormUsuarioComponent,
+    UsuarioDetalleComponent,
+  ],
+  providers: [
+    AuthenticationService,
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: MatPaginatorIntl, useValue: getEsPaginatorIntl() },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
