@@ -1,0 +1,78 @@
+<div *ngIf="(artista | async) != null; then ifBlock; else elseBlock"></div>
+<ng-template #ifBlock>
+  <mat-card class="default-card">
+    <div class="avatar-upload">
+      <img
+        mat-card-image
+        class="default-avatar"
+        [src]="imgPath"
+        alt="Foto de artista"
+      />
+    </div>
+    <mat-card-header>
+      <mat-card-title>{{ (artista | async)?.nombreUsuario }}</mat-card-title>
+      <mat-card-subtitle
+        >{{ (artista | async)?.nombre }}
+        {{ (artista | async)?.apellido }}</mat-card-subtitle
+      >
+    </mat-card-header>
+    <mat-card-content>
+      <div class="card-row">
+        <strong>Apodo</strong><span>{{ (artista | async)?.apodo }}</span>
+      </div>
+      <mat-divider></mat-divider>
+    </mat-card-content>
+    <mat-card-actions>
+      <button
+        mat-icon-button
+        class="row-profile-button"
+        matTooltip="Volver"
+        matTooltipPosition="below"
+        [routerLink]="['/artistas/']"
+        aria-label="Volver"
+      >
+        <mat-icon>arrow_back_ios</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        color="warn"
+        [disabled]="loading"
+        class="row-profile-button"
+        matTooltip="Volver"
+        matTooltipPosition="below"
+        aria-label="Me gusta"
+      >
+        <mat-icon>favorite</mat-icon>
+      </button>
+      <div *ngIf="isAdmin(); then ifAdminBlock"></div>
+      <ng-template #ifAdminBlock>
+        <button
+          mat-icon-button
+          class="row-profile-button"
+          [disabled]="true"
+          matTooltip="Editar Artista"
+          matTooltipPosition="below"
+          (click)="onEdit()"
+          aria-label="Editar Artista"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          class="row-profile-button"
+          [disabled]="loading"
+          matTooltip="Eliminar Artista"
+          matTooltipPosition="below"
+          (click)="onDelete()"
+          aria-label="Eliminar Artista"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </ng-template>
+    </mat-card-actions>
+  </mat-card>
+</ng-template>
+<ng-template #elseBlock>
+  <mat-spinner *ngIf="loading"></mat-spinner>
+  <h5 *ngIf="!loading">No se pudo cargar el artista.</h5></ng-template
+>

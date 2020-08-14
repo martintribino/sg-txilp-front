@@ -25,7 +25,7 @@ import { FormDireccionComponent } from 'src/app/dialog/form-direccion/form-direc
 export class PerfilComponent implements OnInit {
   private perfilSubject = new BehaviorSubject<IUsuario>(null);
   perfil = this.perfilSubject.asObservable();
-  private loading: boolean = false;
+  loading: boolean = false;
   private imgPath: string = 'assets/images/user.png';
   constructor(
     private authService: AuthenticationService,
@@ -41,7 +41,8 @@ export class PerfilComponent implements OnInit {
       this.loading = true;
       this.usuService.getUsuario(usu.nombreUsuario).subscribe(
         (data) => this.perfilSubject.next(data),
-        (error) => this.perfilSubject.next(null),
+        (error) => {this.perfilSubject.next(null);
+          this.loading = false;},
         () => {
           this.loading = false;
         }

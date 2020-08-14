@@ -60,9 +60,10 @@ app-sidebar
   height 100%
   overflow auto
 
-app-usuarios
+app-usuarios, app-artistas
   display flex
   flex-direction column
+  align-items center
   width 100%
 
 app-not-found, app-not-allowed, app-map
@@ -153,6 +154,82 @@ button
   form
     .mat-form-field
       width 40%
+
+.loading-cell
+  display flex
+  justify-content center
+  padding 1em 0
+
+.descripcion-cell
+  padding 0
+  width 100%
+  flex-direction: row;
+  span
+    display flex
+    width 100%
+    justify-content center
+    align-items center
+    align-content center
+    flex-direction column
+    &:first-of-type
+      padding-left 24px
+    &:last-of-type
+      padding-right 24px
+
+.default-card
+  display flex
+  flex-direction column
+  justify-content center
+  align-items center
+  max-width 500px
+  min-width 300px
+  margin-top 25px
+  &.mat-card
+    .mat-divider-horizontal
+      display flex
+      position relative
+  .card-row
+    display flex
+    flex-direction row
+    width 100%
+    padding 5px 0px
+    justify-content space-between
+  .mat-card-header
+    .mat-card-title
+      text-align center
+  .mat-card-content
+    display flex
+    flex-direction column
+    width 100%
+    margin-bottom 0
+  .mat-card-actions
+    display flex
+    flex-direction row
+    width 100%
+    margin-bottom 0
+    justify-content flex-end
+    .mat-icon-button.cdk-program-focused
+      .mat-button-focus-overlay
+        opacity 0
+    .row-profile-button
+      border none
+      margin 0
+      padding 4px
+      &:hover
+        color backRed
+  .avatar-upload
+    margin-top 0px
+    position relative
+    max-width 200px
+    margin 20px auto 10px auto
+    .default-avatar
+      width 175px
+      box-shadow 0px 2px 4px 0px rgba(0, 0, 0, 0.12)
+      border-radius 50%
+      margin 0 auto
+      padding 3px
+      border 3px solid backRed
+      height auto
 
 @media screen and (max-width: sm)
   .desktop

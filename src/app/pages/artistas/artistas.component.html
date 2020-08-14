@@ -1,1 +1,70 @@
-<p>artistas works!</p>
+<div *ngIf="(obs | async)?.length > 0; then ifBlock; else elseBlock"></div>
+<ng-template #ifBlock>
+  <table
+    mat-table
+    class="artista-table mat-elevation-z8"
+    [dataSource]="dataSource"
+    multiTemplateDataRows
+  >
+    <ng-container matColumnDef="nombre">
+      <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
+      <mat-cell *matCellDef="let artista">{{ artista.nombre }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="apellido">
+      <mat-header-cell *matHeaderCellDef>Apellido</mat-header-cell>
+      <mat-cell *matCellDef="let artista">{{ artista.apellido }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="apodo">
+      <mat-header-cell *matHeaderCellDef>Apodo</mat-header-cell>
+      <mat-cell *matCellDef="let artista">{{ artista.apodo }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef>
+        <button
+          mat-mini-fab
+          color="primary"
+          (click)="onCreate()"
+          class="fab-button"
+          matTooltip="Crear Usuario"
+          matTooltipPosition="above"
+          aria-label="Crear Usuario"
+        >
+          <mat-icon>person_add_alt_1</mat-icon>
+        </button>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let usuario"> </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="loading">
+      <mat-cell
+        class="loading-cell"
+        *matCellDef="let artista"
+        [attr.colspan]="displayedColumns.length"
+      >
+        <mat-spinner diameter="50"></mat-spinner>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row
+      *matRowDef="let artista; let row; columns: displayedColumns"
+      class="click-row"
+      [routerLink]="['/artistas/', artista.id]"
+    >
+    </mat-row>
+  </table>
+  <mat-paginator [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
+  </mat-paginator>
+</ng-template>
+<ng-template #elseBlock>
+  <mat-spinner *ngIf="loading"></mat-spinner>
+  <div *ngIf="!loading" class="no-artista">
+    <h3 matLine>No hay artistas.</h3>
+    <button
+      color="primary"
+      mat-mini-fab
+      aria-label="Crear artista"
+      (click)="onCreate()"
+    >
+      <mat-icon>person_add_alt_1</mat-icon>
+    </button>
+  </div>
+</ng-template>

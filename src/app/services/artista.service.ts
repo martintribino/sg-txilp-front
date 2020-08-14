@@ -17,18 +17,42 @@ export class ArtistaService {
   }
 
   getArtistas(): Observable<Array<IArtista>> {
-    let url = this.endpoints.usuarios,
+    let url = this.endpoints.artistas,
       options = {
         headers: this.headers,
       };
     return this.http.get<Array<IArtista>>(url, options);
   }
 
-  getArtista(): Observable<Array<IArtista>> {
-    let url = this.endpoints.usuarios,
+  getArtista(id: number): Observable<IArtista> {
+    let url = `${this.endpoints.artistas}${id}`,
       options = {
         headers: this.headers,
       };
-    return this.http.get<Array<IArtista>>(url, options);
+    return this.http.get<IArtista>(url, options);
+  }
+
+  crearArtista(artista: IArtista): Observable<Array<IArtista>> {
+    let url = this.endpoints.artistas,
+      options = {
+        headers: this.headers,
+      };
+    return this.http.post<Array<IArtista>>(url, artista, options);
+  }
+
+  actualizarArtista(artista: IArtista): Observable<Array<IArtista>> {
+    let url = this.endpoints.artistas,
+      options = {
+        headers: this.headers,
+      };
+    return this.http.put<Array<IArtista>>(url, artista, options);
+  }
+
+  eliminarArtista(artista: IArtista): Observable<Array<IArtista>> {
+    let url = `${this.endpoints.artistas}${artista.id}`,
+      options = {
+        headers: this.headers,
+      };
+    return this.http.delete<Array<IArtista>>(url, options);
   }
 }

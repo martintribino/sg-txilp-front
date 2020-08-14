@@ -6,6 +6,7 @@ import { NotAllowedComponent } from './pages/not-allowed/not-allowed.component';
 import { RolGuard } from './auth/rol.guard';
 import { Usuario } from 'src/model/usuario';
 import { RolTipo } from './interface/interface.model';
+import { ArtistaComponent } from './pages/artista/artista.component';
 
 const routes: Routes = [
   {
@@ -27,7 +28,7 @@ const routes: Routes = [
       ),
     canLoad: [RolGuard],
     data: {
-      allowedRoles: [RolTipo.Administrador],
+      allowedRoles: [RolTipo.Administrador, RolTipo.Participante],
     },
   },
   {

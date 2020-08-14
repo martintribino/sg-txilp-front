@@ -20,6 +20,9 @@ export enum EspacioEstadoTipo {
 export interface IDictionary<T> {
   [key: string]: T;
 }
+export interface INumberDictionary<T> {
+  [key: number]: T;
+}
 export interface IPaginatorEv {
   length: number;
   pageIndex: number;
@@ -45,6 +48,7 @@ export interface IUsuario {
   imagen?: string;
 }
 export interface IArtista {
+  id: number;
   nombre: string;
   apellido: string;
   apodo: string;

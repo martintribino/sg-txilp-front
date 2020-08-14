@@ -3,6 +3,7 @@ import {
   ViewChild,
   ChangeDetectorRef,
   AfterViewInit,
+  OnInit,
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import {
@@ -57,12 +58,13 @@ import { UsuarioDetalleComponent } from 'src/app/dialog/usuario-detalle/usuario-
     ]),
   ],
 })
-export class UsuariosComponent implements AfterViewInit {
+export class UsuariosComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   private dataSource: MatTableDataSource<IUsuario>;
   private usuariosSubject = new BehaviorSubject<Array<IUsuario>>([]);
   private usuarios = this.usuariosSubject.asObservable();
-  obs: BehaviorSubject<Array<IUsuario>>;
+  obs: BehaviorSubject<Array<IUsuario>> = new BehaviorSubject<Array<IUsuario>>([]);
+  private loading: boolean = false;
   private pageSize: number = 5;
   private pageSizeOptions: number[] = [5, 10, 20];
   private loadingDict: Array<IDictionary<boolean>>;
@@ -86,10 +88,12 @@ export class UsuariosComponent implements AfterViewInit {
     this.dataSource = new MatTableDataSource<IUsuario>([]);
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
+    this.loading = true;
     this.usuService.getUsuarios().subscribe(
       (data) => this.onSuccess(data),
-      (error) => this.onError(error)
+      (error) => this.onError(error),
+      () => this.loading = false
     );
   }
 
@@ -112,6 +116,7 @@ export class UsuariosComponent implements AfterViewInit {
     if (this.dataSource) {
       this.dataSource.disconnect();
     }
+    this.loading = false;
   }
 
   private changeDataSource(result: Array<IUsuario>) {
@@ -149,7 +154,7 @@ export class UsuariosComponent implements AfterViewInit {
               `Se ha creado correctamente el usuario ${usu.nombreUsuario}`,
               'success'
             );
-            this.ngAfterViewInit();
+            this.ngOnInit();
           },
           () => {
             this.mostrarMensaje(
@@ -211,7 +216,7 @@ export class UsuariosComponent implements AfterViewInit {
             `Se ha dado de baja correctamente al usuario ${usuario.nombreUsuario}`,
             'success'
           );
-          this.ngAfterViewInit();
+          this.ngOnInit();
         },
         () => {
           this.mostrarMensaje(
@@ -244,7 +249,7 @@ export class UsuariosComponent implements AfterViewInit {
               `Se ha editado correctamente el usuario ${usu.nombreUsuario}`,
               'success'
             );
-            this.ngAfterViewInit();
+            this.ngOnInit();
           },
           () => {
             this.mostrarMensaje(

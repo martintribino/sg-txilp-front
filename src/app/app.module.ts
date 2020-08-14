@@ -23,6 +23,8 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FormArtistaComponent } from './dialog/form-artista/form-artista.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -32,6 +34,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     FormDireccionComponent,
     FormUsuarioComponent,
     UsuarioDetalleComponent,
+    FormArtistaComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
@@ -45,12 +48,14 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatFormFieldModule,
     MatOptionModule,
     MatSelectModule,
+    MatSnackBarModule,
     MatIconModule,
     ReactiveFormsModule,
   ],
   entryComponents: [
     FormDireccionComponent,
     FormUsuarioComponent,
+    FormArtistaComponent,
     UsuarioDetalleComponent,
   ],
   providers: [

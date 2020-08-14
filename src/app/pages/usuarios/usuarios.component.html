@@ -118,7 +118,8 @@
   </mat-paginator>
 </ng-template>
 <ng-template #elseBlock>
-  <div class="no-usuarios">
+  <mat-spinner *ngIf="loading"></mat-spinner>
+  <div *ngIf="!loading" class="no-usuarios">
     <h3 matLine>No hay usuarios.</h3>
     <button
       color="primary"
