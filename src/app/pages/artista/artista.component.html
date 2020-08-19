@@ -10,17 +10,20 @@
       />
     </div>
     <mat-card-header>
-      <mat-card-title>{{ (artista | async)?.nombreUsuario }}</mat-card-title>
-      <mat-card-subtitle
-        >{{ (artista | async)?.nombre }}
-        {{ (artista | async)?.apellido }}</mat-card-subtitle
-      >
+      <mat-card-title>{{ (artista | async)?.apodo }}</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <div class="card-row">
-        <strong>Apodo</strong><span>{{ (artista | async)?.apodo }}</span>
+        <strong>Nombre</strong><span>{{ (artista | async)?.nombre }}</span>
       </div>
       <mat-divider></mat-divider>
+      <div class="card-row">
+        <strong>Apellido</strong><span>{{ (artista | async)?.apellido }}</span>
+      </div>
+      <mat-divider></mat-divider>
+      <app-carrusel-imagenes
+        [slides]="(artista | async)?.fotos"
+      ></app-carrusel-imagenes>
     </mat-card-content>
     <mat-card-actions>
       <button
@@ -33,23 +36,23 @@
       >
         <mat-icon>arrow_back_ios</mat-icon>
       </button>
-      <button
-        mat-icon-button
-        color="warn"
-        [disabled]="loading"
-        class="row-profile-button"
-        matTooltip="Volver"
-        matTooltipPosition="below"
-        aria-label="Me gusta"
-      >
-        <mat-icon>favorite</mat-icon>
-      </button>
       <div *ngIf="isAdmin(); then ifAdminBlock"></div>
       <ng-template #ifAdminBlock>
         <button
           mat-icon-button
           class="row-profile-button"
-          [disabled]="true"
+          [disabled]="loading"
+          matTooltip="Agregar Fotos"
+          matTooltipPosition="below"
+          (click)="onAddPhoto()"
+          aria-label="Agregar Fotos"
+        >
+          <mat-icon>add_a_photo</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          class="row-profile-button"
+          [disabled]="loading"
           matTooltip="Editar Artista"
           matTooltipPosition="below"
           (click)="onEdit()"

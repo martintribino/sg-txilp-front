@@ -1,0 +1,87 @@
+<h4>Datos del espacio</h4>
+<mat-dialog-content>
+  <form [formGroup]="espacioForm" class="dialog">
+    <mat-form-field>
+      <mat-label>Nombre</mat-label>
+      <input
+        matInput
+        type="text"
+        formControlName="nombre"
+        autocomplete="off"
+        maxlength="100"
+        minlength="2"
+        required
+      />
+      <mat-hint>Nombre</mat-hint>
+      <mat-error *ngIf="crearEspacioForm.nombre?.errors?.minlength"
+        >El campo debe tener al menos 2 caracteres
+      </mat-error>
+      <mat-error *ngIf="crearEspacioForm.nombre?.errors?.maxlength"
+        >El campo debe tener como máximo 100 caracteres
+      </mat-error>
+      <mat-error *ngIf="crearEspacioForm.nombre?.errors?.required"
+        >Campo requerido</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Descripción</mat-label>
+      <input
+        matInput
+        type="text"
+        formControlName="descripcion"
+        autocomplete="off"
+        maxlength="150"
+        required
+      />
+      <mat-hint>Descripción</mat-hint>
+      <mat-error *ngIf="crearEspacioForm.descripcion?.errors?.maxlength"
+        >El campo debe tener como máximo 150 caracteres
+      </mat-error>
+      <mat-error *ngIf="crearEspacioForm.descripcion?.errors?.required"
+        >Campo requerido</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Capacidad</mat-label>
+      <input
+        matInput
+        type="number"
+        formControlName="capacidad"
+        autocomplete="off"
+        required
+      />
+      <mat-hint>Capacidad</mat-hint>
+      <mat-error *ngIf="crearEspacioForm.capacidad?.errors?.required"
+        >Campo requerido</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Tipo</mat-label>
+      <mat-select
+        placeholder="Tipo"
+        formControlName="condicion"
+        [(value)]="condicionSelected"
+        required
+      >
+        <mat-option *ngFor="let condicion of tipos" [value]="condicion.indice">
+          {{ condicion.value }}
+        </mat-option>
+      </mat-select>
+      <mat-hint>Tipo</mat-hint>
+      <mat-error *ngIf="crearEspacioForm.condicion?.errors?.required"
+        >Campo requerido</mat-error
+      >
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button
+    type="submit"
+    class="submit-button"
+    [mat-dialog-close]="espacio"
+    (click)="onSubmit()"
+    [disabled]="espacioForm.invalid"
+  >
+    Enviar
+  </button>
+</mat-dialog-actions>

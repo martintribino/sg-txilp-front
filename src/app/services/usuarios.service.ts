@@ -1,19 +1,19 @@
-import { Injectable } from '@angular/core';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { IUsuario } from '../interface/interface.model';
-import { environment } from 'src/environments/environment';
+import { Injectable } from "@angular/core";
+import { HttpHeaders, HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
+import { IUsuario } from "../interface/interface.model";
+import { environment } from "src/environments/environment";
 //import { environment } from 'src/environments/environment.prod';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class UsuariosService {
   endpoints = environment.endpoints;
   private headers: HttpHeaders;
 
   constructor(private http: HttpClient) {
-    this.headers = new HttpHeaders().set('Content-Type', 'application/json');
+    this.headers = new HttpHeaders().set("Content-Type", "application/json");
   }
 
   getUsuarios(): Observable<Array<IUsuario>> {
@@ -49,7 +49,7 @@ export class UsuariosService {
   }
 
   eliminarUsuario(usuario: IUsuario): Observable<Array<IUsuario>> {
-    let url = `${this.endpoints.usuarios}${usuario.nombreUsuario}`,
+    let url = `${this.endpoints.usuarios}${usuario.id}`,
       options = {
         headers: this.headers,
       };

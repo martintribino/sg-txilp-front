@@ -3,10 +3,11 @@
   "compilerOptions": {
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
+    "experimentalDecorators": true,
+    "allowJs": true,
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,
-    "experimentalDecorators": true,
     "allowSyntheticDefaultImports": false,
     "module": "esnext",
     "moduleResolution": "node",

@@ -1,43 +1,47 @@
-import { Component, OnInit } from '@angular/core';
-import { ArtistaService } from 'src/app/services/artista.service';
+import { Component, OnInit } from "@angular/core";
+import { ArtistaService } from "src/app/services/artista.service";
 import {
   MatSnackBar,
   MatSnackBarVerticalPosition,
-} from '@angular/material/snack-bar';
-import { MatDialog } from '@angular/material/dialog';
-import { BehaviorSubject } from 'rxjs';
+} from "@angular/material/snack-bar";
+import { MatDialog } from "@angular/material/dialog";
+import { BehaviorSubject } from "rxjs";
 import {
   IArtista,
   ActionTipo,
   MSGTIME,
   RolTipo,
-} from 'src/app/interface/interface.model';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormArtistaComponent } from 'src/app/dialog/form-artista/form-artista.component';
-import { AuthenticationService } from 'src/app/services/auth.service';
+} from "src/app/interface/interface.model";
+import { Router, ActivatedRoute } from "@angular/router";
+import { FormArtistaComponent } from "src/app/dialog/form-artista/form-artista.component";
+import { AuthenticationService } from "src/app/services/auth.service";
+import { isArray } from "util";
+import { FormUploadImageComponent } from "src/app/dialog/form-upload-image/form-upload-image.component";
+import { ArchivosService } from "src/app/services/archivos.service";
 
 @Component({
-  selector: 'app-artista',
-  templateUrl: './artista.component.html',
-  styleUrls: ['./artista.component.styl'],
+  selector: "app-artista",
+  templateUrl: "./artista.component.html",
+  styleUrls: ["./artista.component.styl"],
 })
 export class ArtistaComponent implements OnInit {
   private artistaSubject = new BehaviorSubject<IArtista>(null);
   artista = this.artistaSubject.asObservable();
   private loading: boolean = false;
   private id: number = null;
-  private imgPath: string = 'assets/images/user.png';
+  private imgPath: string = "assets/images/user.png";
 
   constructor(
     private authService: AuthenticationService,
     private artistaServ: ArtistaService,
+    private archivoServ: ArchivosService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
     private router: Router,
     private route: ActivatedRoute
   ) {
     this.route.params.subscribe((params) => {
-      this.id = parseInt(params['id']);
+      this.id = parseInt(params["id"]);
     });
   }
 
@@ -60,6 +64,27 @@ export class ArtistaComponent implements OnInit {
     this.loading = false;
   }
 
+  getFotos() {
+    let art: IArtista = this.artistaSubject.value;
+    if (art == null || !isArray(art.fotos)) return [];
+    else return art.fotos;
+  }
+
+  onAddPhoto() {
+    let art = this.artistaSubject.value;
+    if (art != null) {
+      const dialogRef = this.dialog.open(FormUploadImageComponent, {
+        maxWidth: "550px",
+        maxHeight: "100%",
+        height: "auto",
+        data: art,
+      });
+      dialogRef.afterClosed().subscribe((result) => {
+        this.ngOnInit();
+      });
+    }
+  }
+
   onEdit() {
     let art = this.artistaSubject.value;
     if (art != null) {
@@ -68,9 +93,9 @@ export class ArtistaComponent implements OnInit {
           data: this.artistaSubject.value,
         },
         dialogRef = this.dialog.open(FormArtistaComponent, {
-          maxWidth: '550px',
-          maxHeight: '100%',
-          height: 'auto',
+          maxWidth: "550px",
+          maxHeight: "100%",
+          height: "auto",
           data: body,
         });
       dialogRef.afterClosed().subscribe((result) => {
@@ -80,14 +105,14 @@ export class ArtistaComponent implements OnInit {
             () => {
               this.mostrarMensaje(
                 `Se ha editado correctamente el artista ${art.nombre}`,
-                'success'
+                "success"
               );
               this.ngOnInit();
             },
             () => {
               this.mostrarMensaje(
                 `No se ha podido actualizar el artista ${art.nombre}`,
-                'error'
+                "error"
               );
             }
           );
@@ -104,15 +129,15 @@ export class ArtistaComponent implements OnInit {
         () => {
           this.mostrarMensaje(
             `Se ha dado de baja correctamente al artista ${art.nombre}`,
-            'success'
+            "success"
           );
           //this.ngOnInit();
-          this.router.navigate(['/artistas']);
+          this.router.navigate(["/artistas"]);
         },
         () => {
           this.mostrarMensaje(
             `No se ha podido dar de baja el artista ${art.nombre}`,
-            'error'
+            "error"
           );
           this.loading = false;
         },
@@ -125,11 +150,11 @@ export class ArtistaComponent implements OnInit {
 
   private mostrarMensaje(
     strError: string,
-    clase: string = '',
+    clase: string = "",
     time: number = MSGTIME,
-    pos: MatSnackBarVerticalPosition = 'bottom'
+    pos: MatSnackBarVerticalPosition = "bottom"
   ) {
-    this.snackBar.open(strError, '', {
+    this.snackBar.open(strError, "", {
       duration: time,
       verticalPosition: pos,
       panelClass: clase,

@@ -1,0 +1,34 @@
+<mat-form-field appearance="standard">
+  <button
+    mat-icon-button
+    class="attach-icon"
+    [(matTooltip)]="chooseLabel"
+    matTooltipPosition="below"
+    (click)="onClick($event)"
+    [(disabled)]="disabled"
+  >
+    <mat-icon>{{ attachButtonIcon }}</mat-icon>
+  </button>
+  <input
+    #fileUpload
+    type="file"
+    class="input_fileupload--hidden"
+    (input)="onInput($event)"
+    (change)="onFileSelected($event)"
+    [(ngModel)]="inputFileName"
+    [accept]="accept"
+  />
+  <mat-chip-list #chipList aria-label="Archivos">
+    <mat-chip
+      *ngFor="let f of files"
+      selectable="false"
+      removable="true"
+      (removed)="removeFile($event, f)"
+    >
+      <label>{{ f.name }}</label>
+      <mat-icon matChipRemove>{{ deleteButtonIcon }}</mat-icon>
+    </mat-chip>
+  </mat-chip-list>
+</mat-form-field>
+<mat-error *ngIf="invalidFileSize">{{ invalidFileSizeMessage }}</mat-error>
+<mat-error *ngIf="invalidFileType">{{ invalidFileTypeMessage }}</mat-error>

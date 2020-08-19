@@ -1,0 +1,26 @@
+<div *ngIf="slides.length > 0; then ifBlock; else elseBlock"></div>
+<ng-template #ifBlock>
+  <mat-carousel
+    timings="250ms ease-in"
+    maxWidth="auto"
+    proportion="50"
+    slides="5"
+    [hideArrows]="false"
+    [hideIndicators]="false"
+    [useKeyboard]="true"
+    [useMouseWheel]="false"
+    orientation="ltr"
+  >
+    <mat-carousel-slide
+      #matCarouselSlide
+      *ngFor="let slide of slides"
+      [hideOverlay]="false"
+      overlayColor="transparent"
+    >
+      <app-secure-img [slide]="slide"></app-secure-img>
+    </mat-carousel-slide>
+  </mat-carousel>
+  <ng-template #elseBlock>
+    <h5>No hay imagenes para mostrar.</h5>
+  </ng-template>
+</ng-template>

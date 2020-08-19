@@ -1,3 +1,12 @@
+<div class="filtro-tabla">
+  <input
+    matInput
+    type="text"
+    (keyup)="aplicarFiltro($event)"
+    placeholder="Ingrese busqueda"
+    #input
+  />
+</div>
 <div *ngIf="(obs | async)?.length > 0; then ifBlock; else elseBlock"></div>
 <ng-template #ifBlock>
   <table
@@ -25,14 +34,14 @@
           color="primary"
           (click)="onCreate()"
           class="fab-button"
-          matTooltip="Crear Usuario"
+          matTooltip="Crear Artista"
           matTooltipPosition="above"
-          aria-label="Crear Usuario"
+          aria-label="Crear Artista"
         >
           <mat-icon>person_add_alt_1</mat-icon>
         </button>
       </mat-header-cell>
-      <mat-cell *matCellDef="let usuario"> </mat-cell>
+      <mat-cell *matCellDef="let artista"> </mat-cell>
     </ng-container>
     <ng-container matColumnDef="loading">
       <mat-cell

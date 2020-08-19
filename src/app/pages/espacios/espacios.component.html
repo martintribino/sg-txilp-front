@@ -1,1 +1,83 @@
-<p>Espacios</p>
+<div class="filtro-tabla">
+  <input
+    matInput
+    type="text"
+    (keyup)="aplicarFiltro($event)"
+    placeholder="Ingrese busqueda"
+    #input
+  />
+</div>
+<div *ngIf="(obs | async)?.length > 0; then ifBlock; else elseBlock"></div>
+<ng-template #ifBlock>
+  <table
+    mat-table
+    class="espacio-table mat-elevation-z8"
+    [dataSource]="dataSource"
+    multiTemplateDataRows
+  >
+    <ng-container matColumnDef="nombre">
+      <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
+      <mat-cell *matCellDef="let espacio">{{ espacio.nombre }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="descripcion">
+      <mat-header-cell *matHeaderCellDef>Descripción</mat-header-cell>
+      <mat-cell *matCellDef="let espacio">{{ espacio.descripcion }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="capacidad">
+      <mat-header-cell *matHeaderCellDef>Capacidad</mat-header-cell>
+      <mat-cell *matCellDef="let espacio">{{ espacio.capacidad }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="condicion">
+      <mat-header-cell *matHeaderCellDef>Condición</mat-header-cell>
+      <mat-cell *matCellDef="let espacio">{{ espacio.condicion }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef>
+        <button
+          mat-mini-fab
+          color="primary"
+          (click)="onCreate()"
+          class="fab-button"
+          matTooltip="Crear Espacio"
+          matTooltipPosition="above"
+          aria-label="Crear Espacio"
+        >
+          <mat-icon>person_add_alt_1</mat-icon>
+        </button>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let espacio"> </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="loading">
+      <mat-cell
+        class="loading-cell"
+        *matCellDef="let espacio"
+        [attr.colspan]="displayedColumns.length"
+      >
+        <mat-spinner diameter="50"></mat-spinner>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row
+      *matRowDef="let espacio; let row; columns: displayedColumns"
+      class="click-row"
+      [routerLink]="['/espacios/', espacio.id]"
+    >
+    </mat-row>
+  </table>
+  <mat-paginator [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
+  </mat-paginator>
+</ng-template>
+<ng-template #elseBlock>
+  <mat-spinner *ngIf="loading"></mat-spinner>
+  <div *ngIf="!loading" class="no-espacio">
+    <h3 matLine>No hay espacios.</h3>
+    <button
+      color="primary"
+      mat-mini-fab
+      aria-label="Crear espacio"
+      (click)="onCreate()"
+    >
+      <mat-icon>person_add_alt_1</mat-icon>
+    </button>
+  </div>
+</ng-template>

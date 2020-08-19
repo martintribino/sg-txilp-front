@@ -2,19 +2,19 @@
 export const MSGTIME = 2000;
 //enums
 export enum RolTipo {
-  Administrador = 'ADMINISTRADOR',
-  Operador = 'OPERADOR',
-  Participante = 'PARTICIPANTE',
-  Visitante = 'VISITANTE',
+  Administrador = "ADMINISTRADOR",
+  Operador = "OPERADOR",
+  Participante = "PARTICIPANTE",
+  Visitante = "VISITANTE",
 }
 export enum ActionTipo {
-  crear = 'crear',
-  editar = 'editar',
-  borrar = 'borrar',
+  crear = "crear",
+  editar = "editar",
+  borrar = "borrar",
 }
 export enum EspacioEstadoTipo {
-  Abierto = 'ABIERTO',
-  Cerrado = 'CERRADO',
+  Abierto = "ABIERTO",
+  Cerrado = "CERRADO",
 }
 //interface
 export interface IDictionary<T> {
@@ -36,6 +36,7 @@ export interface IJWT {
   imagen?: string;
 }
 export interface IUsuario {
+  id: number;
   nombreUsuario: string;
   nombre: string;
   apellido: string;
@@ -52,10 +53,24 @@ export interface IArtista {
   nombre: string;
   apellido: string;
   apodo: string;
-  fotos?: Array<IFoto>;
+  fotos?: Array<string>;
 }
-export interface IFoto {
-  source: string;
+export interface IActividad {
+  id: number;
+  nombre: string;
+  descripcion: string;
+  desde: Date;
+  hasta: Date;
+  vendidas: number;
+  obra: IObra;
+  espacio: IEspacio;
+  edicion: IEdicion;
+}
+export interface IImagen {
+  b64str: string;
+  extension: string;
+  width: number;
+  height: number;
 }
 export interface IEtiqueta {
   nombre: string;
@@ -68,9 +83,19 @@ export interface IObra {
   nombre: string;
   descripcion: string;
   duracion: number;
-  fotos?: Array<IFoto>;
+  fotos?: Array<string>;
+}
+export interface IEdicion {
+  id: number;
+  nombre: string;
+  descripcion: string;
+  desde: Date;
+  hasta: Date;
+  fotos?: Array<string>;
+  actividades?: Array<IActividad>;
 }
 export interface IEspacio {
+  id: number;
   nombre: string;
   descripcion: string;
   capacidad: number;
