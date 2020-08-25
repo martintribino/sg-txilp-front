@@ -11,11 +11,13 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ArtistaRoutingModule } from './artista-routing.module';
 import { CarruselImagenesModule } from 'src/app/shared/carrusel-imagenes/carrusel-imagenes.module';
+import { EtiquetasEntidadModule } from 'src/app/shared/etiquetas-entidad/etiquetas-entidad.module';
 
 @NgModule({
   imports: [
     ArtistaRoutingModule,
     CarruselImagenesModule,
+    EtiquetasEntidadModule,
     CommonModule,
     MatCardModule,
     MatDividerModule,

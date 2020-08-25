@@ -1,0 +1,108 @@
+<h4>Datos de la Edición</h4>
+<mat-dialog-content>
+  <form [formGroup]="edicionForm" class="dialog">
+    <mat-form-field>
+      <mat-label>Nombre</mat-label>
+      <input
+        matInput
+        type="text"
+        formControlName="nombre"
+        autocomplete="off"
+        maxlength="100"
+        minlength="2"
+        required
+      />
+      <mat-hint>Nombre</mat-hint>
+      <mat-error *ngIf="crearEdicionForm.nombre?.errors?.minlength"
+        >El campo debe tener al menos 2 caracteres
+      </mat-error>
+      <mat-error *ngIf="crearEdicionForm.nombre?.errors?.maxlength"
+        >El campo debe tener como máximo 100 caracteres
+      </mat-error>
+      <mat-error *ngIf="crearEdicionForm.nombre?.errors?.required"
+        >Campo requerido</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Descripción</mat-label>
+      <input
+        matInput
+        type="text"
+        formControlName="descripcion"
+        autocomplete="off"
+        maxlength="150"
+        required
+      />
+      <mat-hint>Descripción</mat-hint>
+      <mat-error *ngIf="crearEdicionForm.descripcion?.errors?.maxlength"
+        >El campo debe tener como máximo 150 caracteres
+      </mat-error>
+      <mat-error *ngIf="crearEdicionForm.descripcion?.errors?.required"
+        >Campo requerido</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        type="text"
+        [matDatepicker]="desdeF"
+        formControlName="desde"
+        autocomplete="off"
+        [min]="minDate"
+        readonly
+        required
+      />
+      <mat-datepicker-toggle matSuffix [for]="desdeF"></mat-datepicker-toggle>
+      <mat-datepicker #desdeF></mat-datepicker>
+      <mat-hint>Desde</mat-hint>
+      <mat-error *ngIf="crearEdicionForm.desde?.errors?.parse"
+        >Fecha no válida</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        type="text"
+        [matDatepicker]="hastaF"
+        formControlName="hasta"
+        autocomplete="off"
+        [min]="minDate"
+        readonly
+        required
+      />
+      <mat-datepicker-toggle matSuffix [for]="hastaF"></mat-datepicker-toggle>
+      <mat-datepicker #hastaF></mat-datepicker>
+      <mat-hint>Hasta</mat-hint>
+      <mat-error *ngIf="crearEdicionForm.hasta?.errors?.parse"
+        >Fecha no válida</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Actividades</mat-label>
+      <mat-select
+        formControlName="actividades"
+        [compareWith]="compare"
+        multiple
+      >
+        <mat-option
+          *ngFor="let actividad of actividadesObs | async"
+          [value]="actividad"
+        >
+          {{ actividad.nombre }}
+        </mat-option>
+      </mat-select>
+      <mat-hint>Actividades</mat-hint>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button
+    type="submit"
+    class="submit-button"
+    [mat-dialog-close]="edicion"
+    (click)="onSubmit()"
+    [disabled]="edicionForm.invalid"
+  >
+    Enviar
+  </button>
+</mat-dialog-actions>

@@ -28,6 +28,7 @@ export class AuthenticationService {
       jwtoken = JSON.parse(localStorage.getItem("jwtuser"));
     try {
       usu = {
+        id: jwtoken.id,
         nombreUsuario: jwtoken.nombreUsuario,
         rol: jwtoken.rol,
         imagen: jwtoken.imagen,

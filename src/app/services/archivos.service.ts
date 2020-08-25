@@ -23,8 +23,8 @@ export class ArchivosService {
     return this.http.get<IImagen>(url, options);
   }
 
-  guardarImagen(form: FormData) {
-    let url = `${this.endpoints.archivos}`,
+  guardarImagen(form: FormData, path: string) {
+    let url = `${this.endpoints.archivos}${path}`,
       options = {
         //headers: this.headers,
       };

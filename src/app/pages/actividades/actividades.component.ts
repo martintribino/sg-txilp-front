@@ -1,24 +1,24 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef } from "@angular/core";
-import { MatPaginator } from "@angular/material/paginator";
-import { BehaviorSubject } from "rxjs";
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { BehaviorSubject } from 'rxjs';
 import {
   MSGTIME,
   IActividad,
   ActionTipo,
-} from "src/app/interface/interface.model";
-import { MatTableDataSource } from "@angular/material/table";
-import { ActividadService } from "src/app/services/actividad.service";
+} from 'src/app/interface/interface.model';
+import { MatTableDataSource } from '@angular/material/table';
+import { ActividadService } from 'src/app/services/actividad.service';
 import {
   MatSnackBar,
   MatSnackBarVerticalPosition,
-} from "@angular/material/snack-bar";
-import { MatDialog } from "@angular/material/dialog";
-import { FormActividadComponent } from "src/app/dialog/form-actividad/form-actividad.component";
+} from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { FormActividadComponent } from 'src/app/dialog/form-actividad/form-actividad.component';
 
 @Component({
-  selector: "app-actividades",
-  templateUrl: "./actividades.component.html",
-  styleUrls: ["./actividades.component.styl"],
+  selector: 'app-actividades',
+  templateUrl: './actividades.component.html',
+  styleUrls: ['./actividades.component.styl'],
 })
 export class ActividadesComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -28,11 +28,11 @@ export class ActividadesComponent implements OnInit {
   private loading: boolean = false;
   private pageSizeOptions: number[] = [5, 10, 20];
   private displayedColumns: Array<string> = [
-    "nombre",
-    "descripcion",
-    "desde",
-    "hasta",
-    "actions",
+    'nombre',
+    'descripcion',
+    'desde',
+    'hasta',
+    'actions',
   ];
 
   constructor(
@@ -85,20 +85,20 @@ export class ActividadesComponent implements OnInit {
   onCreate() {
     let actividad: IActividad = {
       id: null,
-      nombre: "",
-      descripcion: "",
-      desde: null,
-      hasta: null,
-      vendidas: 0,
+      nombre: '',
+      descripcion: '',
+      desde: new Date(),
+      hasta: new Date(),
+      entradasVendidas: 0,
       obra: null,
       espacio: null,
       edicion: null,
     };
     const body = { action: ActionTipo.crear, data: actividad },
       dialogRef = this.dialog.open(FormActividadComponent, {
-        maxWidth: "550px",
-        maxHeight: "100%",
-        height: "auto",
+        maxWidth: '550px',
+        maxHeight: '100%',
+        height: 'auto',
         data: body,
       });
     dialogRef.afterClosed().subscribe((result) => {
@@ -108,14 +108,14 @@ export class ActividadesComponent implements OnInit {
           () => {
             this.mostrarMensaje(
               `Se ha creado correctamente la actividad ${act.nombre}`,
-              "success"
+              'success'
             );
             this.ngOnInit();
           },
           () => {
             this.mostrarMensaje(
               `No se ha podido crear la actividad ${act.nombre}`,
-              "error"
+              'error'
             );
           }
         );
@@ -131,11 +131,11 @@ export class ActividadesComponent implements OnInit {
 
   private mostrarMensaje(
     strError: string,
-    clase: string = "",
+    clase: string = '',
     time: number = MSGTIME,
-    pos: MatSnackBarVerticalPosition = "bottom"
+    pos: MatSnackBarVerticalPosition = 'bottom'
   ) {
-    this.snackBar.open(strError, "", {
+    this.snackBar.open(strError, '', {
       duration: time,
       verticalPosition: pos,
       panelClass: clase,

@@ -1,0 +1,88 @@
+<h4>Datos de la obra</h4>
+<mat-dialog-content>
+  <form [formGroup]="obraForm" class="dialog obra-form">
+    <mat-form-field>
+      <mat-label>Nombre</mat-label>
+      <input
+        matInput
+        type="text"
+        formControlName="nombre"
+        autocomplete="off"
+        maxlength="100"
+        minlength="2"
+        required
+      />
+      <mat-hint>Nombre</mat-hint>
+      <mat-error *ngIf="getObraForm.nombre?.errors?.minlength"
+        >El campo debe tener al menos 2 caracteres
+      </mat-error>
+      <mat-error *ngIf="getObraForm.nombre?.errors?.maxlength"
+        >El campo debe tener como máximo 100 caracteres
+      </mat-error>
+      <mat-error *ngIf="getObraForm.nombre?.errors?.required"
+        >Campo requerido</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Descripción</mat-label>
+      <input
+        matInput
+        type="text"
+        formControlName="descripcion"
+        autocomplete="off"
+        maxlength="150"
+        required
+      />
+      <mat-hint>Descripción</mat-hint>
+      <mat-error *ngIf="getObraForm.descripcion?.errors?.maxlength"
+        >El campo debe tener como máximo 150 caracteres
+      </mat-error>
+      <mat-error *ngIf="getObraForm.descripcion?.errors?.required"
+        >Campo requerido</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Duración</mat-label>
+      <input
+        matInput
+        type="number"
+        formControlName="duracion"
+        min="0"
+        required
+      />
+      <mat-hint>Duración</mat-hint>
+      <mat-error *ngIf="getObraForm.duracion?.errors?.min"
+        >El campo debe ser mayor a 0
+      </mat-error>
+      <mat-error *ngIf="getObraForm.duracion?.errors?.required"
+        >Campo requerido</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Artistas</mat-label>
+      <mat-select formControlName="artistas" [compareWith]="compare" multiple>
+        <mat-option
+          *ngFor="let artista of (artistasObs | async)"
+          [value]="artista"
+        >
+          {{ artista.nombre }}
+        </mat-option>
+      </mat-select>
+      <mat-hint>Artistas</mat-hint>
+      <mat-error *ngIf="getObraForm.artistas?.errors?.required"
+        >Campo requerido</mat-error
+      >
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button
+    type="submit"
+    class="submit-button"
+    [mat-dialog-close]="obra"
+    (click)="onSubmit()"
+    [disabled]="obraForm.invalid"
+  >
+    Enviar
+  </button>
+</mat-dialog-actions>

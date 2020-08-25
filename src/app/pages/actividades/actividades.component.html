@@ -21,17 +21,21 @@
     </ng-container>
     <ng-container matColumnDef="descripcion">
       <mat-header-cell *matHeaderCellDef>Descripción</mat-header-cell>
-      <mat-cell *matCellDef="let actividad"
-        >{{ actividad.descripcion }}</mat-cell
-      >
+      <mat-cell *matCellDef="let actividad">{{
+        actividad.descripcion
+      }}</mat-cell>
     </ng-container>
     <ng-container matColumnDef="desde">
       <mat-header-cell *matHeaderCellDef>Desde</mat-header-cell>
-      <mat-cell *matCellDef="let actividad">{{ actividad.desde }}</mat-cell>
+      <mat-cell *matCellDef="let actividad">{{
+        actividad.desde | date
+      }}</mat-cell>
     </ng-container>
     <ng-container matColumnDef="hasta">
       <mat-header-cell *matHeaderCellDef>Hasta</mat-header-cell>
-      <mat-cell *matCellDef="let actividad">{{ actividad.hasta }}</mat-cell>
+      <mat-cell *matCellDef="let actividad">{{
+        actividad.hasta | date
+      }}</mat-cell>
     </ng-container>
     <ng-container matColumnDef="actions">
       <mat-header-cell *matHeaderCellDef>
@@ -62,7 +66,7 @@
     <mat-row
       *matRowDef="let actividad; let row; columns: displayedColumns"
       class="click-row"
-      [routerLink]="['/actividads/', actividad.id]"
+      [routerLink]="['/actividades/', actividad.id]"
     >
     </mat-row>
   </table>

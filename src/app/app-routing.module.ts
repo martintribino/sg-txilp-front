@@ -4,9 +4,7 @@ import { CommonModule } from '@angular/common';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { NotAllowedComponent } from './pages/not-allowed/not-allowed.component';
 import { RolGuard } from './auth/rol.guard';
-import { Usuario } from 'src/model/usuario';
 import { RolTipo } from './interface/interface.model';
-import { ArtistaComponent } from './pages/artista/artista.component';
 
 const routes: Routes = [
   {

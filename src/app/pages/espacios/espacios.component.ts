@@ -1,25 +1,25 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef } from "@angular/core";
-import { MatPaginator } from "@angular/material/paginator";
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
 import {
   IEspacio,
   MSGTIME,
   EspacioEstadoTipo,
   ActionTipo,
-} from "src/app/interface/interface.model";
-import { BehaviorSubject } from "rxjs";
-import { MatTableDataSource } from "@angular/material/table";
+} from 'src/app/interface/interface.model';
+import { BehaviorSubject } from 'rxjs';
+import { MatTableDataSource } from '@angular/material/table';
 import {
   MatSnackBar,
   MatSnackBarVerticalPosition,
-} from "@angular/material/snack-bar";
-import { MatDialog } from "@angular/material/dialog";
-import { EspacioService } from "src/app/services/espacio.service";
-import { FormEspacioComponent } from "src/app/dialog/form-espacio/form-espacio.component";
+} from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { EspacioService } from 'src/app/services/espacio.service';
+import { FormEspacioComponent } from 'src/app/dialog/form-espacio/form-espacio.component';
 
 @Component({
-  selector: "app-espacios",
-  templateUrl: "./espacios.component.html",
-  styleUrls: ["./espacios.component.styl"],
+  selector: 'app-espacios',
+  templateUrl: './espacios.component.html',
+  styleUrls: ['./espacios.component.styl'],
 })
 export class EspaciosComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -29,11 +29,11 @@ export class EspaciosComponent implements OnInit {
   private loading: boolean = false;
   private pageSizeOptions: number[] = [5, 10, 20];
   private displayedColumns: Array<string> = [
-    "nombre",
-    "descripcion",
-    "capacidad",
-    "condicion",
-    "actions",
+    'nombre',
+    'descripcion',
+    'capacidad',
+    'condicion',
+    'actions',
   ];
 
   constructor(
@@ -62,7 +62,6 @@ export class EspaciosComponent implements OnInit {
   }
 
   onSuccess(result: Array<IEspacio>) {
-    //this.espaciosSubject.next(result);
     this.changeDataSource(result);
     this.loading = false;
   }
@@ -86,17 +85,18 @@ export class EspaciosComponent implements OnInit {
   onCreate() {
     let espacio: IEspacio = {
       id: null,
-      nombre: "",
-      descripcion: "",
+      nombre: '',
+      descripcion: '',
       capacidad: 0,
       condicion: EspacioEstadoTipo.Abierto,
       direccion: null,
+      etiquetas: [],
     };
     const body = { action: ActionTipo.crear, data: espacio },
       dialogRef = this.dialog.open(FormEspacioComponent, {
-        maxWidth: "550px",
-        maxHeight: "100%",
-        height: "auto",
+        maxWidth: '550px',
+        maxHeight: '100%',
+        height: 'auto',
         data: body,
       });
     dialogRef.afterClosed().subscribe((result) => {
@@ -106,14 +106,14 @@ export class EspaciosComponent implements OnInit {
           () => {
             this.mostrarMensaje(
               `Se ha creado correctamente el espacio ${esp.nombre}`,
-              "success"
+              'success'
             );
             this.ngOnInit();
           },
           () => {
             this.mostrarMensaje(
               `No se ha podido crear el espacio ${esp.nombre}`,
-              "error"
+              'error'
             );
           }
         );
@@ -129,11 +129,11 @@ export class EspaciosComponent implements OnInit {
 
   private mostrarMensaje(
     strError: string,
-    clase: string = "",
+    clase: string = '',
     time: number = MSGTIME,
-    pos: MatSnackBarVerticalPosition = "bottom"
+    pos: MatSnackBarVerticalPosition = 'bottom'
   ) {
-    this.snackBar.open(strError, "", {
+    this.snackBar.open(strError, '', {
       duration: time,
       verticalPosition: pos,
       panelClass: clase,

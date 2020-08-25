@@ -24,8 +24,8 @@ export class UsuariosService {
     return this.http.get<Array<IUsuario>>(url, options);
   }
 
-  getUsuario(username: string): Observable<IUsuario> {
-    let url = `${this.endpoints.usuarios}${username}`,
+  getUsuario(id: number): Observable<IUsuario> {
+    let url = `${this.endpoints.perfil}${id}`,
       options = {
         headers: this.headers,
       };

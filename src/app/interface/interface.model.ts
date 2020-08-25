@@ -2,19 +2,19 @@
 export const MSGTIME = 2000;
 //enums
 export enum RolTipo {
-  Administrador = "ADMINISTRADOR",
-  Operador = "OPERADOR",
-  Participante = "PARTICIPANTE",
-  Visitante = "VISITANTE",
+  Administrador = 'ADMINISTRADOR',
+  Operador = 'OPERADOR',
+  Participante = 'PARTICIPANTE',
+  Visitante = 'VISITANTE',
 }
 export enum ActionTipo {
-  crear = "crear",
-  editar = "editar",
-  borrar = "borrar",
+  crear = 'crear',
+  editar = 'editar',
+  borrar = 'borrar',
 }
 export enum EspacioEstadoTipo {
-  Abierto = "ABIERTO",
-  Cerrado = "CERRADO",
+  Abierto = 'ABIERTO',
+  Cerrado = 'CERRADO',
 }
 //interface
 export interface IDictionary<T> {
@@ -30,6 +30,7 @@ export interface IPaginatorEv {
   previousPageIndex: number;
 }
 export interface IJWT {
+  id: number;
   nombreUsuario: string;
   rol: RolTipo;
   token?: string;
@@ -53,7 +54,8 @@ export interface IArtista {
   nombre: string;
   apellido: string;
   apodo: string;
-  fotos?: Array<string>;
+  fotos: Array<string>;
+  etiquetas: Array<IEtiqueta>;
 }
 export interface IActividad {
   id: number;
@@ -61,10 +63,10 @@ export interface IActividad {
   descripcion: string;
   desde: Date;
   hasta: Date;
-  vendidas: number;
-  obra: IObra;
-  espacio: IEspacio;
-  edicion: IEdicion;
+  entradasVendidas: number;
+  obra?: IObra;
+  espacio?: IEspacio;
+  edicion?: IEdicion;
 }
 export interface IImagen {
   b64str: string;
@@ -73,17 +75,20 @@ export interface IImagen {
   height: number;
 }
 export interface IEtiqueta {
+  id: number;
   nombre: string;
-  descripcion: string;
   artistas?: Array<IArtista>;
   espacios?: Array<IEspacio>;
   obras?: Array<IObra>;
 }
 export interface IObra {
+  id: number;
   nombre: string;
   descripcion: string;
   duracion: number;
-  fotos?: Array<string>;
+  fotos: Array<string>;
+  artistas: Array<IArtista>;
+  etiquetas: Array<IEtiqueta>;
 }
 export interface IEdicion {
   id: number;
@@ -101,8 +106,10 @@ export interface IEspacio {
   capacidad: number;
   condicion: EspacioEstadoTipo;
   direccion: IDireccion;
+  etiquetas: Array<IEtiqueta>;
 }
 export interface IDireccion {
+  id: number;
   calle: string;
   ciudad: string;
   estado: string;
@@ -125,6 +132,7 @@ export interface ILoginBody {
   nombre_usuario_viejo?: string;
 }
 export interface IDialogBody<T> {
-  action: ActionTipo;
+  action?: ActionTipo;
+  path?: string;
   data: T;
 }

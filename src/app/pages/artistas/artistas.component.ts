@@ -1,24 +1,24 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef } from "@angular/core";
-import { MatPaginator } from "@angular/material/paginator";
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
 import {
   IArtista,
   ActionTipo,
   MSGTIME,
-} from "src/app/interface/interface.model";
-import { MatTableDataSource } from "@angular/material/table";
-import { BehaviorSubject } from "rxjs";
+} from 'src/app/interface/interface.model';
+import { MatTableDataSource } from '@angular/material/table';
+import { BehaviorSubject } from 'rxjs';
 import {
   MatSnackBar,
   MatSnackBarVerticalPosition,
-} from "@angular/material/snack-bar";
-import { MatDialog } from "@angular/material/dialog";
-import { ArtistaService } from "src/app/services/artista.service";
-import { FormArtistaComponent } from "src/app/dialog/form-artista/form-artista.component";
+} from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { ArtistaService } from 'src/app/services/artista.service';
+import { FormArtistaComponent } from 'src/app/dialog/form-artista/form-artista.component';
 
 @Component({
-  selector: "app-artistas",
-  templateUrl: "./artistas.component.html",
-  styleUrls: ["./artistas.component.styl"],
+  selector: 'app-artistas',
+  templateUrl: './artistas.component.html',
+  styleUrls: ['./artistas.component.styl'],
 })
 export class ArtistasComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -28,10 +28,10 @@ export class ArtistasComponent implements OnInit {
   private loading: boolean = false;
   private pageSizeOptions: number[] = [5, 10, 20];
   private displayedColumns: Array<string> = [
-    "nombre",
-    "apellido",
-    "apodo",
-    "actions",
+    'nombre',
+    'apellido',
+    'apodo',
+    'actions',
   ];
 
   constructor(
@@ -60,7 +60,6 @@ export class ArtistasComponent implements OnInit {
   }
 
   onSuccess(result: Array<IArtista>) {
-    this.artistasSubject.next(result);
     this.changeDataSource(result);
     this.loading = false;
   }
@@ -84,15 +83,17 @@ export class ArtistasComponent implements OnInit {
   onCreate() {
     let artista: IArtista = {
       id: null,
-      nombre: "",
-      apellido: "",
-      apodo: "",
+      nombre: '',
+      apellido: '',
+      apodo: '',
+      fotos: [],
+      etiquetas: [],
     };
     const body = { action: ActionTipo.crear, data: artista },
       dialogRef = this.dialog.open(FormArtistaComponent, {
-        maxWidth: "550px",
-        maxHeight: "100%",
-        height: "auto",
+        maxWidth: '550px',
+        maxHeight: '100%',
+        height: 'auto',
         data: body,
       });
     dialogRef.afterClosed().subscribe((result) => {
@@ -102,14 +103,14 @@ export class ArtistasComponent implements OnInit {
           () => {
             this.mostrarMensaje(
               `Se ha creado correctamente el artista ${art.nombre}`,
-              "success"
+              'success'
             );
             this.ngOnInit();
           },
           () => {
             this.mostrarMensaje(
               `No se ha podido crear el artista ${art.nombre}`,
-              "error"
+              'error'
             );
           }
         );
@@ -125,11 +126,11 @@ export class ArtistasComponent implements OnInit {
 
   private mostrarMensaje(
     strError: string,
-    clase: string = "",
+    clase: string = '',
     time: number = MSGTIME,
-    pos: MatSnackBarVerticalPosition = "bottom"
+    pos: MatSnackBarVerticalPosition = 'bottom'
   ) {
-    this.snackBar.open(strError, "", {
+    this.snackBar.open(strError, '', {
       duration: time,
       verticalPosition: pos,
       panelClass: clase,

@@ -1,11 +1,11 @@
-import { Component, OnInit, Input } from "@angular/core";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { environment } from "src/environments/environment";
+import { Component, OnInit, Input } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: "app-secure-img",
-  templateUrl: "./secure-img.component.html",
-  styleUrls: ["./secure-img.component.styl"],
+  selector: 'app-secure-img',
+  templateUrl: './secure-img.component.html',
+  styleUrls: ['./secure-img.component.styl'],
 })
 export class SecureImgComponent implements OnInit {
   @Input() slide: string;
@@ -20,16 +20,14 @@ export class SecureImgComponent implements OnInit {
     this.http
       .get(url, {
         headers,
-        responseType: "text",
+        responseType: 'text',
       })
       .subscribe(
         (src) => {
-          console.log(src);
           this.imgb64 = src;
         },
         () => {
-          console.log("assets/images/fallback.jpg");
-          this.imgb64 = "assets/images/fallback.jpg";
+          this.imgb64 = 'assets/images/fallback.jpg';
         }
       );
   }

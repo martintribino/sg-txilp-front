@@ -1,6 +1,10 @@
-import { Component, OnInit, ViewChild, Inject } from "@angular/core";
+import { Component, ViewChild, Inject } from "@angular/core";
 import { FileUploaderComponent } from "src/app/shared/file-uploader/file-uploader.component";
-import { IArtista } from "src/app/interface/interface.model";
+import {
+  IArtista,
+  IObra,
+  IDialogBody,
+} from "src/app/interface/interface.model";
 import { FormGroup, FormBuilder } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import {
@@ -17,7 +21,8 @@ import { ArchivosService } from "src/app/services/archivos.service";
 export class FormUploadImageComponent {
   @ViewChild("uploader", { static: true }) uploader: FileUploaderComponent;
 
-  private artista: IArtista;
+  private objeto: IArtista | IObra;
+  private path: string;
   private isSubmitting: boolean;
   uploadForm: FormGroup;
 
@@ -26,13 +31,14 @@ export class FormUploadImageComponent {
     private snackBar: MatSnackBar,
     private archService: ArchivosService,
     private formBuilder: FormBuilder,
-    @Inject(MAT_DIALOG_DATA) public data: IArtista
+    @Inject(MAT_DIALOG_DATA) public dialogdata: IDialogBody<IArtista | IObra>
   ) {
-    this.artista = data;
+    this.objeto = dialogdata.data;
+    this.path = dialogdata.path;
     this.isSubmitting = false;
     this.uploadForm = this.formBuilder.group({
       archivos: [],
-      artista: [this.artista.id],
+      objeto: [this.objeto.id],
     });
   }
 
@@ -42,31 +48,26 @@ export class FormUploadImageComponent {
     if (this.uploader.files.length > 0) {
       this.isSubmitting = true;
       var formData = new FormData();
-      formData.append("artista", this.uploadForm.get("artista").value);
+      formData.append("objeto", this.uploadForm.get("objeto").value);
       for (var i = 0; i < this.uploader.files.length; i++) {
         this.uploadForm.get("archivos").setValue(this.uploader.files[i]);
         formData.append("archivos", this.uploadForm.get("archivos").value);
       }
-      this.archService.guardarImagen(formData).subscribe(
+      this.archService.guardarImagen(formData, this.path).subscribe(
         (resul: any) =>
-          this.artistaSuccess(
-            `Se ha guardado correctamente la imagen para ${this.artista.nombre}`
-          ),
-        () =>
-          this.artistaError(
-            `No se ha podido guardar la imagen de ${this.artista.nombre}`
-          )
+          this.submitSuccess(`Se ha guardado correctamente la imagen`),
+        () => this.submitError(`No se ha podido guardar la imagen`)
       );
     }
   }
 
-  private artistaSuccess(strSuccess: string) {
+  private submitSuccess(strSuccess: string) {
     this.isSubmitting = false;
     this.showError(strSuccess, "success");
     this.dialogRef.close();
   }
 
-  private artistaError(strError: string) {
+  private submitError(strError: string) {
     this.isSubmitting = false;
     this.showError(strError, "error");
   }

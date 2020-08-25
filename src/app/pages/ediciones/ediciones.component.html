@@ -1,1 +1,85 @@
-<p>Ediciones</p>
+<div class="filtro-tabla">
+  <input
+    matInput
+    type="text"
+    (keyup)="aplicarFiltro($event)"
+    placeholder="Ingrese busqueda"
+    #input
+  />
+</div>
+<div
+  *ngIf="(edicionesObs | async)?.length > 0; then ifBlock; else elseBlock"
+></div>
+<ng-template #ifBlock>
+  <table
+    mat-table
+    class="edicion-table mat-elevation-z8"
+    [dataSource]="dataSource"
+    multiTemplateDataRows
+  >
+    <ng-container matColumnDef="nombre">
+      <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
+      <mat-cell *matCellDef="let edicion">{{ edicion.nombre }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="descripcion">
+      <mat-header-cell *matHeaderCellDef>Descripción</mat-header-cell>
+      <mat-cell *matCellDef="let edicion">{{ edicion.descripcion }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="desde">
+      <mat-header-cell *matHeaderCellDef>Desde</mat-header-cell>
+      <mat-cell *matCellDef="let edicion">{{ edicion.desde }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="hasta">
+      <mat-header-cell *matHeaderCellDef>Hasta</mat-header-cell>
+      <mat-cell *matCellDef="let edicion">{{ edicion.hasta }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef>
+        <button
+          mat-mini-fab
+          color="primary"
+          (click)="onCreate()"
+          class="fab-button"
+          matTooltip="Crear Edición"
+          matTooltipPosition="above"
+          aria-label="Crear Edición"
+        >
+          <mat-icon>person_add_alt_1</mat-icon>
+        </button>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let edicion"> </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="loading">
+      <mat-cell
+        class="loading-cell"
+        *matCellDef="let edicion"
+        [attr.colspan]="displayedColumns.length"
+      >
+        <mat-spinner diameter="50"></mat-spinner>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row
+      *matRowDef="let edicion; let row; columns: displayedColumns"
+      class="click-row"
+      [routerLink]="['/ediciones/', edicion.id]"
+    >
+    </mat-row>
+  </table>
+  <mat-paginator [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
+  </mat-paginator>
+</ng-template>
+<ng-template #elseBlock>
+  <mat-spinner *ngIf="loading"></mat-spinner>
+  <div *ngIf="!loading" class="no-edicion">
+    <h3 matLine>No hay ediciones.</h3>
+    <button
+      color="primary"
+      mat-mini-fab
+      aria-label="Crear Edición"
+      (click)="onCreate()"
+    >
+      <mat-icon>person_add_alt_1</mat-icon>
+    </button>
+  </div>
+</ng-template>

@@ -1,35 +1,37 @@
-import { Component, OnInit } from "@angular/core";
-import { ArtistaService } from "src/app/services/artista.service";
+import { Component, OnInit } from '@angular/core';
+import { ArtistaService } from 'src/app/services/artista.service';
 import {
   MatSnackBar,
   MatSnackBarVerticalPosition,
-} from "@angular/material/snack-bar";
-import { MatDialog } from "@angular/material/dialog";
-import { BehaviorSubject } from "rxjs";
+} from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { BehaviorSubject } from 'rxjs';
 import {
   IArtista,
   ActionTipo,
   MSGTIME,
   RolTipo,
-} from "src/app/interface/interface.model";
-import { Router, ActivatedRoute } from "@angular/router";
-import { FormArtistaComponent } from "src/app/dialog/form-artista/form-artista.component";
-import { AuthenticationService } from "src/app/services/auth.service";
-import { isArray } from "util";
-import { FormUploadImageComponent } from "src/app/dialog/form-upload-image/form-upload-image.component";
-import { ArchivosService } from "src/app/services/archivos.service";
+  IDialogBody,
+  IEtiqueta,
+} from 'src/app/interface/interface.model';
+import { Router, ActivatedRoute } from '@angular/router';
+import { FormArtistaComponent } from 'src/app/dialog/form-artista/form-artista.component';
+import { AuthenticationService } from 'src/app/services/auth.service';
+import { isArray } from 'util';
+import { FormUploadImageComponent } from 'src/app/dialog/form-upload-image/form-upload-image.component';
+import { ArchivosService } from 'src/app/services/archivos.service';
 
 @Component({
-  selector: "app-artista",
-  templateUrl: "./artista.component.html",
-  styleUrls: ["./artista.component.styl"],
+  selector: 'app-artista',
+  templateUrl: './artista.component.html',
+  styleUrls: ['./artista.component.styl'],
 })
 export class ArtistaComponent implements OnInit {
   private artistaSubject = new BehaviorSubject<IArtista>(null);
   artista = this.artistaSubject.asObservable();
   private loading: boolean = false;
   private id: number = null;
-  private imgPath: string = "assets/images/user.png";
+  private imgPath: string = 'assets/images/user.png';
 
   constructor(
     private authService: AuthenticationService,
@@ -41,7 +43,7 @@ export class ArtistaComponent implements OnInit {
     private route: ActivatedRoute
   ) {
     this.route.params.subscribe((params) => {
-      this.id = parseInt(params["id"]);
+      this.id = parseInt(params['id']);
     });
   }
 
@@ -73,11 +75,16 @@ export class ArtistaComponent implements OnInit {
   onAddPhoto() {
     let art = this.artistaSubject.value;
     if (art != null) {
-      const dialogRef = this.dialog.open(FormUploadImageComponent, {
-        maxWidth: "550px",
-        maxHeight: "100%",
-        height: "auto",
+      let body: IDialogBody<IArtista> = {
+        action: ActionTipo.crear,
+        path: 'artista',
         data: art,
+      };
+      const dialogRef = this.dialog.open(FormUploadImageComponent, {
+        maxWidth: '550px',
+        maxHeight: '100%',
+        height: 'auto',
+        data: body,
       });
       dialogRef.afterClosed().subscribe((result) => {
         this.ngOnInit();
@@ -86,16 +93,16 @@ export class ArtistaComponent implements OnInit {
   }
 
   onEdit() {
-    let art = this.artistaSubject.value;
-    if (art != null) {
+    let artst = this.artistaSubject.value;
+    if (artst != null) {
       const body = {
           action: ActionTipo.editar,
-          data: this.artistaSubject.value,
+          data: artst,
         },
         dialogRef = this.dialog.open(FormArtistaComponent, {
-          maxWidth: "550px",
-          maxHeight: "100%",
-          height: "auto",
+          maxWidth: '550px',
+          maxHeight: '100%',
+          height: 'auto',
           data: body,
         });
       dialogRef.afterClosed().subscribe((result) => {
@@ -105,14 +112,14 @@ export class ArtistaComponent implements OnInit {
             () => {
               this.mostrarMensaje(
                 `Se ha editado correctamente el artista ${art.nombre}`,
-                "success"
+                'success'
               );
               this.ngOnInit();
             },
             () => {
               this.mostrarMensaje(
                 `No se ha podido actualizar el artista ${art.nombre}`,
-                "error"
+                'error'
               );
             }
           );
@@ -129,16 +136,69 @@ export class ArtistaComponent implements OnInit {
         () => {
           this.mostrarMensaje(
             `Se ha dado de baja correctamente al artista ${art.nombre}`,
-            "success"
+            'success'
           );
-          //this.ngOnInit();
-          this.router.navigate(["/artistas"]);
+          this.router.navigate(['/artistas']);
         },
         () => {
           this.mostrarMensaje(
             `No se ha podido dar de baja el artista ${art.nombre}`,
-            "error"
+            'error'
           );
+          this.loading = false;
+        },
+        () => {
+          this.loading = false;
+        }
+      );
+    }
+  }
+
+  agregarEtiqueta(nombreSel: string) {
+    let art = this.artistaSubject.value;
+    if (art != null) {
+      let eti: IEtiqueta = {
+          id: null,
+          nombre: nombreSel,
+        },
+        etiAux = [...art.etiquetas];
+      art.etiquetas.push(eti);
+      this.loading = true;
+      this.artistaServ.actualizarArtista(art).subscribe(
+        () => {
+          this.mostrarMensaje(
+            `Se ha agregado la etiqueta ${nombreSel}`,
+            'success'
+          );
+          this.ngOnInit();
+        },
+        () => {
+          this.mostrarMensaje(
+            `No se ha podido agregar la etiqueta ${nombreSel}`,
+            'error'
+          );
+          art.etiquetas = etiAux;
+          this.loading = false;
+        },
+        () => {
+          this.loading = false;
+        }
+      );
+    }
+  }
+
+  eliminarEtiqueta(etiqueta: IEtiqueta) {
+    let art = this.artistaSubject.value;
+    if (art != null) {
+      art.etiquetas = art.etiquetas.filter((e) => e.id != etiqueta.id);
+      this.loading = true;
+      this.artistaServ.actualizarArtista(art).subscribe(
+        () => {
+          this.mostrarMensaje(`Se ha eliminado la etiqueta`, 'success');
+          this.ngOnInit();
+        },
+        () => {
+          this.mostrarMensaje(`No se ha podido eliminar la etiqueta`, 'error');
           this.loading = false;
         },
         () => {
@@ -150,11 +210,11 @@ export class ArtistaComponent implements OnInit {
 
   private mostrarMensaje(
     strError: string,
-    clase: string = "",
+    clase: string = '',
     time: number = MSGTIME,
-    pos: MatSnackBarVerticalPosition = "bottom"
+    pos: MatSnackBarVerticalPosition = 'bottom'
   ) {
-    this.snackBar.open(strError, "", {
+    this.snackBar.open(strError, '', {
       duration: time,
       verticalPosition: pos,
       panelClass: clase,

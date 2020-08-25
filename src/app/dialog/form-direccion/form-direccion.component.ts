@@ -10,6 +10,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class FormDireccionComponent {
   direccionForm: FormGroup = new FormGroup({
+    id: new FormControl(0),
     calle: new FormControl(''),
     ciudad: new FormControl(''),
     estado: new FormControl(''),
@@ -24,6 +25,7 @@ export class FormDireccionComponent {
     @Inject(MAT_DIALOG_DATA) public data: IDireccion
   ) {
     this.direccionForm = new FormGroup({
+      id: new FormControl(null),
       calle: new FormControl(''),
       ciudad: new FormControl(''),
       estado: new FormControl(''),
@@ -32,17 +34,9 @@ export class FormDireccionComponent {
       longitud: new FormControl(0),
     });
     this.direccion = data;
-    if (this.direccion != null) {
-      this.crearDireccionForm.calle.setValue(this.direccion.calle);
-      this.crearDireccionForm.ciudad.setValue(this.direccion.ciudad);
-      this.crearDireccionForm.estado.setValue(this.direccion.estado);
-      this.crearDireccionForm.codigoPostal.setValue(
-        this.direccion.codigoPostal
-      );
-      this.crearDireccionForm.latitud.setValue(this.direccion.latitud);
-      this.crearDireccionForm.longitud.setValue(this.direccion.longitud);
-    } else {
+    if (this.direccion == null) {
       this.direccion = {
+        id: null,
         calle: '',
         ciudad: '',
         estado: '',
@@ -51,6 +45,13 @@ export class FormDireccionComponent {
         longitud: 0,
       };
     }
+    this.crearDireccionForm.id.setValue(this.direccion.id);
+    this.crearDireccionForm.calle.setValue(this.direccion.calle);
+    this.crearDireccionForm.ciudad.setValue(this.direccion.ciudad);
+    this.crearDireccionForm.estado.setValue(this.direccion.estado);
+    this.crearDireccionForm.codigoPostal.setValue(this.direccion.codigoPostal);
+    this.crearDireccionForm.latitud.setValue(this.direccion.latitud);
+    this.crearDireccionForm.longitud.setValue(this.direccion.longitud);
   }
 
   onSubmit() {

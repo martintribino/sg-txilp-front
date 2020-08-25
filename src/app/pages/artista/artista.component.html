@@ -24,6 +24,12 @@
       <app-carrusel-imagenes
         [slides]="(artista | async)?.fotos"
       ></app-carrusel-imagenes>
+      <app-etiquetas-entidad
+        [etiquetas]="(artista | async)?.etiquetas"
+        [loading]="loading"
+        (agregar)="agregarEtiqueta($event)"
+        (eliminar)="eliminarEtiqueta($event)"
+      ></app-etiquetas-entidad>
     </mat-card-content>
     <mat-card-actions>
       <button
