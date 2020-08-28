@@ -19,9 +19,9 @@ export class FormEdicionComponent {
   edicionForm: FormGroup;
   edicion: IEdicion = null;
   private action: ActionTipo;
-  private minDate: Date = new Date();
+  minDate: Date = new Date();
   private actividadesSubject = new BehaviorSubject<Array<IActividad>>([]);
-  private actividadesObs = this.actividadesSubject.asObservable();
+  actividadesObs = this.actividadesSubject.asObservable();
 
   constructor(
     public dialogRef: MatDialogRef<FormEdicionComponent>,

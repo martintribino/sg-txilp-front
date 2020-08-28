@@ -1,5 +1,10 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  ValidatorFn,
+} from '@angular/forms';
 import {
   IActividad,
   ActionTipo,
@@ -29,13 +34,13 @@ export class FormActividadComponent {
   });
   actividad: IActividad = null;
   private action: ActionTipo;
-  private minDate: Date = new Date();
+  minDate: Date = new Date();
   private espaciosSubject = new BehaviorSubject<Array<IEspacio>>([]);
-  private espaciosObs = this.espaciosSubject.asObservable();
+  espaciosObs = this.espaciosSubject.asObservable();
   private obrasSubject = new BehaviorSubject<Array<IObra>>([]);
-  private obrasObs = this.obrasSubject.asObservable();
+  obrasObs = this.obrasSubject.asObservable();
   private edicionesSubject = new BehaviorSubject<Array<IEdicion>>([]);
-  private edicionesObs = this.edicionesSubject.asObservable();
+  edicionesObs = this.edicionesSubject.asObservable();
 
   constructor(
     public dialogRef: MatDialogRef<FormActividadComponent>,
@@ -44,13 +49,17 @@ export class FormActividadComponent {
     private espacioServ: EspacioService,
     @Inject(MAT_DIALOG_DATA) public body: IDialogBody<IActividad>
   ) {
+    let validators: ValidatorFn[] = [Validators.min(0)];
+    if (this.actividad != null && this.actividad.espacio != null) {
+      validators.push(Validators.max(this.actividad.espacio.capacidad));
+    }
     this.actividadForm = new FormGroup({
       id: new FormControl(null),
       nombre: new FormControl(''),
       descripcion: new FormControl(''),
       desde: new FormControl(null),
       hasta: new FormControl(null),
-      entradasVendidas: new FormControl(0),
+      entradasVendidas: new FormControl(0, validators),
       obra: new FormControl(null),
       espacio: new FormControl(null),
       edicion: new FormControl(null),

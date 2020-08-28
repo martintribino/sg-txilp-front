@@ -1,7 +1,8 @@
 import { Component, Inject } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { IDireccion, ICoordinadas } from 'src/app/interface/interface.model';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { regexPostal } from 'src/app/helpers/constants';
 
 @Component({
   selector: 'app-form-direccion',
@@ -14,7 +15,10 @@ export class FormDireccionComponent {
     calle: new FormControl(''),
     ciudad: new FormControl(''),
     estado: new FormControl(''),
-    codigoPostal: new FormControl(null),
+    codigoPostal: new FormControl(null, [
+      Validators.min(0),
+      Validators.pattern(regexPostal),
+    ]),
     latitud: new FormControl(null),
     longitud: new FormControl(null),
   });

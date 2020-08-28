@@ -20,7 +20,7 @@ export class EtiquetasComponent implements OnInit {
   private addOnBlur = true;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   private etiquetasSubject = new BehaviorSubject<Array<IEtiqueta>>([]);
-  private etiquetas = this.etiquetasSubject.asObservable();
+  etiquetas = this.etiquetasSubject.asObservable();
   private loading: boolean = false;
 
   constructor(
@@ -44,14 +44,12 @@ export class EtiquetasComponent implements OnInit {
 
   ngOnDestroy() {}
 
-  add(event: MatChipInputEvent): void {
-    const input = event.input;
-    const value = event.value;
-    if ((value || '').trim()) {
+  agregarEtiqueta(nombreSel: string): void {
+    if ((nombreSel || '').trim()) {
       this.loading = true;
       let tag: IEtiqueta = {
         id: null,
-        nombre: value,
+        nombre: nombreSel,
       };
       this.etiquetasServ.crearEtiqueta(tag).subscribe(
         (data) => {
@@ -63,18 +61,15 @@ export class EtiquetasComponent implements OnInit {
           this.loading = false;
         },
         (error) => {
-          this.mostrarMensaje(`No se ha podido agregar la etiqueta`, 'success');
+          this.mostrarMensaje(`No se ha podido agregar la etiqueta`, 'error');
           this.loading = false;
         }
       );
     }
-    // Reset the input value
-    if (input) {
-      input.value = '';
-    }
   }
 
-  remove(etiqueta: IEtiqueta): void {
+  eliminarEtiqueta(etiqueta: IEtiqueta): void {
+    this.loading = true;
     this.etiquetasServ.eliminarEtiqueta(etiqueta).subscribe(
       (data) => {
         this.mostrarMensaje(
@@ -82,12 +77,17 @@ export class EtiquetasComponent implements OnInit {
           'success'
         );
         this.ngOnInit();
+        this.loading = false;
       },
       (error) => {
         this.mostrarMensaje(
           `No se ha podido eliminar la etiqueta ${etiqueta.nombre}`,
-          'success'
+          'error'
         );
+        this.loading = false;
+      },
+      () => {
+        this.loading = false;
       }
     );
   }

@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {
   IActividad,
   ActionTipo,
@@ -10,6 +10,7 @@ import {
   ICoordinadas,
 } from 'src/app/interface/interface.model';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { regexPostal } from 'src/app/helpers/constants';
 
 @Component({
   selector: 'app-form-espacio',
@@ -21,7 +22,7 @@ export class FormEspacioComponent {
   espacio: IEspacio = null;
   direccion: IDireccion = null;
   private action: ActionTipo;
-  private tipos: Array<{ indice: string; value: string }> = [];
+  tipos: Array<{ indice: string; value: string }> = [];
   private tipoSelected: string = '';
 
   constructor(
@@ -65,14 +66,17 @@ export class FormEspacioComponent {
       id: new FormControl(this.espacio.id),
       nombre: new FormControl(this.espacio.nombre),
       descripcion: new FormControl(this.espacio.descripcion),
-      capacidad: new FormControl(this.espacio.capacidad),
+      capacidad: new FormControl(this.espacio.capacidad, [Validators.min(0)]),
       condicion: new FormControl(this.espacio.condicion),
       direccion: new FormGroup({
         id: new FormControl(this.espacio.direccion.id),
         calle: new FormControl(this.espacio.direccion.calle),
         ciudad: new FormControl(this.espacio.direccion.ciudad),
         estado: new FormControl(this.espacio.direccion.estado),
-        codigoPostal: new FormControl(this.espacio.direccion.codigoPostal),
+        codigoPostal: new FormControl(this.espacio.direccion.codigoPostal, [
+          Validators.min(0),
+          Validators.pattern(regexPostal),
+        ]),
         latitud: new FormControl(this.espacio.direccion.latitud),
         longitud: new FormControl(this.espacio.direccion.longitud),
       }),

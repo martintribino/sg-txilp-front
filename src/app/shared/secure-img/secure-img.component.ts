@@ -10,7 +10,7 @@ import { environment } from 'src/environments/environment';
 export class SecureImgComponent implements OnInit {
   @Input() slide: string;
   private urldom: string = environment.endpoints.archivos;
-  private imgb64: string = null;
+  imgb64: string = null;
 
   constructor(private http: HttpClient) {}
 

@@ -47,9 +47,12 @@
         type="number"
         formControlName="codigoPostal"
         autocomplete="off"
-        min="1"
+        min="0"
         required
       />
+      <mat-error *ngIf="crearDireccionForm.codigoPostal?.errors?.pattern">
+        Debe ingresar un código postal correcto
+      </mat-error>
       <mat-error *ngIf="crearDireccionForm.codigoPostal?.errors?.min">
         El campo debe ser mayor que 0
       </mat-error>

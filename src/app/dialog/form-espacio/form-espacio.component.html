@@ -61,12 +61,7 @@
     </mat-form-field>
     <mat-form-field>
       <mat-label>Condición</mat-label>
-      <mat-select
-        placeholder="Tipo"
-        formControlName="condicion"
-        [(value)]="condicionSelected"
-        required
-      >
+      <mat-select placeholder="Tipo" formControlName="condicion" required>
         <mat-option *ngFor="let condicion of tipos" [value]="condicion.indice">
           {{ condicion.value }}
         </mat-option>
@@ -127,6 +122,9 @@
           min="1"
           required
         />
+        <mat-error *ngIf="direccionForm.codigoPostal?.errors?.pattern">
+          Debe ingresar un código postal correcto
+        </mat-error>
         <mat-error *ngIf="direccionForm.codigoPostal?.errors?.min">
           El campo debe ser mayor que 0
         </mat-error>

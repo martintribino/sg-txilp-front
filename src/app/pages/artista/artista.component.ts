@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  AfterViewInit,
+  AfterViewChecked,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { ArtistaService } from 'src/app/services/artista.service';
 import {
   MatSnackBar,
@@ -26,12 +31,12 @@ import { ArchivosService } from 'src/app/services/archivos.service';
   templateUrl: './artista.component.html',
   styleUrls: ['./artista.component.styl'],
 })
-export class ArtistaComponent implements OnInit {
+export class ArtistaComponent implements AfterViewInit, AfterViewChecked {
   private artistaSubject = new BehaviorSubject<IArtista>(null);
   artista = this.artistaSubject.asObservable();
   private loading: boolean = false;
   private id: number = null;
-  private imgPath: string = 'assets/images/user.png';
+  imgPath: string = `ng/assets/images/user.png`;
 
   constructor(
     private authService: AuthenticationService,
@@ -40,14 +45,18 @@ export class ArtistaComponent implements OnInit {
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private changeDetector: ChangeDetectorRef
   ) {
     this.route.params.subscribe((params) => {
       this.id = parseInt(params['id']);
     });
   }
+  ngAfterViewChecked(): void {
+    this.changeDetector.detectChanges();
+  }
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.loading = true;
     this.artistaServ.getArtista(this.id).subscribe(
       (data) => this.onSuccess(data),
@@ -87,7 +96,7 @@ export class ArtistaComponent implements OnInit {
         data: body,
       });
       dialogRef.afterClosed().subscribe((result) => {
-        this.ngOnInit();
+        this.ngAfterViewInit();
       });
     }
   }
@@ -114,7 +123,7 @@ export class ArtistaComponent implements OnInit {
                 `Se ha editado correctamente el artista ${art.nombre}`,
                 'success'
               );
-              this.ngOnInit();
+              this.ngAfterViewInit();
             },
             () => {
               this.mostrarMensaje(
@@ -162,15 +171,15 @@ export class ArtistaComponent implements OnInit {
           nombre: nombreSel,
         },
         etiAux = [...art.etiquetas];
-      art.etiquetas.push(eti);
       this.loading = true;
-      this.artistaServ.actualizarArtista(art).subscribe(
+      this.artistaServ.agregarEtiqueta(nombreSel, art).subscribe(
         () => {
           this.mostrarMensaje(
             `Se ha agregado la etiqueta ${nombreSel}`,
             'success'
           );
-          this.ngOnInit();
+          this.ngAfterViewInit();
+          this.loading = false;
         },
         () => {
           this.mostrarMensaje(
@@ -195,7 +204,8 @@ export class ArtistaComponent implements OnInit {
       this.artistaServ.actualizarArtista(art).subscribe(
         () => {
           this.mostrarMensaje(`Se ha eliminado la etiqueta`, 'success');
-          this.ngOnInit();
+          this.ngAfterViewInit();
+          this.loading = false;
         },
         () => {
           this.mostrarMensaje(`No se ha podido eliminar la etiqueta`, 'error');

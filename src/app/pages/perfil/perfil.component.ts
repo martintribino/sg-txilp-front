@@ -26,7 +26,8 @@ export class PerfilComponent implements OnInit {
   private perfilSubject = new BehaviorSubject<IUsuario>(null);
   perfil = this.perfilSubject.asObservable();
   loading: boolean = false;
-  private imgPath: string = 'assets/images/user.png';
+  imgPath: string = `ng/assets/images/user.png`;
+
   constructor(
     private authService: AuthenticationService,
     private usuService: UsuariosService,

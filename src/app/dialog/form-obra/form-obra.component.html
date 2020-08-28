@@ -62,7 +62,7 @@
       <mat-label>Artistas</mat-label>
       <mat-select formControlName="artistas" [compareWith]="compare" multiple>
         <mat-option
-          *ngFor="let artista of (artistasObs | async)"
+          *ngFor="let artista of artistasObs | async"
           [value]="artista"
         >
           {{ artista.nombre }}

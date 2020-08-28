@@ -1,29 +1,30 @@
-import { Component, Inject } from "@angular/core";
+import { Component, Inject } from '@angular/core';
 import {
   IUsuario,
   IRol,
   RolTipo,
   IDialogBody,
   ActionTipo,
-} from "src/app/interface/interface.model";
-import { FormGroup, FormControl } from "@angular/forms";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+} from 'src/app/interface/interface.model';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { regexEmail, regexPhone } from 'src/app/helpers/constants';
 
 @Component({
-  selector: "app-form-usuario",
-  templateUrl: "./form-usuario.component.html",
-  styleUrls: ["./form-usuario.component.styl"],
+  selector: 'app-form-usuario',
+  templateUrl: './form-usuario.component.html',
+  styleUrls: ['./form-usuario.component.styl'],
 })
 export class FormUsuarioComponent {
   usuariosForm: FormGroup = new FormGroup({
-    nombreUsuario: new FormControl(""),
+    nombreUsuario: new FormControl(''),
     clave: new FormControl(null),
-    nombre: new FormControl(""),
-    apellido: new FormControl(""),
-    dni: new FormControl(""),
-    email: new FormControl(""),
-    telefono: new FormControl(""),
-    token: new FormControl(""),
+    nombre: new FormControl(''),
+    apellido: new FormControl(''),
+    dni: new FormControl(''),
+    email: new FormControl(''),
+    telefono: new FormControl(''),
+    token: new FormControl(''),
     rol: new FormControl(null),
     direccion: new FormControl(null),
   });
@@ -44,13 +45,13 @@ export class FormUsuarioComponent {
       });
     });
     this.usuariosForm = new FormGroup({
-      nombreUsuario: new FormControl(""),
+      nombreUsuario: new FormControl(''),
       clave: new FormControl(null),
-      nombre: new FormControl(""),
-      apellido: new FormControl(""),
-      dni: new FormControl(""),
-      email: new FormControl(""),
-      telefono: new FormControl(""),
+      nombre: new FormControl(''),
+      apellido: new FormControl(''),
+      dni: new FormControl('', [Validators.min(0)]),
+      email: new FormControl(''),
+      telefono: new FormControl('', [Validators.pattern(regexPhone)]),
       rol: new FormControl(null),
       direccion: new FormControl(null),
     });
@@ -90,6 +91,6 @@ export class FormUsuarioComponent {
   }
 
   compare(a1, a2) {
-    return a1.nombre == a2.nombre ? a1 : null;
+    return a1 != null && a2 != null && a1.nombre == a2.nombre ? a1 : null;
   }
 }

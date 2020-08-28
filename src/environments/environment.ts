@@ -1,7 +1,7 @@
 export const environment = {
   production: false,
   port: 4200,
-  baseLocalUrl: 'http://localhost:4200/',
+  baseLocalUrl: 'http://localhost:8080/',
   baseApiUrl: 'http://localhost:8080/jyaa2020_grupo12/rest/',
   baseApiPrivateUrl: 'http://localhost:8080/jyaa2020_grupo12/rest/api/',
   endpoints: {

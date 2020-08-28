@@ -98,9 +98,13 @@
         type="number"
         formControlName="dni"
         autocomplete="off"
+        min="0"
         required
       />
       <mat-hint>Dni</mat-hint>
+      <mat-error *ngIf="crearUsuarioForm.dni?.errors?.min"
+        >El campo debe ser mayor a 0
+      </mat-error>
       <mat-error *ngIf="crearUsuarioForm.dni?.errors?.required"
         >Campo requerido</mat-error
       >
@@ -127,11 +131,14 @@
       <mat-label>Teléfono</mat-label>
       <input
         matInput
-        type="number"
+        type="text"
         formControlName="telefono"
         autocomplete="off"
       />
       <mat-hint>Teléfono</mat-hint>
+      <mat-error *ngIf="crearUsuarioForm.telefono?.errors?.pattern">
+        Debe ingresar un teléfono correcto
+      </mat-error>
     </mat-form-field>
     <mat-form-field>
       <mat-label>Rol</mat-label>

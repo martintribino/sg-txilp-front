@@ -9,14 +9,14 @@
   />
   <mat-hint>Agregar Etiqueta</mat-hint>
 </mat-form-field>
-<mat-chip-list #tagList aria-label="Etiquetas" class="etiquetas-list">
+<mat-chip-list #tagList aria-label="Etiquetas" class="etiquetas-list" multiple>
   <mat-chip
     *ngFor="let etiqueta of etiquetas"
-    selectable="false"
+    [selectable]="false"
     [removable]="removable"
     (removed)="remove(etiqueta)"
   >
-    {{ etiqueta.nombre }}
-    <mat-icon matChipRemove *ngIf="removable">cancelar</mat-icon>
+    <label>{{ etiqueta.nombre }}</label>
+    <mat-icon matChipRemove *ngIf="removable && !loading">cancelar</mat-icon>
   </mat-chip>
 </mat-chip-list>

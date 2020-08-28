@@ -5,7 +5,7 @@ import {
   IDialogBody,
   IArtista,
 } from 'src/app/interface/interface.model';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ArtistaService } from 'src/app/services/artista.service';
 import { BehaviorSubject } from 'rxjs';
@@ -22,7 +22,7 @@ export class FormObraComponent implements OnInit {
   private tipos: Array<{ indice: string; value: string }> = [];
   private tipoSelected: string = '';
   private artistasSubject = new BehaviorSubject<Array<IArtista>>([]);
-  private artistasObs = this.artistasSubject.asObservable();
+  artistasObs = this.artistasSubject.asObservable();
 
   constructor(
     private artistaServ: ArtistaService,
@@ -36,7 +36,7 @@ export class FormObraComponent implements OnInit {
       id: new FormControl(this.obra.id),
       nombre: new FormControl(this.obra.nombre),
       descripcion: new FormControl(this.obra.descripcion),
-      duracion: new FormControl(this.obra.duracion),
+      duracion: new FormControl(this.obra.duracion, [Validators.min(0)]),
       fotos: new FormControl(this.obra.fotos),
       artistas: new FormControl([]),
     });
