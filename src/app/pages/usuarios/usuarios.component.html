@@ -1,3 +1,12 @@
+<div class="filtro-tabla">
+  <input
+    matInput
+    type="text"
+    (keyup)="aplicarFiltro($event)"
+    placeholder="Ingrese busqueda"
+    #input
+  />
+</div>
 <div *ngIf="(obs | async)?.length > 0; then ifBlock; else elseBlock"></div>
 <ng-template #ifBlock>
   <table
@@ -17,6 +26,10 @@
     <ng-container matColumnDef="apellido">
       <mat-header-cell *matHeaderCellDef>Apellido</mat-header-cell>
       <mat-cell *matCellDef="let usuario">{{ usuario.apellido }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="perfil">
+      <mat-header-cell *matHeaderCellDef>Perfil</mat-header-cell>
+      <mat-cell *matCellDef="let usuario">{{ usuario.rol.nombre }}</mat-cell>
     </ng-container>
     <ng-container matColumnDef="actions">
       <mat-header-cell *matHeaderCellDef>

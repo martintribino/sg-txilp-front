@@ -1,18 +1,18 @@
-import { Injectable } from "@angular/core";
-import { environment } from "src/environments/environment";
-import { HttpHeaders, HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
-import { IEspacio } from "../interface/interface.model";
+import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { IEspacio } from '../interface/interface.model';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class EspacioService {
   endpoints = environment.endpoints;
   private headers: HttpHeaders;
 
   constructor(private http: HttpClient) {
-    this.headers = new HttpHeaders().set("Content-Type", "application/json");
+    this.headers = new HttpHeaders().set('Content-Type', 'application/json');
   }
 
   getEspacios(): Observable<Array<IEspacio>> {
@@ -41,6 +41,17 @@ export class EspacioService {
 
   actualizarEspacio(espacio: IEspacio): Observable<Array<IEspacio>> {
     let url = this.endpoints.espacios,
+      options = {
+        headers: this.headers,
+      };
+    return this.http.put<Array<IEspacio>>(url, espacio, options);
+  }
+
+  agregarEtiqueta(
+    nombre: string,
+    espacio: IEspacio
+  ): Observable<Array<IEspacio>> {
+    let url = `${this.endpoints.espacios}etiqueta/${nombre}`,
       options = {
         headers: this.headers,
       };

@@ -47,6 +47,14 @@ export class ObraService {
     return this.http.put<Array<IObra>>(url, obra, options);
   }
 
+  agregarEtiqueta(nombre: string, obra: IObra): Observable<Array<IObra>> {
+    let url = `${this.endpoints.obras}etiqueta/${nombre}`,
+      options = {
+        headers: this.headers,
+      };
+    return this.http.put<Array<IObra>>(url, obra, options);
+  }
+
   eliminarObra(obra: IObra): Observable<Array<IObra>> {
     let url = `${this.endpoints.obras}${obra.id}`,
       options = {

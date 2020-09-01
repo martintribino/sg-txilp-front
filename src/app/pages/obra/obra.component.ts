@@ -153,9 +153,8 @@ export class ObraComponent implements OnInit {
           nombre: nombreSel,
         },
         etiAux = [...obra.etiquetas];
-      obra.etiquetas.push(eti);
       this.loading = true;
-      this.obraServ.actualizarObra(obra).subscribe(
+      this.obraServ.agregarEtiqueta(nombreSel, obra).subscribe(
         () => {
           this.mostrarMensaje(
             `Se ha agregado la etiqueta ${nombreSel}`,

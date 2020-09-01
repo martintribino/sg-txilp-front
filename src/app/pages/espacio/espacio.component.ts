@@ -131,9 +131,8 @@ export class EspacioComponent implements OnInit {
           nombre: nombreSel,
         },
         etiAux = [...espacio.etiquetas];
-      espacio.etiquetas.push(eti);
       this.loading = true;
-      this.espacioServ.actualizarEspacio(espacio).subscribe(
+      this.espacioServ.agregarEtiqueta(nombreSel, espacio).subscribe(
         () => {
           this.mostrarMensaje(
             `Se ha agregado la etiqueta ${nombreSel}`,
