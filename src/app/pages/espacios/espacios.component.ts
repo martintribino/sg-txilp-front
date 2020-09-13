@@ -5,6 +5,7 @@ import {
   MSGTIME,
   EspacioEstadoTipo,
   ActionTipo,
+  IFiltroBody,
 } from 'src/app/interface/interface.model';
 import { BehaviorSubject } from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table';
@@ -28,13 +29,22 @@ export class EspaciosComponent implements OnInit {
   obs: BehaviorSubject<Array<IEspacio>>;
   private loading: boolean = false;
   private pageSizeOptions: number[] = [5, 10, 20];
-  private displayedColumns: Array<string> = [
+  displayTitleCol: Array<string> = ['titulo', 'action'];
+  displayedColumns: Array<string> = [
     'nombre',
     'descripcion',
     'capacidad',
     'condicion',
-    'actions',
+    'direccion',
   ];
+  searchColumns: Array<string> = [
+    'nombre',
+    'descripcion',
+    'capacidad',
+    'condicion',
+    'direccion',
+  ];
+  searchSelectedColumns: Array<string> = this.searchColumns;
 
   constructor(
     private espacioServ: EspacioService,
@@ -72,7 +82,31 @@ export class EspaciosComponent implements OnInit {
     this.dataSource = new MatTableDataSource<IEspacio>(result);
     this.obs = this.dataSource.connect();
     this.dataSource.paginator = this.paginator;
+    this.dataSource.filterPredicate = this.predicateFn;
   }
+
+  predicateFn = (espacio: IEspacio, filter: string) => {
+    for (const [key, value] of Object.entries(espacio)) {
+      if (this.searchSelectedColumns.includes(key)) {
+        if (
+          (typeof value === 'string' &&
+            value.toLowerCase().indexOf(filter) != -1) ||
+          (typeof value === 'number' && value.toString().indexOf(filter) != -1)
+        )
+          return true;
+      }
+    }
+    //casos excepcionales
+    var strSrch: string = '';
+    if (
+      this.searchSelectedColumns.includes('direccion') &&
+      espacio.direccion != null
+    ) {
+      strSrch += `${espacio.direccion.calle}${espacio.direccion.ciudad}${espacio.direccion.estado}`;
+      if (strSrch.toLowerCase().indexOf(filter) != -1) return true;
+    }
+    return false;
+  };
 
   onError(error) {
     this.espaciosSubject.next([]);
@@ -121,10 +155,10 @@ export class EspaciosComponent implements OnInit {
     });
   }
 
-  aplicarFiltro(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
+  onFilterSearch(fb: IFiltroBody) {
+    this.searchSelectedColumns = fb.campos;
     if (this.dataSource.data != null && this.dataSource.data.length > 0)
-      this.dataSource.filter = filterValue.trim().toLowerCase();
+      this.dataSource.filter = fb.filtro.trim().toLowerCase();
   }
 
   private mostrarMensaje(

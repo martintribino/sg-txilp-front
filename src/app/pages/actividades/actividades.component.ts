@@ -5,6 +5,10 @@ import {
   MSGTIME,
   IActividad,
   ActionTipo,
+  IEspacio,
+  IObra,
+  IEdicion,
+  IFiltroBody,
 } from 'src/app/interface/interface.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActividadService } from 'src/app/services/actividad.service';
@@ -14,6 +18,9 @@ import {
 } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { FormActividadComponent } from 'src/app/dialog/form-actividad/form-actividad.component';
+import { EdicionService } from 'src/app/services/edicion.service';
+import { EspacioService } from 'src/app/services/espacio.service';
+import { ObraService } from 'src/app/services/obra.service';
 
 @Component({
   selector: 'app-actividades',
@@ -27,22 +34,63 @@ export class ActividadesComponent implements OnInit {
   obs: BehaviorSubject<Array<IActividad>>;
   private loading: boolean = false;
   private pageSizeOptions: number[] = [5, 10, 20];
-  private displayedColumns: Array<string> = [
+  private espaciosSubject = new BehaviorSubject<Array<IEspacio>>([]);
+  private obrasSubject = new BehaviorSubject<Array<IObra>>([]);
+  private edicionesSubject = new BehaviorSubject<Array<IEdicion>>([]);
+  displayTitleCol: Array<string> = ['titulo', 'action'];
+  displayedColumns: Array<string> = [
     'nombre',
-    'descripcion',
+    'edicion',
+    'obra',
     'desde',
     'hasta',
-    'actions',
   ];
+  searchColumns: Array<string> = [
+    'nombre',
+    'descripcion',
+    'edicion',
+    'espacio',
+    'obra',
+    'desde',
+    'hasta',
+  ];
+  searchSelectedColumns: Array<string> = this.searchColumns;
 
   constructor(
     private actividadServ: ActividadService,
+    private edicionServ: EdicionService,
+    private espacioServ: EspacioService,
+    private obraServ: ObraService,
     private changeDetectorRef: ChangeDetectorRef,
     private snackBar: MatSnackBar,
     private dialog: MatDialog
   ) {
     this.actividadesSubject.next([]);
     this.dataSource = new MatTableDataSource<IActividad>([]);
+    this.edicionServ.getEdiciones().subscribe(
+      (data) => {
+        this.edicionesSubject.next(data);
+      },
+      (error) => {
+        this.edicionesSubject.next([]);
+      }
+    );
+    this.espacioServ.getEspacios().subscribe(
+      (data) => {
+        this.espaciosSubject.next(data);
+      },
+      (error) => {
+        this.espaciosSubject.next([]);
+      }
+    );
+    this.obraServ.getObras().subscribe(
+      (data) => {
+        this.obrasSubject.next(data);
+      },
+      (error) => {
+        this.obrasSubject.next([]);
+      }
+    );
   }
 
   ngOnInit(): void {
@@ -80,7 +128,43 @@ export class ActividadesComponent implements OnInit {
     this.dataSource = new MatTableDataSource<IActividad>(result);
     this.obs = this.dataSource.connect();
     this.dataSource.paginator = this.paginator;
+    this.dataSource.filterPredicate = this.predicateFn;
   }
+
+  predicateFn = (actividad: IActividad, filter: string) => {
+    for (const [key, value] of Object.entries(actividad)) {
+      if (this.searchSelectedColumns.includes(key)) {
+        if (
+          (typeof value === 'string' &&
+            value.toLowerCase().indexOf(filter) != -1) ||
+          (typeof value === 'number' && value.toString().indexOf(filter) != -1)
+        )
+          return true;
+      }
+    }
+    //casos excepcionales
+    var strSrch: string = '';
+    if (
+      this.searchSelectedColumns.includes('edicion') &&
+      actividad.edicion != null
+    ) {
+      strSrch += `${actividad.edicion.nombre}${actividad.edicion.descripcion}${actividad.edicion.desde}`;
+      if (strSrch.toLowerCase().indexOf(filter) != -1) return true;
+    }
+    if (
+      this.searchSelectedColumns.includes('espacio') &&
+      actividad.espacio != null
+    ) {
+      strSrch += `${actividad.espacio.nombre}${actividad.espacio.descripcion}${actividad.espacio.condicion}`;
+      if (strSrch.toLowerCase().indexOf(filter) != -1) return true;
+    }
+    if (this.searchSelectedColumns.includes('obra') && actividad.obra != null) {
+      strSrch = '';
+      strSrch += `${actividad.obra.nombre}${actividad.obra.descripcion}${actividad.obra.duracion}`;
+      if (strSrch.toLowerCase().indexOf(filter) != -1) return true;
+    }
+    return false;
+  };
 
   onCreate() {
     let actividad: IActividad = {
@@ -94,7 +178,13 @@ export class ActividadesComponent implements OnInit {
       espacio: null,
       edicion: null,
     };
-    const body = { action: ActionTipo.crear, data: actividad },
+    const body = {
+        action: ActionTipo.crear,
+        ediciones: this.edicionesSubject.value,
+        espacios: this.espaciosSubject.value,
+        obras: this.obrasSubject.value,
+        data: actividad,
+      },
       dialogRef = this.dialog.open(FormActividadComponent, {
         maxWidth: '550px',
         maxHeight: '100%',
@@ -123,10 +213,10 @@ export class ActividadesComponent implements OnInit {
     });
   }
 
-  aplicarFiltro(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
+  onFilterSearch(fb: IFiltroBody) {
+    this.searchSelectedColumns = fb.campos;
     if (this.dataSource.data != null && this.dataSource.data.length > 0)
-      this.dataSource.filter = filterValue.trim().toLowerCase();
+      this.dataSource.filter = fb.filtro.trim().toLowerCase();
   }
 
   private mostrarMensaje(

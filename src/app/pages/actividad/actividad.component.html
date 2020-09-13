@@ -12,12 +12,12 @@
       <mat-divider></mat-divider>
       <div class="card-row">
         <strong>Desde</strong
-        ><span>{{ (actividad | async)?.desde | date }}</span>
+        ><span>{{ (actividad | async)?.desde | date: "medium" }}</span>
       </div>
       <mat-divider></mat-divider>
       <div class="card-row">
         <strong>Hasta</strong
-        ><span>{{ (actividad | async)?.hasta | date }}</span>
+        ><span>{{ (actividad | async)?.hasta | date: "medium" }}</span>
       </div>
       <mat-divider></mat-divider>
       <div class="card-row">
@@ -30,11 +30,10 @@
           <strong>Edición</strong>
         </div>
         <div class="card-row">
-          <span
-            >{{ (actividad | async)?.edicion.nombre }} ({{
-              (actividad | async)?.edicion.desde | date
-            }}
-            - {{ (actividad | async)?.edicion.hasta | date }})</span
+          <a
+            [routerLink]="['/ediciones/', (actividad | async)?.edicion.id]"
+            class="entidad"
+            ><span>{{ (actividad | async)?.edicion.nombre }}</span></a
           >
         </div>
         <mat-divider></mat-divider>
@@ -43,13 +42,11 @@
         <div class="card-row">
           <strong>Espacio</strong>
         </div>
-        <div class="card-row">
-          <span
-            >{{ (actividad | async)?.espacio.nombre }} ({{
-              (actividad | async)?.espacio.capacidad
-            }})</span
-          >
-        </div>
+        <a
+          [routerLink]="['/espacios/', (actividad | async)?.espacio.id]"
+          class="entidad"
+          ><span>{{ (actividad | async)?.espacio.nombre }}</span></a
+        >
         <mat-divider></mat-divider>
       </div>
       <div *ngIf="(actividad | async)?.obra != null">
@@ -57,10 +54,10 @@
           <strong>Obra</strong>
         </div>
         <div class="card-row">
-          <span
-            >{{ (actividad | async)?.obra.nombre }} ({{
-              (actividad | async)?.obra.duracion
-            }})</span
+          <a
+            [routerLink]="['/obras/', (actividad | async)?.obra.id]"
+            class="entidad"
+            ><span>{{ (actividad | async)?.obra.nombre }}</span></a
           >
         </div>
         <mat-divider></mat-divider>
@@ -96,7 +93,7 @@
           [disabled]="loading"
           matTooltip="Eliminar Actividad"
           matTooltipPosition="below"
-          (click)="onDelete()"
+          (click)="onConfirmDelete()"
           aria-label="Eliminar Actividad"
         >
           <mat-icon>delete</mat-icon>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, Input } from '@angular/core';
 import {
   FormGroup,
   FormControl,
@@ -30,35 +30,39 @@ export class FormActividadComponent {
     nombre: new FormControl(''),
     descripcion: new FormControl(''),
     desde: new FormControl(null),
+    desdeTime: new FormControl(''),
     hasta: new FormControl(null),
+    hastaTime: new FormControl(''),
   });
   actividad: IActividad = null;
   private action: ActionTipo;
   minDate: Date = new Date();
-  private espaciosSubject = new BehaviorSubject<Array<IEspacio>>([]);
-  espaciosObs = this.espaciosSubject.asObservable();
-  private obrasSubject = new BehaviorSubject<Array<IObra>>([]);
-  obrasObs = this.obrasSubject.asObservable();
-  private edicionesSubject = new BehaviorSubject<Array<IEdicion>>([]);
-  edicionesObs = this.edicionesSubject.asObservable();
+  maxDate: Date = new Date();
+  ediciones: Array<IEdicion>;
+  espacios: Array<IEspacio>;
+  obras: Array<IObra>;
+  edicionSelected: IEdicion;
 
   constructor(
     public dialogRef: MatDialogRef<FormActividadComponent>,
-    private obraServ: ObraService,
-    private edicionServ: EdicionService,
-    private espacioServ: EspacioService,
     @Inject(MAT_DIALOG_DATA) public body: IDialogBody<IActividad>
   ) {
     let validators: ValidatorFn[] = [Validators.min(0)];
     if (this.actividad != null && this.actividad.espacio != null) {
       validators.push(Validators.max(this.actividad.espacio.capacidad));
     }
+    this.edicionSelected = null;
+    this.ediciones = body.ediciones;
+    this.espacios = body.espacios;
+    this.obras = body.obras;
     this.actividadForm = new FormGroup({
       id: new FormControl(null),
       nombre: new FormControl(''),
       descripcion: new FormControl(''),
-      desde: new FormControl(null),
-      hasta: new FormControl(null),
+      desde: new FormControl(new Date()),
+      desdeTime: new FormControl(''),
+      hasta: new FormControl(new Date()),
+      hastaTime: new FormControl(''),
       entradasVendidas: new FormControl(0, validators),
       obra: new FormControl(null),
       espacio: new FormControl(null),
@@ -69,41 +73,40 @@ export class FormActividadComponent {
     this.crearActividadForm.id.setValue(this.actividad.id);
     this.crearActividadForm.nombre.setValue(this.actividad.nombre);
     this.crearActividadForm.descripcion.setValue(this.actividad.descripcion);
-    this.crearActividadForm.desde.setValue(new Date(this.actividad.desde));
-    this.crearActividadForm.hasta.setValue(new Date(this.actividad.hasta));
+    let desdeDate: Date = new Date(this.actividad.desde),
+      desdeT: string = `${String(desdeDate.getHours()).padStart(
+        2,
+        '0'
+      )}:${String(desdeDate.getMinutes()).padStart(2, '0')}`;
+    this.crearActividadForm.desde.setValue(desdeDate);
+    this.crearActividadForm.desdeTime.setValue(desdeT);
+    let hastaDate: Date = new Date(this.actividad.hasta),
+      hastaT: string = `${String(hastaDate.getHours()).padStart(
+        2,
+        '0'
+      )}:${String(hastaDate.getMinutes()).padStart(2, '0')}`;
+    this.crearActividadForm.hasta.setValue(hastaDate);
+    this.crearActividadForm.hastaTime.setValue(hastaT);
     this.crearActividadForm.entradasVendidas.setValue(
       this.actividad.entradasVendidas
     );
     this.crearActividadForm.obra.setValue(this.actividad.obra);
     this.crearActividadForm.espacio.setValue(this.actividad.espacio);
     this.crearActividadForm.edicion.setValue(this.actividad.edicion);
-    this.edicionServ.getEdiciones().subscribe(
-      (data) => {
-        this.edicionesSubject.next(data);
-      },
-      (error) => {
-        this.edicionesSubject.next([]);
-      }
-    );
-    this.espacioServ.getEspacios().subscribe(
-      (data) => {
-        this.espaciosSubject.next(data);
-      },
-      (error) => {
-        this.espaciosSubject.next([]);
-      }
-    );
-    this.obraServ.getObras().subscribe(
-      (data) => {
-        this.obrasSubject.next(data);
-      },
-      (error) => {
-        this.obrasSubject.next([]);
-      }
-    );
   }
 
   onSubmit() {
+    try {
+      let desde: Date = this.getDesde(),
+        hasta: Date = this.getHasta();
+      this.crearActividadForm.desde.setValue(desde);
+      this.crearActividadForm.hasta.setValue(hasta);
+      this.actividadForm.removeControl('desdeTime');
+      this.actividadForm.removeControl('hastaTime');
+    } catch (error) {
+      console.log('Error manejando tiempo y fechas');
+      console.log(error);
+    }
     this.dialogRef.close(this.actividadForm.value);
   }
 
@@ -113,6 +116,28 @@ export class FormActividadComponent {
 
   get crearActividadForm() {
     return this.actividadForm.controls;
+  }
+
+  getHasta() {
+    let hasta: Date = this.crearActividadForm.hasta.value,
+      hastaT: Array<string> = this.crearActividadForm.hastaTime.value.split(
+        ':'
+      ),
+      hastaHora: number = parseInt(hastaT[0]),
+      hastaMin: number = parseInt(hastaT[1]);
+    hasta.setHours(hastaHora, hastaMin);
+    return hasta;
+  }
+
+  getDesde() {
+    let desde: Date = this.crearActividadForm.desde.value,
+      desdeT: Array<string> = this.crearActividadForm.desdeTime.value.split(
+        ':'
+      ),
+      desdeHora: number = parseInt(desdeT[0]),
+      desdeMin: number = parseInt(desdeT[1]);
+    desde.setHours(desdeHora, desdeMin);
+    return desde;
   }
 
   compare(a1, a2) {

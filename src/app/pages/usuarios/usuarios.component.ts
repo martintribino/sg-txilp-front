@@ -1,10 +1,4 @@
-import {
-  Component,
-  ViewChild,
-  ChangeDetectorRef,
-  AfterViewInit,
-  OnInit,
-} from '@angular/core';
+import { Component, ViewChild, ChangeDetectorRef, OnInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import {
   MatSnackBar,
@@ -16,47 +10,19 @@ import { BehaviorSubject } from 'rxjs';
 
 import {
   IUsuario,
-  IDictionary,
   MSGTIME,
   ActionTipo,
   IDireccion,
+  IFiltroBody,
 } from 'src/app/interface/interface.model';
 import { UsuariosService } from 'src/app/services/usuarios.service';
 import { FormUsuarioComponent } from 'src/app/dialog/form-usuario/form-usuario.component';
-import {
-  trigger,
-  state,
-  transition,
-  animate,
-  style,
-} from '@angular/animations';
 import { FormDireccionComponent } from 'src/app/dialog/form-direccion/form-direccion.component';
-import { UsuarioDetalleComponent } from 'src/app/dialog/usuario-detalle/usuario-detalle.component';
 
 @Component({
   selector: 'app-usuarios',
   templateUrl: './usuarios.component.html',
   styleUrls: ['./usuarios.component.styl'],
-  animations: [
-    trigger('detailExpand', [
-      state(
-        'collapsed',
-        style({ opacity: 0, height: '0px', minHeight: '0', display: 'none' })
-      ),
-      state('expanded', style({ opacity: 1, height: '*' })),
-      transition('expanded => collapsed', animate('300ms ease-out')),
-      transition('collapsed => expanded', animate('150ms ease-out')),
-    ]),
-    trigger('loading', [
-      state(
-        'hide',
-        style({ opacity: 0, height: '0px', minHeight: '0', display: 'none' })
-      ),
-      state('show', style({ opacity: 1, height: '*' })),
-      transition('show => hide', animate('400ms ease-in')),
-      transition('hide => show', animate('200ms ease-in')),
-    ]),
-  ],
 })
 export class UsuariosComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -67,18 +33,18 @@ export class UsuariosComponent implements OnInit {
     []
   );
   private loading: boolean = false;
-  private pageSize: number = 5;
   private pageSizeOptions: number[] = [5, 10, 20];
-  private loadingDict: Array<IDictionary<boolean>>;
-  private displayedColumns: Array<string> = [
+  displayTitleCol: Array<string> = ['titulo', 'action'];
+  displayedColumns: Array<string> = ['nombre', 'nombreUsuario', 'email', 'rol'];
+  searchColumns: Array<string> = [
     'nombre',
     'apellido',
     'nombreUsuario',
-    'perfil',
-    'actions',
+    'email',
+    'dni',
+    'rol',
   ];
-  private descColumns: Array<string> = ['descripcion'];
-  private loadColumns: Array<string> = ['loading'];
+  searchSelectedColumns: Array<string> = this.searchColumns;
 
   constructor(
     private usuService: UsuariosService,
@@ -87,7 +53,6 @@ export class UsuariosComponent implements OnInit {
     private dialog: MatDialog
   ) {
     this.usuariosSubject.next([]);
-    this.loadingDict = [];
     this.dataSource = new MatTableDataSource<IUsuario>([]);
   }
 
@@ -107,9 +72,7 @@ export class UsuariosComponent implements OnInit {
   }
 
   onSuccess(result: Array<IUsuario>) {
-    result.map((usu) => {
-      this.loadingDict[usu.nombreUsuario] = false;
-    });
+    this.loading = false;
     this.usuariosSubject.next(result);
     this.changeDataSource(result);
   }
@@ -128,7 +91,28 @@ export class UsuariosComponent implements OnInit {
     this.dataSource = new MatTableDataSource<IUsuario>(result);
     this.obs = this.dataSource.connect();
     this.dataSource.paginator = this.paginator;
+    this.dataSource.filterPredicate = this.predicateFn;
   }
+
+  predicateFn = (usuario: IUsuario, filter: string) => {
+    for (const [key, value] of Object.entries(usuario)) {
+      if (this.searchSelectedColumns.includes(key)) {
+        if (
+          (typeof value === 'string' &&
+            value.toLowerCase().indexOf(filter) != -1) ||
+          (typeof value === 'number' && value.toString().indexOf(filter) != -1)
+        )
+          return true;
+      }
+    }
+    //casos excepcionales
+    var strSrch: string = '';
+    if (this.searchSelectedColumns.includes('rol')) {
+      strSrch += `${usuario.rol.nombre}`;
+      if (strSrch.toLowerCase().indexOf(filter) != -1) return true;
+    }
+    return false;
+  };
 
   onCreate() {
     let usuario: IUsuario = {
@@ -168,15 +152,6 @@ export class UsuariosComponent implements OnInit {
           }
         );
       }
-    });
-  }
-
-  onDetailUsuario(usuario: IUsuario) {
-    const dialogRef = this.dialog.open(UsuarioDetalleComponent, {
-      maxWidth: '550px',
-      maxHeight: '80%',
-      height: 'auto',
-      data: usuario,
     });
   }
 
@@ -266,10 +241,10 @@ export class UsuariosComponent implements OnInit {
     });
   }
 
-  aplicarFiltro(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
+  onFilterSearch(fb: IFiltroBody) {
+    this.searchSelectedColumns = fb.campos;
     if (this.dataSource.data != null && this.dataSource.data.length > 0)
-      this.dataSource.filter = filterValue.trim().toLowerCase();
+      this.dataSource.filter = fb.filtro.trim().toLowerCase();
   }
 
   private mostrarMensaje(

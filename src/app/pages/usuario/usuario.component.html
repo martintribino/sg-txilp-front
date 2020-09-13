@@ -1,65 +1,61 @@
-<div *ngIf="(edicion | async) != null; then ifBlock; else elseBlock"></div>
+<div *ngIf="(usuario | async) != null; then ifBlock; else elseBlock"></div>
 <ng-template #ifBlock>
   <mat-card class="default-card">
+    <div class="avatar-upload">
+      <img
+        mat-card-image
+        class="default-avatar"
+        [src]="imgPath"
+        alt="Foto del usuario"
+      />
+    </div>
     <mat-card-header>
-      <mat-card-title>{{ (edicion | async)?.apodo }}</mat-card-title>
+      <mat-card-title>{{ (usuario | async)?.nombreUsuario }}</mat-card-title>
+      <mat-card-subtitle
+        >{{ (usuario | async)?.nombre }}
+        {{ (usuario | async)?.apellido }}</mat-card-subtitle
+      >
     </mat-card-header>
     <mat-card-content>
       <div class="card-row">
-        <strong>Nombre</strong><span>{{ (edicion | async)?.nombre }}</span>
+        <strong>Email</strong><span>{{ (usuario | async)?.email }}</span>
       </div>
       <mat-divider></mat-divider>
       <div class="card-row">
-        <strong>Descripción</strong
-        ><span>{{ (edicion | async)?.descripcion }}</span>
+        <strong>Documento</strong><span>{{ (usuario | async)?.dni }}</span>
       </div>
       <mat-divider></mat-divider>
       <div class="card-row">
-        <strong>Desde</strong
-        ><span>{{ (edicion | async)?.desde | date: "medium" }}</span>
+        <strong>Telefono</strong><span>{{ (usuario | async)?.telefono }}</span>
       </div>
       <mat-divider></mat-divider>
       <div class="card-row">
-        <strong>Hasta</strong
-        ><span>{{ (edicion | async)?.hasta | date: "medium" }}</span>
+        <strong>Rol</strong><span>{{ (usuario | async)?.rol.nombre }}</span>
       </div>
       <mat-divider></mat-divider>
-      <app-carrusel-imagenes
-        [slides]="(edicion | async)?.fotos"
-      ></app-carrusel-imagenes>
     </mat-card-content>
     <mat-card-actions>
-      <button
-        mat-icon-button
-        class="row-profile-button"
-        matTooltip="Volver"
-        matTooltipPosition="below"
-        [routerLink]="['/ediciones/']"
-        aria-label="Volver"
-      >
-        <mat-icon>arrow_back_ios</mat-icon>
-      </button>
       <div *ngIf="isAdmin(); then ifAdminBlock"></div>
       <ng-template #ifAdminBlock>
         <button
           mat-icon-button
           class="row-profile-button"
           [disabled]="loading"
-          matTooltip="Agregar Fotos"
+          matTooltip="Editar Dirección"
           matTooltipPosition="below"
-          (click)="onAddPhoto()"
-          aria-label="Agregar Fotos"
+          (click)="onEditDireccion()"
+          aria-label="Editar Dirección"
         >
-          <mat-icon>add_a_photo</mat-icon>
+          <mat-icon>place</mat-icon>
         </button>
         <button
           mat-icon-button
           class="row-profile-button"
           [disabled]="loading"
-          matTooltip="Editar Edición"
+          matTooltip="Editar Usuario"
           matTooltipPosition="below"
           (click)="onEdit()"
-          aria-label="Editar Edición"
+          aria-label="Editar Usuario"
         >
           <mat-icon>edit</mat-icon>
         </button>
@@ -67,10 +63,10 @@
           mat-icon-button
           class="row-profile-button"
           [disabled]="loading"
-          matTooltip="Eliminar Edición"
+          matTooltip="Eliminar Usuario"
           matTooltipPosition="below"
           (click)="onConfirmDelete()"
-          aria-label="Eliminar Edición"
+          aria-label="Eliminar Usuario"
         >
           <mat-icon>delete</mat-icon>
         </button>
@@ -80,5 +76,5 @@
 </ng-template>
 <ng-template #elseBlock>
   <mat-spinner *ngIf="loading"></mat-spinner>
-  <h5 *ngIf="!loading">No se pudo cargar la edición.</h5></ng-template
+  <h5 *ngIf="!loading">No se pudo cargar el usuario.</h5></ng-template
 >

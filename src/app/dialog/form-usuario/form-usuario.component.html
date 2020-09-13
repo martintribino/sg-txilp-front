@@ -84,9 +84,17 @@
         type="text"
         formControlName="apellido"
         autocomplete="off"
+        maxlength="100"
+        minlength="2"
         required
       />
       <mat-hint>Apellido</mat-hint>
+      <mat-error *ngIf="crearUsuarioForm.apellido?.errors?.minlength"
+        >El campo debe tener al menos 2 caracteres
+      </mat-error>
+      <mat-error *ngIf="crearUsuarioForm.apellido?.errors?.maxlength"
+        >El campo debe tener como máximo 100 caracteres
+      </mat-error>
       <mat-error *ngIf="crearUsuarioForm.apellido?.errors?.required"
         >Campo requerido</mat-error
       >
@@ -131,14 +139,18 @@
       <mat-label>Teléfono</mat-label>
       <input
         matInput
-        type="text"
+        type="number"
         formControlName="telefono"
         autocomplete="off"
+        required
       />
       <mat-hint>Teléfono</mat-hint>
       <mat-error *ngIf="crearUsuarioForm.telefono?.errors?.pattern">
         Debe ingresar un teléfono correcto
       </mat-error>
+      <mat-error *ngIf="crearUsuarioForm.email?.errors?.required"
+        >Campo requerido</mat-error
+      >
     </mat-form-field>
     <mat-form-field>
       <mat-label>Rol</mat-label>

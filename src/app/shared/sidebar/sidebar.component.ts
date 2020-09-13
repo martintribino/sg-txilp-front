@@ -62,7 +62,6 @@ export class SidebarComponent implements OnInit {
             elem.path[0].toUpperCase() + elem.path.substr(1).toLowerCase()
           );
       });
-      this.urlFixedMap.set('cerrar-sesion', 'Cerrar Sesión');
     }
   }
 

@@ -15,7 +15,6 @@ import { MatPaginatorIntl } from '@angular/material/paginator';
 import { getEsPaginatorIntl } from './helpers/es-paginator-intl';
 import { FormDireccionComponent } from './dialog/form-direccion/form-direccion.component';
 import { FormUsuarioComponent } from './dialog/form-usuario/form-usuario.component';
-import { UsuarioDetalleComponent } from './dialog/usuario-detalle/usuario-detalle.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -31,6 +30,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { FormEspacioComponent } from './dialog/form-espacio/form-espacio.component';
 import { FormObraComponent } from './dialog/form-obra/form-obra.component';
 import { FormEdicionComponent } from './dialog/form-edicion/form-edicion.component';
+import { ConfirmarComponent } from './dialog/confirmar/confirmar.component';
 
 @NgModule({
   declarations: [
@@ -39,13 +39,13 @@ import { FormEdicionComponent } from './dialog/form-edicion/form-edicion.compone
     NotAllowedComponent,
     FormDireccionComponent,
     FormUsuarioComponent,
-    UsuarioDetalleComponent,
     FormArtistaComponent,
     FormUploadImageComponent,
     FormActividadComponent,
     FormEspacioComponent,
     FormObraComponent,
     FormEdicionComponent,
+    ConfirmarComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
@@ -73,8 +73,8 @@ import { FormEdicionComponent } from './dialog/form-edicion/form-edicion.compone
     FormObraComponent,
     FormActividadComponent,
     FormEdicionComponent,
+    ConfirmarComponent,
     FormUploadImageComponent,
-    UsuarioDetalleComponent,
   ],
   providers: [
     AuthenticationService,

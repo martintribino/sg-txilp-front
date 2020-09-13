@@ -1,12 +1,8 @@
-<div class="filtro-tabla">
-  <input
-    matInput
-    type="text"
-    (keyup)="aplicarFiltro($event)"
-    placeholder="Ingrese busqueda"
-    #input
-  />
-</div>
+<app-filtro-tabla
+  [searchFields]="searchColumns"
+  (filterSearch)="onFilterSearch($event)"
+>
+</app-filtro-tabla>
 <div *ngIf="(obs | async)?.length > 0; then ifBlock; else elseBlock"></div>
 <ng-template #ifBlock>
   <table
@@ -15,6 +11,24 @@
     [dataSource]="dataSource"
     multiTemplateDataRows
   >
+    <ng-container matColumnDef="titulo">
+      <mat-header-cell *matHeaderCellDef><h2>Espacios</h2></mat-header-cell>
+    </ng-container>
+    <ng-container matColumnDef="action">
+      <mat-header-cell *matHeaderCellDef class="add-cell">
+        <button
+          mat-mini-fab
+          color="primary"
+          (click)="onCreate()"
+          class="fab-button"
+          matTooltip="Crear Espacio"
+          matTooltipPosition="above"
+          aria-label="Crear Espacio"
+        >
+          <mat-icon>person_add_alt_1</mat-icon>
+        </button></mat-header-cell
+      >
+    </ng-container>
     <ng-container matColumnDef="nombre">
       <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
       <mat-cell *matCellDef="let espacio">{{ espacio.nombre }}</mat-cell>
@@ -31,31 +45,13 @@
       <mat-header-cell *matHeaderCellDef>Condición</mat-header-cell>
       <mat-cell *matCellDef="let espacio">{{ espacio.condicion }}</mat-cell>
     </ng-container>
-    <ng-container matColumnDef="actions">
-      <mat-header-cell *matHeaderCellDef>
-        <button
-          mat-mini-fab
-          color="primary"
-          (click)="onCreate()"
-          class="fab-button"
-          matTooltip="Crear Espacio"
-          matTooltipPosition="above"
-          aria-label="Crear Espacio"
-        >
-          <mat-icon>person_add_alt_1</mat-icon>
-        </button>
-      </mat-header-cell>
-      <mat-cell *matCellDef="let espacio"> </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="loading">
-      <mat-cell
-        class="loading-cell"
-        *matCellDef="let espacio"
-        [attr.colspan]="displayedColumns.length"
+    <ng-container matColumnDef="direccion">
+      <mat-header-cell *matHeaderCellDef>Dirección</mat-header-cell>
+      <mat-cell *matCellDef="let espacio"
+        >{{ espacio.direccion.calle }} {{ espacio.direccion.ciudad }}</mat-cell
       >
-        <mat-spinner diameter="50"></mat-spinner>
-      </mat-cell>
     </ng-container>
+    <mat-header-row *matHeaderRowDef="displayTitleCol"></mat-header-row>
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row
       *matRowDef="let espacio; let row; columns: displayedColumns"

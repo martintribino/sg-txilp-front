@@ -1,12 +1,8 @@
-<div class="filtro-tabla">
-  <input
-    matInput
-    type="text"
-    (keyup)="aplicarFiltro($event)"
-    placeholder="Ingrese busqueda"
-    #input
-  />
-</div>
+<app-filtro-tabla
+  [searchFields]="searchColumns"
+  (filterSearch)="onFilterSearch($event)"
+>
+</app-filtro-tabla>
 <div *ngIf="(obs | async)?.length > 0; then ifBlock; else elseBlock"></div>
 <ng-template #ifBlock>
   <table
@@ -15,30 +11,11 @@
     [dataSource]="dataSource"
     multiTemplateDataRows
   >
-    <ng-container matColumnDef="nombre">
-      <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
-      <mat-cell *matCellDef="let actividad">{{ actividad.nombre }}</mat-cell>
+    <ng-container matColumnDef="titulo">
+      <mat-header-cell *matHeaderCellDef><h2>Actividades</h2></mat-header-cell>
     </ng-container>
-    <ng-container matColumnDef="descripcion">
-      <mat-header-cell *matHeaderCellDef>Descripción</mat-header-cell>
-      <mat-cell *matCellDef="let actividad">{{
-        actividad.descripcion
-      }}</mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="desde">
-      <mat-header-cell *matHeaderCellDef>Desde</mat-header-cell>
-      <mat-cell *matCellDef="let actividad">{{
-        actividad.desde | date
-      }}</mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="hasta">
-      <mat-header-cell *matHeaderCellDef>Hasta</mat-header-cell>
-      <mat-cell *matCellDef="let actividad">{{
-        actividad.hasta | date
-      }}</mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="actions">
-      <mat-header-cell *matHeaderCellDef>
+    <ng-container matColumnDef="action">
+      <mat-header-cell *matHeaderCellDef class="add-cell">
         <button
           mat-mini-fab
           color="primary"
@@ -49,19 +26,38 @@
           aria-label="Crear Actividad"
         >
           <mat-icon>person_add_alt_1</mat-icon>
-        </button>
-      </mat-header-cell>
-      <mat-cell *matCellDef="let actividad"> </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="loading">
-      <mat-cell
-        class="loading-cell"
-        *matCellDef="let actividad"
-        [attr.colspan]="displayedColumns.length"
+        </button></mat-header-cell
       >
-        <mat-spinner diameter="50"></mat-spinner>
-      </mat-cell>
     </ng-container>
+    <ng-container matColumnDef="nombre">
+      <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
+      <mat-cell *matCellDef="let actividad">{{ actividad.nombre }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="edicion">
+      <mat-header-cell *matHeaderCellDef>Edición</mat-header-cell>
+      <mat-cell *matCellDef="let actividad">{{
+        actividad.edicion.nombre
+      }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="obra">
+      <mat-header-cell *matHeaderCellDef>Obra</mat-header-cell>
+      <mat-cell *matCellDef="let actividad">{{
+        actividad.obra != null ? actividad.obra.nombre : "no tiene"
+      }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="desde">
+      <mat-header-cell *matHeaderCellDef>Desde</mat-header-cell>
+      <mat-cell *matCellDef="let actividad">{{
+        actividad.desde | date: "short"
+      }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="hasta">
+      <mat-header-cell *matHeaderCellDef>Hasta</mat-header-cell>
+      <mat-cell *matCellDef="let actividad">{{
+        actividad.hasta | date: "short"
+      }}</mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayTitleCol"></mat-header-row>
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row
       *matRowDef="let actividad; let row; columns: displayedColumns"

@@ -4,6 +4,8 @@ import {
   IArtista,
   ActionTipo,
   MSGTIME,
+  IFiltroBody,
+  IObra,
 } from 'src/app/interface/interface.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { BehaviorSubject } from 'rxjs';
@@ -21,18 +23,24 @@ import { FormArtistaComponent } from 'src/app/dialog/form-artista/form-artista.c
   styleUrls: ['./artistas.component.styl'],
 })
 export class ArtistasComponent implements OnInit {
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatPaginator) set matPaginator(paginator: MatPaginator) {
+    this.dataSource.paginator = paginator;
+  }
   private dataSource: MatTableDataSource<IArtista>;
   private artistasSubject = new BehaviorSubject<Array<IArtista>>([]);
   obs: BehaviorSubject<Array<IArtista>>;
-  private loading: boolean = false;
-  private pageSizeOptions: number[] = [5, 10, 20];
-  private displayedColumns: Array<string> = [
+  loading: boolean = false;
+  pageSizeOptions: number[] = [5, 10, 20];
+  displayTitleCol: Array<string> = ['titulo', 'action'];
+  displayedColumns: Array<string> = ['nombre', 'apellido', 'apodo', 'obras'];
+  searchColumns: Array<string> = [
     'nombre',
     'apellido',
     'apodo',
-    'actions',
+    'etiquetas',
+    'obras',
   ];
+  searchSelectedColumns: Array<string> = this.searchColumns;
 
   constructor(
     private artistaServ: ArtistaService,
@@ -76,8 +84,48 @@ export class ArtistasComponent implements OnInit {
     this.artistasSubject.next(result);
     this.changeDetectorRef.detectChanges();
     this.dataSource = new MatTableDataSource<IArtista>(result);
+    this.dataSource.filterPredicate = this.predicateFn;
     this.obs = this.dataSource.connect();
-    this.dataSource.paginator = this.paginator;
+  }
+
+  predicateFn = (artista: IArtista, filter: string) => {
+    for (const [key, value] of Object.entries(artista)) {
+      if (this.searchSelectedColumns.includes(key)) {
+        if (
+          (typeof value === 'string' &&
+            value.toLowerCase().indexOf(filter) != -1) ||
+          (typeof value === 'number' && value.toString().indexOf(filter) != -1)
+        )
+          return true;
+      }
+    }
+    //casos excepcionales
+    var strSrch: string = '';
+    if (this.searchSelectedColumns.includes('obras')) {
+      artista.obras.map((obra) => {
+        strSrch += `${obra.nombre}${obra.descripcion}`;
+      });
+      if (strSrch.toLowerCase().indexOf(filter) != -1) return true;
+    }
+    if (this.searchSelectedColumns.includes('etiquetas')) {
+      strSrch = '';
+      artista.etiquetas.map((eti) => {
+        strSrch += `${eti.nombre}`;
+      });
+      if (strSrch.toLowerCase().indexOf(filter) != -1) return true;
+    }
+    return false;
+  };
+
+  getObras(obras: Array<IObra>, i: number, s: string = ', ') {
+    let str: string = '',
+      esPrimero: boolean = true;
+    if (obras == null || obras.length == 0) return 'No hay obras.';
+    obras.forEach((obra) => {
+      let sep: string = esPrimero ? '' : s;
+      str += `${sep}${obra.nombre}`;
+    });
+    return str;
   }
 
   onCreate() {
@@ -118,10 +166,10 @@ export class ArtistasComponent implements OnInit {
     });
   }
 
-  aplicarFiltro(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
+  onFilterSearch(fb: IFiltroBody) {
+    this.searchSelectedColumns = fb.campos;
     if (this.dataSource.data != null && this.dataSource.data.length > 0)
-      this.dataSource.filter = filterValue.trim().toLowerCase();
+      this.dataSource.filter = fb.filtro.trim().toLowerCase();
   }
 
   private mostrarMensaje(

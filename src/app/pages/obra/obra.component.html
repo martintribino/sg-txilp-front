@@ -1,9 +1,10 @@
 <div *ngIf="(obra | async) != null; then ifBlock; else elseBlock"></div>
 <ng-template #ifBlock>
   <mat-card class="default-card">
-    <mat-card-header>
-      <mat-card-title>{{ (obra | async)?.nombre }}</mat-card-title>
-    </mat-card-header>
+    <mat-card-title>{{ (obra | async)?.nombre }}</mat-card-title>
+    <app-carrusel-imagenes
+      [slides]="(obra | async)?.fotos"
+    ></app-carrusel-imagenes>
     <mat-card-content>
       <div class="card-row">
         <strong>Descripción</strong
@@ -17,8 +18,19 @@
       <div class="card-row">
         <strong>Artistas</strong>
       </div>
-      <div *ngFor="let artista of (obra | async)?.artistas" class="card-row">
-        <span>{{ artista.nombre }} {{ artista.apellido }}</span>
+      <div class="card-row" *ngFor="let artista of (obra | async)?.artistas">
+        <a [routerLink]="['/artistas/', artista.id]" class="entidad"
+          ><span>{{ artista.nombre }}{{ artista.apellido }}</span></a
+        >
+      </div>
+      <div
+        class="card-row"
+        *ngIf="
+          (obra | async)?.artistas == null ||
+          (obra | async)?.artistas.length == 0
+        "
+      >
+        <span>No tiene artistas.</span>
       </div>
       <mat-divider></mat-divider>
       <app-etiquetas-entidad
@@ -27,9 +39,6 @@
         (agregar)="agregarEtiqueta($event)"
         (eliminar)="eliminarEtiqueta($event)"
       ></app-etiquetas-entidad>
-      <app-carrusel-imagenes
-        [slides]="(obra | async)?.fotos"
-      ></app-carrusel-imagenes>
     </mat-card-content>
     <mat-card-actions>
       <button
@@ -72,7 +81,7 @@
           [disabled]="loading"
           matTooltip="Eliminar Obra"
           matTooltipPosition="below"
-          (click)="onDelete()"
+          (click)="onConfirmDelete()"
           aria-label="Eliminar Obra"
         >
           <mat-icon>delete</mat-icon>

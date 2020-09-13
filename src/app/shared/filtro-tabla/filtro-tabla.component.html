@@ -1,0 +1,32 @@
+<form [formGroup]="filtroForm" class="dialog filtro-tabla">
+  <mat-form-field appearance="outline">
+    <mat-select
+      [formControl]="getFiltroForm.campos"
+      [compareWith]="compare"
+      (selectionChange)="onFilter($event)"
+      multiple
+    >
+      <mat-option *ngFor="let field of searchFields" [value]="field">
+        {{ field }}
+      </mat-option>
+    </mat-select>
+    <mat-hint>Campos de búsqueda</mat-hint>
+    <mat-error *ngIf="getFiltroForm.campos?.errors?.required"
+      >Campo requerido</mat-error
+    >
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Filtro</mat-label>
+    <input
+      matInput
+      type="text"
+      formControlName="filtro"
+      (keyup)="onFilter($event)"
+      placeholder="Ingrese busqueda"
+      autocomplete="off"
+      #input
+    />
+    <mat-icon matSuffix>search</mat-icon>
+    <mat-hint>Filtro</mat-hint>
+  </mat-form-field>
+</form>

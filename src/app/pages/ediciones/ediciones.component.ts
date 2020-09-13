@@ -1,4 +1,10 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ChangeDetectorRef,
+  AfterViewInit,
+} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { BehaviorSubject } from 'rxjs';
@@ -11,9 +17,11 @@ import {
   IEdicion,
   ActionTipo,
   MSGTIME,
+  IFiltroBody,
 } from 'src/app/interface/interface.model';
 import { EdicionService } from 'src/app/services/edicion.service';
 import { FormEdicionComponent } from 'src/app/dialog/form-edicion/form-edicion.component';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-ediciones',
@@ -22,18 +30,18 @@ import { FormEdicionComponent } from 'src/app/dialog/form-edicion/form-edicion.c
 })
 export class EdicionesComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatSort) set matSort(sort: MatSort) {
+    this.dataSource.sort = sort;
+  }
   private dataSource: MatTableDataSource<IEdicion>;
   private edicionesSubject = new BehaviorSubject<Array<IEdicion>>([]);
   edicionesObs: BehaviorSubject<Array<IEdicion>>;
   private loading: boolean = false;
   private pageSizeOptions: number[] = [5, 10, 20];
-  private displayedColumns: Array<string> = [
-    'nombre',
-    'descripcion',
-    'desde',
-    'hasta',
-    'actions',
-  ];
+  displayTitleCol: Array<string> = ['titulo', 'action'];
+  displayedColumns: Array<string> = ['nombre', 'descripcion', 'desde', 'hasta'];
+  searchColumns: Array<string> = ['nombre', 'descripcion', 'desde', 'hasta'];
+  searchSelectedColumns: Array<string> = this.searchColumns;
 
   constructor(
     private edicionServ: EdicionService,
@@ -78,17 +86,32 @@ export class EdicionesComponent implements OnInit {
     this.edicionesSubject.next(result);
     this.changeDetectorRef.detectChanges();
     this.dataSource = new MatTableDataSource<IEdicion>(result);
-    this.edicionesObs = this.dataSource.connect();
     this.dataSource.paginator = this.paginator;
+    this.edicionesObs = this.dataSource.connect();
+    this.dataSource.filterPredicate = this.predicateFn;
   }
+
+  predicateFn = (edicion: IEdicion, filter: string) => {
+    for (const [key, value] of Object.entries(edicion)) {
+      if (this.searchSelectedColumns.includes(key)) {
+        if (
+          (typeof value === 'string' &&
+            value.toLowerCase().indexOf(filter) != -1) ||
+          (typeof value === 'number' && value.toString().indexOf(filter) != -1)
+        )
+          return true;
+      }
+    }
+    return false;
+  };
 
   onCreate() {
     let edicion: IEdicion = {
       id: null,
       nombre: '',
       descripcion: '',
-      desde: null,
-      hasta: null,
+      desde: new Date(),
+      hasta: new Date(),
       actividades: [],
       fotos: [],
     };
@@ -121,10 +144,10 @@ export class EdicionesComponent implements OnInit {
     });
   }
 
-  aplicarFiltro(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
+  onFilterSearch(fb: IFiltroBody) {
+    this.searchSelectedColumns = fb.campos;
     if (this.dataSource.data != null && this.dataSource.data.length > 0)
-      this.dataSource.filter = filterValue.trim().toLowerCase();
+      this.dataSource.filter = fb.filtro.trim().toLowerCase();
   }
 
   private mostrarMensaje(

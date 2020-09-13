@@ -45,6 +45,7 @@ export class FormUsuarioComponent {
       });
     });
     this.usuariosForm = new FormGroup({
+      id: new FormControl(''),
       nombreUsuario: new FormControl(''),
       clave: new FormControl(null),
       nombre: new FormControl(''),
@@ -58,6 +59,7 @@ export class FormUsuarioComponent {
     this.hide = true;
     this.usuario = body.data;
     this.action = body.action;
+    this.crearUsuarioForm.id.setValue(this.usuario.id);
     this.crearUsuarioForm.nombreUsuario.setValue(this.usuario.nombreUsuario);
     this.crearUsuarioForm.nombre.setValue(this.usuario.nombre);
     this.crearUsuarioForm.apellido.setValue(this.usuario.apellido);

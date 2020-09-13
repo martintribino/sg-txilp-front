@@ -14,6 +14,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatMenuModule } from '@angular/material/menu';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FiltroTablaModule } from 'src/app/shared/filtro-tabla/filtro-tabla.module';
 
 @NgModule({
   imports: [
@@ -30,6 +32,9 @@ import { MatMenuModule } from '@angular/material/menu';
     MatExpansionModule,
     MatProgressSpinnerModule,
     MatMenuModule,
+    FormsModule,
+    ReactiveFormsModule,
+    FiltroTablaModule,
   ],
   declarations: [UsuariosComponent],
   providers: [],

@@ -14,7 +14,6 @@ import {
   MatSnackBarVerticalPosition,
 } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
-import { UsuarioDetalleComponent } from 'src/app/dialog/usuario-detalle/usuario-detalle.component';
 import { FormDireccionComponent } from 'src/app/dialog/form-direccion/form-direccion.component';
 
 @Component({
@@ -53,18 +52,6 @@ export class PerfilComponent implements OnInit {
           this.loading = false;
         }
       );
-    }
-  }
-
-  onDetailUsuario() {
-    let usu = this.perfilSubject.getValue();
-    if (usu != null) {
-      const dialogRef = this.dialog.open(UsuarioDetalleComponent, {
-        maxWidth: '550px',
-        maxHeight: '90%',
-        height: 'auto',
-        data: usu,
-      });
     }
   }
 
@@ -109,7 +96,11 @@ export class PerfilComponent implements OnInit {
   onEdit() {
     let usuario = this.perfilSubject.getValue();
     if (usuario != null) {
-      const body = { action: ActionTipo.editar, data: usuario },
+      const body = {
+          action: ActionTipo.editar,
+          component: 'perfil',
+          data: usuario,
+        },
         dialogRef = this.dialog.open(FormUsuarioComponent, {
           maxWidth: '550px',
           maxHeight: '100%',
@@ -119,11 +110,9 @@ export class PerfilComponent implements OnInit {
       dialogRef.afterClosed().subscribe((result) => {
         let usu: IUsuario = result;
         if (usu != null) {
-          this.loading = true;
-          //no queremos cambiar el nombre de usuario
-          usu.nombreUsuario = usuario.nombreUsuario;
           //queremos actualizar la direccion aparte
-          usu.direccion = null;
+          usu.direccion = usuario.direccion;
+          usu.rol = usuario.rol;
           this.usuService.actualizarUsuario(usu).subscribe(
             () => {
               this.mostrarMensaje(

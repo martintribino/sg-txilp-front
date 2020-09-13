@@ -11,6 +11,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatSortModule } from '@angular/material/sort';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FiltroTablaModule } from 'src/app/shared/filtro-tabla/filtro-tabla.module';
 
 @NgModule({
   imports: [
@@ -18,12 +21,16 @@ import { MatMenuModule } from '@angular/material/menu';
     CommonModule,
     MatTableModule,
     MatPaginatorModule,
+    MatSortModule,
     MatIconModule,
     MatDialogModule,
     MatButtonModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
     MatMenuModule,
+    FormsModule,
+    ReactiveFormsModule,
+    FiltroTablaModule,
   ],
   declarations: [EdicionesComponent],
   providers: [],

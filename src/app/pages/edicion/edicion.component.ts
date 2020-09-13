@@ -5,6 +5,7 @@ import {
   ActionTipo,
   MSGTIME,
   RolTipo,
+  IDialogConfirmBody,
 } from 'src/app/interface/interface.model';
 import { BehaviorSubject } from 'rxjs';
 import { AuthenticationService } from 'src/app/services/auth.service';
@@ -20,6 +21,7 @@ import { isArray } from 'util';
 import { FormUploadImageComponent } from 'src/app/dialog/form-upload-image/form-upload-image.component';
 import { FormEdicionComponent } from 'src/app/dialog/form-edicion/form-edicion.component';
 import { EdicionesComponent } from '../ediciones/ediciones.component';
+import { ConfirmarComponent } from 'src/app/dialog/confirmar/confirmar.component';
 
 @Component({
   selector: 'app-edicion',
@@ -125,6 +127,19 @@ export class EdicionComponent implements OnInit {
         }
       });
     }
+  }
+
+  onConfirmDelete() {
+    const dataBody: IDialogConfirmBody = {
+        titulo: 'Confirmar Borrado',
+        subtitulo: 'Está seguro que desea borrar la edición?',
+      },
+      dialogRef = this.dialog.open(ConfirmarComponent, {
+        data: dataBody,
+      });
+    dialogRef.afterClosed().subscribe((confirmado: boolean) => {
+      if (confirmado) this.onDelete();
+    });
   }
 
   onDelete() {

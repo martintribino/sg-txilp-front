@@ -5,6 +5,7 @@ import { MapModule } from './map/map.module';
 import { CarruselImagenesModule } from './carrusel-imagenes/carrusel-imagenes.module';
 import { FileUploaderModule } from './file-uploader/file-uploader.module';
 import { SecureImgModule } from './secure-img/secure-img.module';
+import { FiltroTablaModule } from './filtro-tabla/filtro-tabla.module';
 
 @NgModule({
   imports: [
@@ -13,6 +14,7 @@ import { SecureImgModule } from './secure-img/secure-img.module';
     MapModule,
     CarruselImagenesModule,
     FileUploaderModule,
+    FiltroTablaModule,
     SecureImgModule,
   ],
   exports: [

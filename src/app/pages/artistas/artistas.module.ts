@@ -11,6 +11,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatMenuModule } from '@angular/material/menu';
+import { FiltroTablaModule } from 'src/app/shared/filtro-tabla/filtro-tabla.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -24,6 +26,9 @@ import { MatMenuModule } from '@angular/material/menu';
     MatProgressSpinnerModule,
     MatTooltipModule,
     MatMenuModule,
+    FormsModule,
+    ReactiveFormsModule,
+    FiltroTablaModule,
   ],
   declarations: [ArtistasComponent],
   providers: [],

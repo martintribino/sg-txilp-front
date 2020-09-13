@@ -1,17 +1,10 @@
 <div *ngIf="(artista | async) != null; then ifBlock; else elseBlock"></div>
 <ng-template #ifBlock>
   <mat-card class="default-card">
-    <div class="avatar-upload">
-      <img
-        mat-card-image
-        class="default-avatar"
-        [src]="imgPath"
-        alt="Foto de artista"
-      />
-    </div>
-    <mat-card-header>
-      <mat-card-title>{{ (artista | async)?.apodo }}</mat-card-title>
-    </mat-card-header>
+    <mat-card-title>{{ (artista | async)?.apodo }}</mat-card-title>
+    <app-carrusel-imagenes
+      [slides]="(artista | async)?.fotos"
+    ></app-carrusel-imagenes>
     <mat-card-content>
       <div class="card-row">
         <strong>Nombre</strong><span>{{ (artista | async)?.nombre }}</span>
@@ -21,9 +14,24 @@
         <strong>Apellido</strong><span>{{ (artista | async)?.apellido }}</span>
       </div>
       <mat-divider></mat-divider>
-      <app-carrusel-imagenes
-        [slides]="(artista | async)?.fotos"
-      ></app-carrusel-imagenes>
+      <div class="card-row">
+        <strong>Obras</strong>
+      </div>
+      <div class="card-row" *ngFor="let obra of (artista | async)?.obras">
+        <a [routerLink]="['/obras/', obra.id]" class="entidad"
+          ><span>{{ obra.nombre }}</span></a
+        >
+      </div>
+      <div
+        class="card-row"
+        *ngIf="
+          (artista | async)?.obras == null ||
+          (artista | async)?.obras.length == 0
+        "
+      >
+        <span>No pertenece a alguna obra por el momento.</span>
+      </div>
+      <mat-divider></mat-divider>
       <app-etiquetas-entidad
         [etiquetas]="(artista | async)?.etiquetas"
         [loading]="loading"
@@ -72,7 +80,7 @@
           [disabled]="loading"
           matTooltip="Eliminar Artista"
           matTooltipPosition="below"
-          (click)="onDelete()"
+          (click)="onConfirmDelete()"
           aria-label="Eliminar Artista"
         >
           <mat-icon>delete</mat-icon>

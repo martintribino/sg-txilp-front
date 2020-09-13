@@ -56,6 +56,7 @@ export interface IArtista {
   apodo: string;
   fotos: Array<string>;
   etiquetas: Array<IEtiqueta>;
+  obras?: Array<IObra>;
 }
 export interface IActividad {
   id: number;
@@ -96,7 +97,7 @@ export interface IEdicion {
   descripcion: string;
   desde: Date;
   hasta: Date;
-  fotos?: Array<string>;
+  fotos: Array<string>;
   actividades?: Array<IActividad>;
 }
 export interface IEspacio {
@@ -131,8 +132,20 @@ export interface ILoginBody {
   confirmar_clave?: string;
   nombre_usuario_viejo?: string;
 }
+export interface IDialogConfirmBody {
+  titulo: string;
+  subtitulo: string;
+}
 export interface IDialogBody<T> {
   action?: ActionTipo;
   path?: string;
+  ediciones?: Array<IEdicion>;
+  espacios?: Array<IEspacio>;
+  obras?: Array<IObra>;
+  component?: string;
   data: T;
+}
+export interface IFiltroBody {
+  filtro: string;
+  campos: Array<string>;
 }

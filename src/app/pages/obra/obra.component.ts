@@ -6,6 +6,7 @@ import {
   RolTipo,
   IDialogBody,
   IEtiqueta,
+  IDialogConfirmBody,
 } from 'src/app/interface/interface.model';
 import { BehaviorSubject } from 'rxjs';
 import { AuthenticationService } from 'src/app/services/auth.service';
@@ -18,6 +19,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormObraComponent } from 'src/app/dialog/form-obra/form-obra.component';
 import { FormUploadImageComponent } from 'src/app/dialog/form-upload-image/form-upload-image.component';
+import { ConfirmarComponent } from 'src/app/dialog/confirmar/confirmar.component';
 
 @Component({
   selector: 'app-obra',
@@ -116,6 +118,19 @@ export class ObraComponent implements OnInit {
         }
       });
     }
+  }
+
+  onConfirmDelete() {
+    const dataBody: IDialogConfirmBody = {
+        titulo: 'Confirmar Borrado',
+        subtitulo: 'Está seguro que desea borrar la obra?',
+      },
+      dialogRef = this.dialog.open(ConfirmarComponent, {
+        data: dataBody,
+      });
+    dialogRef.afterClosed().subscribe((confirmado: boolean) => {
+      if (confirmado) this.onDelete();
+    });
   }
 
   onDelete() {

@@ -1,12 +1,8 @@
-<div class="filtro-tabla">
-  <input
-    matInput
-    type="text"
-    (keyup)="aplicarFiltro($event)"
-    placeholder="Ingrese busqueda"
-    #input
-  />
-</div>
+<app-filtro-tabla
+  [searchFields]="searchColumns"
+  (filterSearch)="onFilterSearch($event)"
+>
+</app-filtro-tabla>
 <div *ngIf="(obs | async)?.length > 0; then ifBlock; else elseBlock"></div>
 <ng-template #ifBlock>
   <table
@@ -15,24 +11,11 @@
     [dataSource]="dataSource"
     multiTemplateDataRows
   >
-    <ng-container matColumnDef="nombreUsuario">
-      <mat-header-cell *matHeaderCellDef>Nombre de usuario</mat-header-cell>
-      <mat-cell *matCellDef="let usuario">{{ usuario.nombreUsuario }}</mat-cell>
+    <ng-container matColumnDef="titulo">
+      <mat-header-cell *matHeaderCellDef><h2>Usuarios</h2></mat-header-cell>
     </ng-container>
-    <ng-container matColumnDef="nombre">
-      <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
-      <mat-cell *matCellDef="let usuario">{{ usuario.nombre }}</mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="apellido">
-      <mat-header-cell *matHeaderCellDef>Apellido</mat-header-cell>
-      <mat-cell *matCellDef="let usuario">{{ usuario.apellido }}</mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="perfil">
-      <mat-header-cell *matHeaderCellDef>Perfil</mat-header-cell>
-      <mat-cell *matCellDef="let usuario">{{ usuario.rol.nombre }}</mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="actions">
-      <mat-header-cell *matHeaderCellDef>
+    <ng-container matColumnDef="action">
+      <mat-header-cell *matHeaderCellDef class="add-cell">
         <button
           mat-mini-fab
           color="primary"
@@ -43,89 +26,35 @@
           aria-label="Crear Usuario"
         >
           <mat-icon>person_add_alt_1</mat-icon>
-        </button>
-      </mat-header-cell>
-      <mat-cell *matCellDef="let usuario">
-        <button
-          mat-icon-button
-          class="row-common-button"
-          [disabled]="loadingDict[usuario.nombreUsuario]"
-          matTooltip="Detalle del Usuario"
-          matTooltipPosition="below"
-          (click)="onDetailUsuario(usuario)"
-          aria-label="Detalle del Usuario"
-        >
-          <mat-icon>account_box</mat-icon>
-        </button>
-        <button
-          mat-icon-button
-          (click)="$event.stopPropagation()"
-          [matMenuTriggerFor]="menu"
-          matTooltip="Acciones"
-          matTooltipPosition="above"
-          aria-label="Acciones Usuario"
-        >
-          <mat-icon>more_vert</mat-icon>
-        </button>
-        <mat-menu #menu="matMenu" (click)="$event.stopPropagation()">
-          <button
-            mat-icon-button
-            class="row-common-button"
-            [disabled]="loadingDict[usuario.nombreUsuario]"
-            matTooltip="Editar Dirección de Usuario"
-            matTooltipPosition="below"
-            (click)="onEditDireccion(usuario)"
-            aria-label="Editar Dirección de Usuario"
-          >
-            <mat-icon>place</mat-icon>
-          </button>
-          <button
-            mat-icon-button
-            class="row-common-button"
-            [disabled]="loadingDict[usuario.nombreUsuario]"
-            matTooltip="Editar Usuario"
-            matTooltipPosition="below"
-            (click)="onEdit(usuario)"
-            aria-label="Editar Usuario"
-          >
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button
-            mat-icon-button
-            class="row-delete-button"
-            [disabled]="loadingDict[usuario.nombreUsuario]"
-            matTooltip="Borrar Usuario"
-            matTooltipPosition="below"
-            (click)="onDelete(usuario)"
-            aria-label="Eliminar Usuario"
-          >
-            <mat-icon>delete</mat-icon>
-          </button>
-        </mat-menu>
-      </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="loading">
-      <mat-cell
-        class="loading-cell"
-        *matCellDef="let usuario"
-        [attr.colspan]="displayedColumns.length"
+        </button></mat-header-cell
       >
-        <mat-spinner diameter="50"></mat-spinner>
-      </mat-cell>
     </ng-container>
+    <ng-container matColumnDef="nombre">
+      <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
+      <mat-cell *matCellDef="let usuario"
+        >{{ usuario.nombre }} {{ usuario.apellido }}</mat-cell
+      >
+    </ng-container>
+    <ng-container matColumnDef="nombreUsuario">
+      <mat-header-cell *matHeaderCellDef>Usuario</mat-header-cell>
+      <mat-cell *matCellDef="let usuario">{{ usuario.nombreUsuario }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="rol">
+      <mat-header-cell *matHeaderCellDef>Rol</mat-header-cell>
+      <mat-cell *matCellDef="let usuario">{{ usuario.rol.nombre }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="email">
+      <mat-header-cell *matHeaderCellDef>Email</mat-header-cell>
+      <mat-cell *matCellDef="let usuario">{{ usuario.email }}</mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayTitleCol"></mat-header-row>
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row
       *matRowDef="let usuario; let row; columns: displayedColumns"
-      [@loading]="!loadingDict[usuario.nombreUsuario] ? 'show' : 'hide'"
+      class="click-row"
+      [routerLink]="['/usuarios/', usuario.id]"
     >
     </mat-row>
-    <ng-container>
-      <mat-row
-        *matRowDef="let usuario; let row; columns: loadColumns"
-        [@loading]="loadingDict[usuario.nombreUsuario] ? 'show' : 'hide'"
-      >
-      </mat-row>
-    </ng-container>
   </table>
   <mat-paginator [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
   </mat-paginator>

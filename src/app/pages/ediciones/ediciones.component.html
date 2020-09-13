@@ -1,12 +1,8 @@
-<div class="filtro-tabla">
-  <input
-    matInput
-    type="text"
-    (keyup)="aplicarFiltro($event)"
-    placeholder="Ingrese busqueda"
-    #input
-  />
-</div>
+<app-filtro-tabla
+  [searchFields]="searchColumns"
+  (filterSearch)="onFilterSearch($event)"
+>
+</app-filtro-tabla>
 <div
   *ngIf="(edicionesObs | async)?.length > 0; then ifBlock; else elseBlock"
 ></div>
@@ -16,25 +12,13 @@
     class="edicion-table mat-elevation-z8"
     [dataSource]="dataSource"
     multiTemplateDataRows
+    matSort
   >
-    <ng-container matColumnDef="nombre">
-      <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
-      <mat-cell *matCellDef="let edicion">{{ edicion.nombre }}</mat-cell>
+    <ng-container matColumnDef="titulo">
+      <mat-header-cell *matHeaderCellDef><h2>Ediciones</h2></mat-header-cell>
     </ng-container>
-    <ng-container matColumnDef="descripcion">
-      <mat-header-cell *matHeaderCellDef>Descripción</mat-header-cell>
-      <mat-cell *matCellDef="let edicion">{{ edicion.descripcion }}</mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="desde">
-      <mat-header-cell *matHeaderCellDef>Desde</mat-header-cell>
-      <mat-cell *matCellDef="let edicion">{{ edicion.desde }}</mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="hasta">
-      <mat-header-cell *matHeaderCellDef>Hasta</mat-header-cell>
-      <mat-cell *matCellDef="let edicion">{{ edicion.hasta }}</mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="actions">
-      <mat-header-cell *matHeaderCellDef>
+    <ng-container matColumnDef="action">
+      <mat-header-cell *matHeaderCellDef class="add-cell">
         <button
           mat-mini-fab
           color="primary"
@@ -45,19 +29,34 @@
           aria-label="Crear Edición"
         >
           <mat-icon>person_add_alt_1</mat-icon>
-        </button>
-      </mat-header-cell>
-      <mat-cell *matCellDef="let edicion"> </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="loading">
-      <mat-cell
-        class="loading-cell"
-        *matCellDef="let edicion"
-        [attr.colspan]="displayedColumns.length"
+        </button></mat-header-cell
       >
-        <mat-spinner diameter="50"></mat-spinner>
-      </mat-cell>
     </ng-container>
+    <ng-container matColumnDef="nombre">
+      <mat-header-cell *matHeaderCellDef mat-sort-header
+        >Nombre</mat-header-cell
+      >
+      <mat-cell *matCellDef="let edicion">{{ edicion.nombre }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="descripcion">
+      <mat-header-cell *matHeaderCellDef mat-sort-header
+        >Descripción</mat-header-cell
+      >
+      <mat-cell *matCellDef="let edicion">{{ edicion.descripcion }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="desde">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Desde</mat-header-cell>
+      <mat-cell *matCellDef="let edicion">{{
+        edicion.desde | date: "short"
+      }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="hasta">
+      <mat-header-cell *matHeaderCellDef>Hasta</mat-header-cell>
+      <mat-cell *matCellDef="let edicion">{{
+        edicion.hasta | date: "short"
+      }}</mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayTitleCol"></mat-header-row>
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row
       *matRowDef="let edicion; let row; columns: displayedColumns"

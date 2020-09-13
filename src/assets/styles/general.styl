@@ -19,6 +19,33 @@ h5
   width 100%
   justify-content center
 
+a
+  color white
+  &.entidad
+    background backBlack
+    border-radius 3px 0 0 3px
+    display inline-block
+    height 26px
+    line-height 26px
+    padding 0 20px 0 10px
+    position relative
+    margin 0 10px 10px 0
+    text-decoration none
+    -webkit-transition color 0.2s
+    &:hover
+      background backRed
+      &:after
+        border-left-color backRed
+    &:after
+      background backBlack2
+      border-bottom 13px solid transparent
+      border-left 10px solid backBlack
+      border-top 13px solid transparent
+      content ''
+      position absolute
+      right 0
+      top 0
+
 app-root
   width 100%
 
@@ -42,6 +69,12 @@ app-root
   width 75%
   @media screen and (max-width: sm)
     width 100%
+  .mat-header-cell
+    &.add-cell
+      display flex
+      justify-content center
+      max-width 75px
+      padding 0
   .mat-header-cell, .mat-cell
     display flex
     justify-content center
@@ -77,16 +110,34 @@ app-sidebar
   height 100%
   overflow auto
 
-app-usuarios, app-artistas, app-espacios, app-actividades, app-obras, app-ediciones, app-etiquetas, app-etiquetas-entidad
+app-usuarios, app-artistas, app-espacios, app-actividades, app-obras, app-ediciones, app-etiquetas, app-etiquetas-entidad, app-filtro-tabla
   display flex
   flex-direction column
   align-items center
   width 100%
 
-app-not-found, app-not-allowed, app-map, app-secure-img
+app-not-found, app-not-allowed, app-map
   display flex
   width 100%
   justify-content center
+
+app-secure-img
+  display flex
+  width 100%
+  height 100%
+  justify-content center
+
+app-carrusel-imagenes
+  margin-top 10px
+  .carrusel
+    .carousel
+      width 100%
+    .carousel > button[mat-icon-button]:last-of-type
+      right 5px
+      width auto
+    .carousel > button[mat-icon-button]:first-of-type
+      left 5px
+      width auto
 
 .nav-container
   display flex
@@ -121,6 +172,9 @@ button
       background-color borderRed
       border solid 1px borderRed
   &.submit-button
+    &:disabled
+      background-color backDisabled
+      border solid 1px backDisabled
     &:not(:disabled)
       background-color backRed
       border solid 1px borderRed
@@ -261,17 +315,14 @@ button
   padding 5px
   @media screen and (max-width: sm)
     width 100%
-  input
-    border  1px solid hoverRed
-    width 100%
-    padding 12px
-    color white
-    font-size 1.1em
-    background-color backBlack2
-    &:focus
-      border  1px solid hoverRed
+
+app-filtro-tabla
+  width 75%
+  margin 0 auto
 
 @media screen and (max-width: sm)
+  app-filtro-tabla
+    width 90%
   .desktop
     display none
   .mobile

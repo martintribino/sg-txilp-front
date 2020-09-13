@@ -6,6 +6,7 @@ import {
   MSGTIME,
   RolTipo,
   IEtiqueta,
+  IDialogConfirmBody,
 } from 'src/app/interface/interface.model';
 import { EspacioService } from 'src/app/services/espacio.service';
 import {
@@ -16,6 +17,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormEspacioComponent } from 'src/app/dialog/form-espacio/form-espacio.component';
 import { AuthenticationService } from 'src/app/services/auth.service';
+import { ConfirmarComponent } from 'src/app/dialog/confirmar/confirmar.component';
 
 @Component({
   selector: 'app-espacio',
@@ -94,6 +96,19 @@ export class EspacioComponent implements OnInit {
         }
       });
     }
+  }
+
+  onConfirmDelete() {
+    const dataBody: IDialogConfirmBody = {
+        titulo: 'Confirmar Borrado',
+        subtitulo: 'Está seguro que desea borrar el espacio?',
+      },
+      dialogRef = this.dialog.open(ConfirmarComponent, {
+        data: dataBody,
+      });
+    dialogRef.afterClosed().subscribe((confirmado: boolean) => {
+      if (confirmado) this.onDelete();
+    });
   }
 
   onDelete() {

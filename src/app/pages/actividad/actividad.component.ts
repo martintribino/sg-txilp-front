@@ -4,6 +4,10 @@ import {
   ActionTipo,
   MSGTIME,
   RolTipo,
+  IEspacio,
+  IObra,
+  IEdicion,
+  IDialogConfirmBody,
 } from 'src/app/interface/interface.model';
 import { BehaviorSubject } from 'rxjs';
 import { ActividadService } from 'src/app/services/actividad.service';
@@ -15,6 +19,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/auth.service';
 import { FormActividadComponent } from 'src/app/dialog/form-actividad/form-actividad.component';
+import { EdicionService } from 'src/app/services/edicion.service';
+import { EspacioService } from 'src/app/services/espacio.service';
+import { ObraService } from 'src/app/services/obra.service';
+import { ConfirmarComponent } from 'src/app/dialog/confirmar/confirmar.component';
 
 @Component({
   selector: 'app-actividad',
@@ -24,12 +32,18 @@ import { FormActividadComponent } from 'src/app/dialog/form-actividad/form-activ
 export class ActividadComponent implements OnInit {
   private actividadSubject = new BehaviorSubject<IActividad>(null);
   actividad = this.actividadSubject.asObservable();
+  private espaciosSubject = new BehaviorSubject<Array<IEspacio>>([]);
+  private obrasSubject = new BehaviorSubject<Array<IObra>>([]);
+  private edicionesSubject = new BehaviorSubject<Array<IEdicion>>([]);
   private loading: boolean = false;
   private id: number = null;
 
   constructor(
     private authService: AuthenticationService,
     private actividadServ: ActividadService,
+    private edicionServ: EdicionService,
+    private espacioServ: EspacioService,
+    private obraServ: ObraService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
     private router: Router,
@@ -38,6 +52,30 @@ export class ActividadComponent implements OnInit {
     this.route.params.subscribe((params) => {
       this.id = parseInt(params['id']);
     });
+    this.edicionServ.getEdiciones().subscribe(
+      (data) => {
+        this.edicionesSubject.next(data);
+      },
+      (error) => {
+        this.edicionesSubject.next([]);
+      }
+    );
+    this.espacioServ.getEspacios().subscribe(
+      (data) => {
+        this.espaciosSubject.next(data);
+      },
+      (error) => {
+        this.espaciosSubject.next([]);
+      }
+    );
+    this.obraServ.getObras().subscribe(
+      (data) => {
+        this.obrasSubject.next(data);
+      },
+      (error) => {
+        this.obrasSubject.next([]);
+      }
+    );
   }
 
   ngOnInit(): void {
@@ -64,6 +102,9 @@ export class ActividadComponent implements OnInit {
     if (activ != null) {
       const body = {
           action: ActionTipo.editar,
+          ediciones: this.edicionesSubject.value,
+          espacios: this.espaciosSubject.value,
+          obras: this.obrasSubject.value,
           data: activ,
         },
         dialogRef = this.dialog.open(FormActividadComponent, {
@@ -93,6 +134,19 @@ export class ActividadComponent implements OnInit {
         }
       });
     }
+  }
+
+  onConfirmDelete() {
+    const dataBody: IDialogConfirmBody = {
+        titulo: 'Confirmar Borrado',
+        subtitulo: 'Está seguro que desea borrar la actividad?',
+      },
+      dialogRef = this.dialog.open(ConfirmarComponent, {
+        data: dataBody,
+      });
+    dialogRef.afterClosed().subscribe((confirmado: boolean) => {
+      if (confirmado) this.onDelete();
+    });
   }
 
   onDelete() {

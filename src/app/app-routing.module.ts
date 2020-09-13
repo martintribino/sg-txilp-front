@@ -26,7 +26,7 @@ const routes: Routes = [
       ),
     canLoad: [RolGuard],
     data: {
-      allowedRoles: [RolTipo.Administrador, RolTipo.Participante],
+      allowedRoles: [RolTipo.Administrador],
     },
   },
   {

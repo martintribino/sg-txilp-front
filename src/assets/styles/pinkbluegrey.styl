@@ -281,20 +281,20 @@
   letter-spacing normal
   &.mat-focused
     .mat-form-field-label
-      color backRed
+      color fontWhite
       &.mat-accent
         color backBlueGray
       &.mat-warn
         color #f44336
     .mat-form-field-ripple
-      background-color backRed
+      background-color fontWhite
       &.mat-accent
         background-color backBlueGray
       &.mat-warn
         background-color #f44336
     &.mat-primary
       .mat-select-arrow
-        color backRed
+        color fontWhite
     &.mat-accent
       .mat-select-arrow
         color backBlueGray
@@ -333,6 +333,10 @@
 .mat-form-field-infix
   padding .5em 0
   border-top .84375em solid transparent
+
+.filtro-tabla
+  .mat-form-field-infix
+    border-top .4em solid transparent
 
 .mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label
   transform translateY(-1.34375em) scale(0.75)
@@ -472,6 +476,11 @@
       color rgba(255,255,255,.5)
     .mat-form-field-outline
       color rgba(255,255,255,.15)
+
+.filtro-tabla
+  .mat-form-field-appearance-outline
+    .mat-form-field-infix
+      padding 0.5em 0 0.5em 0
 
 .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,.mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label
   transform translateY(-1.59375em) scale(0.75)
@@ -821,7 +830,7 @@ textarea
   .mat-option
     &.mat-selected
       &:not(.mat-option-disabled)
-        color backRed
+        color fontWhite
   .mat-slider-thumb-label-text
     color #fff
   .mat-slider-focus-ring
@@ -1090,7 +1099,7 @@ textarea
   color backRed
 
 .mat-button.mat-accent,.mat-icon-button.mat-accent,.mat-stroked-button.mat-accent
-  color backBlueGray
+  color backRed
 
 .mat-button.mat-warn,.mat-icon-button.mat-warn,.mat-stroked-button.mat-warn
   color #f44336
@@ -1102,7 +1111,7 @@ textarea
   background-color backRed
 
 .mat-button.mat-accent .mat-button-focus-overlay,.mat-icon-button.mat-accent .mat-button-focus-overlay,.mat-stroked-button.mat-accent .mat-button-focus-overlay
-  background-color backBlueGray
+  background-color backRed
 
 .mat-button.mat-warn .mat-button-focus-overlay,.mat-icon-button.mat-warn .mat-button-focus-overlay,.mat-stroked-button.mat-warn .mat-button-focus-overlay
   background-color #f44336

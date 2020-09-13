@@ -18,6 +18,7 @@ import {
   RolTipo,
   IDialogBody,
   IEtiqueta,
+  IDialogConfirmBody,
 } from 'src/app/interface/interface.model';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormArtistaComponent } from 'src/app/dialog/form-artista/form-artista.component';
@@ -25,6 +26,7 @@ import { AuthenticationService } from 'src/app/services/auth.service';
 import { isArray } from 'util';
 import { FormUploadImageComponent } from 'src/app/dialog/form-upload-image/form-upload-image.component';
 import { ArchivosService } from 'src/app/services/archivos.service';
+import { ConfirmarComponent } from 'src/app/dialog/confirmar/confirmar.component';
 
 @Component({
   selector: 'app-artista',
@@ -135,6 +137,19 @@ export class ArtistaComponent implements AfterViewInit, AfterViewChecked {
         }
       });
     }
+  }
+
+  onConfirmDelete() {
+    const dataBody: IDialogConfirmBody = {
+        titulo: 'Confirmar Borrado',
+        subtitulo: 'Está seguro que desea borrar al artista?',
+      },
+      dialogRef = this.dialog.open(ConfirmarComponent, {
+        data: dataBody,
+      });
+    dialogRef.afterClosed().subscribe((confirmado: boolean) => {
+      if (confirmado) this.onDelete();
+    });
   }
 
   onDelete() {

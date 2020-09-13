@@ -29,19 +29,12 @@
         <strong>Telefono</strong><span>{{ (perfil | async)?.telefono }}</span>
       </div>
       <mat-divider></mat-divider>
+      <div class="card-row">
+        <strong>Rol</strong><span>{{ (usuario | async)?.rol.nombre }}</span>
+      </div>
+      <mat-divider></mat-divider>
     </mat-card-content>
     <mat-card-actions>
-      <button
-        mat-icon-button
-        class="row-profile-button"
-        [disabled]="loading"
-        matTooltip="Detalle"
-        matTooltipPosition="below"
-        (click)="onDetailUsuario()"
-        aria-label="Detalle del Usuario"
-      >
-        <mat-icon>account_box</mat-icon>
-      </button>
       <button
         mat-icon-button
         class="row-profile-button"
