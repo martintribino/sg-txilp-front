@@ -16,7 +16,19 @@ export enum EspacioEstadoTipo {
   Abierto = 'ABIERTO',
   Cerrado = 'CERRADO',
 }
+export enum AvatarTipo {
+  avatar1 = 'avatar1',
+  avatar2 = 'avatar2',
+  avatar3 = 'avatar3',
+  avatar4 = 'avatar4',
+  avatar5 = 'avatar5',
+  avatar6 = 'avatar6',
+}
 //interface
+export interface IAvatarBody {
+  nombreUsuario: string;
+  imagen: string;
+}
 export interface IDictionary<T> {
   [key: string]: T;
 }
@@ -33,12 +45,13 @@ export interface IJWT {
   id: number;
   nombreUsuario: string;
   rol: RolTipo;
-  token?: string;
-  imagen?: string;
+  token: string;
+  avatar: string;
 }
 export interface IUsuario {
   id: number;
   nombreUsuario: string;
+  clave: string;
   nombre: string;
   apellido: string;
   dni: number;
@@ -46,8 +59,12 @@ export interface IUsuario {
   rol: IRol;
   direccion: IDireccion;
   telefono: number;
-  token?: string;
-  imagen?: string;
+  avatar: string;
+}
+export interface IArtistaObra {
+  id: number;
+  artista: IArtista;
+  obra: IObra;
 }
 export interface IArtista {
   id: number;
@@ -57,6 +74,7 @@ export interface IArtista {
   fotos: Array<string>;
   etiquetas: Array<IEtiqueta>;
   obras?: Array<IObra>;
+  usuariosFav: Array<IUsuario>;
 }
 export interface IActividad {
   id: number;
@@ -81,6 +99,7 @@ export interface IEtiqueta {
   artistas?: Array<IArtista>;
   espacios?: Array<IEspacio>;
   obras?: Array<IObra>;
+  usuariosFav: Array<IUsuario>;
 }
 export interface IObra {
   id: number;
@@ -90,6 +109,7 @@ export interface IObra {
   fotos: Array<string>;
   artistas: Array<IArtista>;
   etiquetas: Array<IEtiqueta>;
+  usuariosFav: Array<IUsuario>;
 }
 export interface IEdicion {
   id: number;

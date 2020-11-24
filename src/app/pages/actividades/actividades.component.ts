@@ -21,6 +21,7 @@ import { FormActividadComponent } from 'src/app/dialog/form-actividad/form-activ
 import { EdicionService } from 'src/app/services/edicion.service';
 import { EspacioService } from 'src/app/services/espacio.service';
 import { ObraService } from 'src/app/services/obra.service';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-actividades',
@@ -29,6 +30,12 @@ import { ObraService } from 'src/app/services/obra.service';
 })
 export class ActividadesComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  //@ViewChild(MatSort, { static: false }) sort: MatSort;
+  @ViewChild(MatSort, {static: false})set matSort(sort: MatSort) {
+    if(this.dataSource) {
+      this.dataSource.sort = sort;
+    }
+  };
   private dataSource: MatTableDataSource<IActividad>;
   private actividadesSubject = new BehaviorSubject<Array<IActividad>>([]);
   obs: BehaviorSubject<Array<IActividad>>;
@@ -41,13 +48,13 @@ export class ActividadesComponent implements OnInit {
   displayedColumns: Array<string> = [
     'nombre',
     'edicion',
+    'espacio',
     'obra',
     'desde',
     'hasta',
   ];
   searchColumns: Array<string> = [
     'nombre',
-    'descripcion',
     'edicion',
     'espacio',
     'obra',

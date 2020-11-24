@@ -35,6 +35,7 @@
       <mat-divider></mat-divider>
       <app-etiquetas-entidad
         [etiquetas]="(obra | async)?.etiquetas"
+        [selectable]="selectable"
         [loading]="loading"
         (agregar)="agregarEtiqueta($event)"
         (eliminar)="eliminarEtiqueta($event)"
@@ -50,6 +51,20 @@
         aria-label="Volver"
       >
         <mat-icon>arrow_back_ios</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        class="row-profile-button"
+        [class]="favorito"
+        matTooltip="Me interesa"
+        matTooltipPosition="below"
+        aria-label="Obra Favorita"
+        [disabled]="loading"
+        (click)="onToggleFavorito()"
+        [matBadge]="(obra | async)?.usuariosFav.length"
+        matBadgeSize="small"
+      >
+        <mat-icon>favorite</mat-icon>
       </button>
       <div *ngIf="isAdmin(); then ifAdminBlock"></div>
       <ng-template #ifAdminBlock>

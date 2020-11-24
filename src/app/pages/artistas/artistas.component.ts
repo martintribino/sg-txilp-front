@@ -6,6 +6,7 @@ import {
   MSGTIME,
   IFiltroBody,
   IObra,
+  IEtiqueta,
 } from 'src/app/interface/interface.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { BehaviorSubject } from 'rxjs';
@@ -16,6 +17,7 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { ArtistaService } from 'src/app/services/artista.service';
 import { FormArtistaComponent } from 'src/app/dialog/form-artista/form-artista.component';
+import { ObraService } from 'src/app/services/obra.service';
 
 @Component({
   selector: 'app-artistas',
@@ -28,11 +30,14 @@ export class ArtistasComponent implements OnInit {
   }
   private dataSource: MatTableDataSource<IArtista>;
   private artistasSubject = new BehaviorSubject<Array<IArtista>>([]);
+  private obrasSubject = new BehaviorSubject<Array<IObra>>([]);
+  obras = this.obrasSubject.asObservable();
   obs: BehaviorSubject<Array<IArtista>>;
+  private id: number = null;
   loading: boolean = false;
   pageSizeOptions: number[] = [5, 10, 20];
   displayTitleCol: Array<string> = ['titulo', 'action'];
-  displayedColumns: Array<string> = ['nombre', 'apellido', 'apodo', 'obras'];
+  displayedColumns: Array<string> = ['nombre', 'apellido', 'apodo', 'obras', 'etiquetas'];
   searchColumns: Array<string> = [
     'nombre',
     'apellido',
@@ -45,6 +50,7 @@ export class ArtistasComponent implements OnInit {
   constructor(
     private artistaServ: ArtistaService,
     private changeDetectorRef: ChangeDetectorRef,
+    private obraServ: ObraService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog
   ) {
@@ -61,6 +67,9 @@ export class ArtistasComponent implements OnInit {
     );
   }
 
+  ngAfterViewInit(): void {
+  }
+
   ngOnDestroy() {
     if (this.dataSource) {
       this.dataSource.disconnect();
@@ -68,6 +77,14 @@ export class ArtistasComponent implements OnInit {
   }
 
   onSuccess(result: Array<IArtista>) {
+    result.map((a:IArtista) => {
+      this.obraServ.getObrasPorArtista(a.id).subscribe(
+        (result) => {
+          a.obras = result;
+        },
+        (error) =>  {}
+      );
+    });
     this.changeDataSource(result);
     this.loading = false;
   }
@@ -103,7 +120,7 @@ export class ArtistasComponent implements OnInit {
     var strSrch: string = '';
     if (this.searchSelectedColumns.includes('obras')) {
       artista.obras.map((obra) => {
-        strSrch += `${obra.nombre}${obra.descripcion}`;
+        strSrch += `${obra.nombre}`;
       });
       if (strSrch.toLowerCase().indexOf(filter) != -1) return true;
     }
@@ -121,9 +138,22 @@ export class ArtistasComponent implements OnInit {
     let str: string = '',
       esPrimero: boolean = true;
     if (obras == null || obras.length == 0) return 'No hay obras.';
-    obras.forEach((obra) => {
+    obras.forEach((obra: IObra) => {
       let sep: string = esPrimero ? '' : s;
+      esPrimero = false;
       str += `${sep}${obra.nombre}`;
+    });
+    return str;
+  }
+
+  getEtiquetas(etiquetas: Array<IEtiqueta>, i: number, s: string = ', ') {
+    let str: string = '',
+      esPrimero: boolean = true;
+    if (etiquetas == null || etiquetas.length == 0) return 'No hay etiquetas.';
+    etiquetas.forEach((e: IEtiqueta) => {
+      let sep: string = esPrimero ? '' : s;
+      esPrimero = false;
+      str += `${sep}${e.nombre}`;
     });
     return str;
   }
@@ -136,6 +166,7 @@ export class ArtistasComponent implements OnInit {
       apodo: '',
       fotos: [],
       etiquetas: [],
+      usuariosFav: [],
     };
     const body = { action: ActionTipo.crear, data: artista },
       dialogRef = this.dialog.open(FormArtistaComponent, {

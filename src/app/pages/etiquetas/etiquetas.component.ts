@@ -21,7 +21,8 @@ export class EtiquetasComponent implements OnInit {
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   private etiquetasSubject = new BehaviorSubject<Array<IEtiqueta>>([]);
   etiquetas = this.etiquetasSubject.asObservable();
-  private loading: boolean = false;
+  loading: boolean = false;
+  selectable: boolean = true;
 
   constructor(
     private etiquetasServ: EtiquetaService,
@@ -50,6 +51,7 @@ export class EtiquetasComponent implements OnInit {
       let tag: IEtiqueta = {
         id: null,
         nombre: nombreSel,
+        usuariosFav: [],
       };
       this.etiquetasServ.crearEtiqueta(tag).subscribe(
         (data) => {
@@ -62,6 +64,34 @@ export class EtiquetasComponent implements OnInit {
         },
         (error) => {
           this.mostrarMensaje(`No se ha podido agregar la etiqueta`, 'error');
+          this.loading = false;
+        },
+        () => {
+          this.loading = false;
+        }
+      );
+    }
+  }
+
+  seleccionarEtiqueta(etiqueta: IEtiqueta): void {
+    if (etiqueta != null) {
+      this.loading = true;
+      this.etiquetasServ.toggleEtiquetaFav(etiqueta).subscribe(
+        () => {
+          this.mostrarMensaje(
+            `Se ha actualizado su interés por la etiqueta correctamente`,
+            'success'
+          );
+          this.ngOnInit();
+        },
+        () => {
+          this.mostrarMensaje(
+            `No se ha actualizado su interés por la etiqueta correctamente`,
+            'error'
+          );
+          this.loading = false;
+        },
+        () => {
           this.loading = false;
         }
       );

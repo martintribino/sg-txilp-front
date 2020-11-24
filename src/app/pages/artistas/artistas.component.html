@@ -47,6 +47,12 @@
         getObras(artista.obras, 2)
       }}</mat-cell>
     </ng-container>
+    <ng-container matColumnDef="etiquetas">
+      <mat-header-cell *matHeaderCellDef>Etiquetas</mat-header-cell>
+      <mat-cell *matCellDef="let artista">{{
+        getEtiquetas(artista.etiquetas, 2)
+      }}</mat-cell>
+    </ng-container>
     <mat-header-row *matHeaderRowDef="displayTitleCol"></mat-header-row>
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row

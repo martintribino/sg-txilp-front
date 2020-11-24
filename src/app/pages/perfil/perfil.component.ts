@@ -6,6 +6,7 @@ import {
   ActionTipo,
   MSGTIME,
   IDireccion,
+  AvatarTipo,
 } from 'src/app/interface/interface.model';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { FormUsuarioComponent } from 'src/app/dialog/form-usuario/form-usuario.component';
@@ -15,6 +16,7 @@ import {
 } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { FormDireccionComponent } from 'src/app/dialog/form-direccion/form-direccion.component';
+import { ChooseAvatarComponent } from 'src/app/dialog/choose-avatar/choose-avatar.component';
 
 @Component({
   selector: 'app-perfil',
@@ -25,7 +27,7 @@ export class PerfilComponent implements OnInit {
   private perfilSubject = new BehaviorSubject<IUsuario>(null);
   perfil = this.perfilSubject.asObservable();
   loading: boolean = false;
-  imgPath: string = `ng/assets/images/user.png`;
+  avatars: Array<string> = Object.keys(AvatarTipo);
 
   constructor(
     private authService: AuthenticationService,
@@ -55,6 +57,45 @@ export class PerfilComponent implements OnInit {
     }
   }
 
+  onChooseAvatar() {
+    let usu = this.perfilSubject.getValue();
+    if (usu != null) {
+      const dialogRef = this.dialog.open(ChooseAvatarComponent, {
+        maxWidth: '600px',
+        maxHeight: '100%',
+        height: 'auto',
+        data: usu,
+      });
+      dialogRef.afterClosed().subscribe((result) => {
+        let usu: IUsuario = result;
+        if (usu != null) {
+          this.loading = true;
+          //no queremos editar la clave
+          usu.clave = null;
+          this.usuService.actualizarUsuario(usu).subscribe(
+            () => {
+              this.mostrarMensaje(
+                `Se ha actualizado el avatar del usuario ${usu.nombreUsuario}`,
+                'success'
+              );
+              this.ngOnInit();
+            },
+            () => {
+              this.mostrarMensaje(
+                `No se ha podido actualizar el avatar del usuario ${usu.nombreUsuario}`,
+                'error'
+              );
+              this.loading = false;
+            },
+            () => {
+              this.loading = false;
+            }
+          );
+        }
+      });
+    }
+  }
+
   onEditDireccion() {
     let usu = this.perfilSubject.getValue();
     if (usu != null) {
@@ -69,6 +110,8 @@ export class PerfilComponent implements OnInit {
         if (direccion != null) {
           this.loading = true;
           usu.direccion = direccion;
+          //no queremos editar la clave
+          usu.clave = null;
           this.usuService.actualizarUsuario(usu).subscribe(
             () => {
               this.mostrarMensaje(

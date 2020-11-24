@@ -12,6 +12,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { EtiquetasEntidadModule } from 'src/app/shared/etiquetas-entidad/etiquetas-entidad.module';
+import { MatBadgeModule } from '@angular/material/badge';
 
 @NgModule({
   imports: [
@@ -27,6 +28,7 @@ import { EtiquetasEntidadModule } from 'src/app/shared/etiquetas-entidad/etiquet
     MatTooltipModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
+    MatBadgeModule,
   ],
   declarations: [ObraComponent],
   providers: [],

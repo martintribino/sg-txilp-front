@@ -12,6 +12,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ArtistaRoutingModule } from './artista-routing.module';
 import { CarruselImagenesModule } from 'src/app/shared/carrusel-imagenes/carrusel-imagenes.module';
 import { EtiquetasEntidadModule } from 'src/app/shared/etiquetas-entidad/etiquetas-entidad.module';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatSliderModule } from '@angular/material/slider';
 
 @NgModule({
   imports: [
@@ -27,6 +29,8 @@ import { EtiquetasEntidadModule } from 'src/app/shared/etiquetas-entidad/etiquet
     MatTooltipModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
+    MatBadgeModule,
+    MatSliderModule,
   ],
   declarations: [ArtistaComponent],
   providers: [],

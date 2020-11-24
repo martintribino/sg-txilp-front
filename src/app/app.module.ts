@@ -29,8 +29,12 @@ import { FormActividadComponent } from './dialog/form-actividad/form-actividad.c
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { FormEspacioComponent } from './dialog/form-espacio/form-espacio.component';
 import { FormObraComponent } from './dialog/form-obra/form-obra.component';
+import { MatRadioModule } from '@angular/material/radio';
 import { FormEdicionComponent } from './dialog/form-edicion/form-edicion.component';
 import { ConfirmarComponent } from './dialog/confirmar/confirmar.component';
+import { ChooseAvatarComponent } from './dialog/choose-avatar/choose-avatar.component';
+import { AvatarsModule } from 'src/assets/svg/avatars.module';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 @NgModule({
   declarations: [
@@ -46,6 +50,7 @@ import { ConfirmarComponent } from './dialog/confirmar/confirmar.component';
     FormObraComponent,
     FormEdicionComponent,
     ConfirmarComponent,
+    ChooseAvatarComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
@@ -61,9 +66,11 @@ import { ConfirmarComponent } from './dialog/confirmar/confirmar.component';
     MatSelectModule,
     MatSnackBarModule,
     MatIconModule,
+    MatRadioModule,
     ReactiveFormsModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    AvatarsModule,
   ],
   entryComponents: [
     FormDireccionComponent,
@@ -74,6 +81,7 @@ import { ConfirmarComponent } from './dialog/confirmar/confirmar.component';
     FormActividadComponent,
     FormEdicionComponent,
     ConfirmarComponent,
+    ChooseAvatarComponent,
     FormUploadImageComponent,
   ],
   providers: [
@@ -82,5 +90,6 @@ import { ConfirmarComponent } from './dialog/confirmar/confirmar.component';
     { provide: MatPaginatorIntl, useValue: getEsPaginatorIntl() },
   ],
   bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule {}

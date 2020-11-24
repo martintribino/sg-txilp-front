@@ -13,9 +13,15 @@
 <mat-chip-list #tagList aria-label="Etiquetas" class="etiquetas-list" multiple>
   <mat-chip
     *ngFor="let etiqueta of etiquetas"
-    [selectable]="false"
+    [matBadge]="etiqueta.usuariosFav.length"
+    matBadgeSize="small"
+    [matBadgeHidden]="!selectable"
+    [class]="etiquetaclase"
+    [selectable]="selectable"
     [removable]="removable"
+    [selected]="isSelected(etiqueta)"
     (removed)="remove(etiqueta)"
+    (click)="select(etiqueta)"
   >
     <label>{{ etiqueta.nombre }}</label>
     <mat-icon matChipRemove *ngIf="removable && !loading">cancelar</mat-icon>

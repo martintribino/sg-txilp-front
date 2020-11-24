@@ -116,6 +116,11 @@ app-usuarios, app-artistas, app-espacios, app-actividades, app-obras, app-edicio
   align-items center
   width 100%
 
+app-avatar1, app-avatar2, app-avatar3, app-avatar4, app-avatar5, app-avatar6, app-noavatar
+  display flex
+  justify-content center
+  position relative
+
 app-not-found, app-not-allowed, app-map
   display flex
   width 100%
@@ -138,6 +143,87 @@ app-carrusel-imagenes
     .carousel > button[mat-icon-button]:first-of-type
       left 5px
       width auto
+
+.edita-comp
+  display flex
+  width 100%
+  flex-direction column
+  align-items center
+  button
+    margin 2% auto
+
+.mat-radio-group
+  display flex
+  flex-direction row
+  justify-content center
+  flex-wrap wrap
+  width 100%
+  .mat-radio-button
+    display flex
+    flex-direction row
+    justify-content center
+    align-items center
+    margin-bottom 1em
+    width 33%
+    @media screen and (max-width: sm)
+      width 50%
+    .mat-radio-container
+      display none
+    .mat-radio-label-content.mat-radio-label-before
+      padding-right 0
+    .mat-radio-label
+      width auto
+
+.mat-card-header
+  display flex
+  width 100%
+  justify-content center
+  .mat-card-header-text
+    width 100%
+    .mat-card-title
+      margin-top 10px
+    .mat-card-title, .mat-card-subtitle
+      display flex
+      width 100%
+      justify-content center
+
+.circle-back
+  fill backBlack2
+  stroke backRed
+  stroke-width 2px
+.avatar-upload
+  display flex
+  width 100%
+  justify-content center
+  .photo-icon-svg-back
+    position absolute
+    top 90px
+    @media screen and (max-width: sm)
+      top 80px
+    right calc(50% - 60px)
+    @media screen and (max-width: sm)
+      right calc(50% - 50px)
+    cursor pointer
+  &.usuarios
+    .svg-back
+      cursor default
+      .circle-back
+        fill backRed
+
+.svg-back
+  cursor pointer
+  width 115px
+  height 115px
+  @media screen and (max-width: sm)
+    width 100px
+    height 100px
+  &:hover
+    .circle-back
+      fill backRed
+
+.mat-radio-checked
+  .circle-back
+    fill backRed
 
 .nav-container
   display flex
@@ -288,11 +374,16 @@ button
       padding 4px
       &:hover
         color backRed
+      &.favorito
+        color backRed
+      &.mat-badge-small.mat-badge-overlap.mat-badge-after
+        .mat-badge-content
+          right -2px
+          top 2px
   .avatar-upload
     margin-top 0px
-    position relative
-    max-width 200px
-    margin 20px auto 10px auto
+    display flex
+    width 100%
     .default-avatar
       width 175px
       box-shadow 0px 2px 4px 0px rgba(0, 0, 0, 0.12)

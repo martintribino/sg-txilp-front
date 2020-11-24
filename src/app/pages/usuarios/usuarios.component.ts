@@ -118,6 +118,7 @@ export class UsuariosComponent implements OnInit {
     let usuario: IUsuario = {
       id: null,
       nombreUsuario: '',
+      clave: null,
       nombre: '',
       apellido: '',
       telefono: 0,
@@ -125,6 +126,7 @@ export class UsuariosComponent implements OnInit {
       email: '',
       rol: null,
       direccion: null,
+      avatar: '',
     };
     const body = { action: ActionTipo.crear, data: usuario },
       dialogRef = this.dialog.open(FormUsuarioComponent, {
@@ -167,6 +169,8 @@ export class UsuariosComponent implements OnInit {
         let direccion: IDireccion = result;
         if (direccion != null) {
           usu.direccion = direccion;
+          //no queremos editar la clave
+          usu.clave = null;
           this.usuService.actualizarUsuario(usu).subscribe(
             () => {
               this.mostrarMensaje(
@@ -219,7 +223,7 @@ export class UsuariosComponent implements OnInit {
       if (usu != null) {
         //no queremos cambiar el nombre de usuario
         usu.id = usuario.id;
-        usu.nombreUsuario = usuario.nombreUsuario;
+        //usu.nombreUsuario = usuario.nombreUsuario;
         //queremos actualizar la direccion aparte
         usu.direccion = null;
         this.usuService.actualizarUsuario(usu).subscribe(

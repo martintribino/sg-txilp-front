@@ -13,9 +13,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { AvatarsModule } from 'src/assets/svg/avatars.module';
 
 @NgModule({
   imports: [
+    AvatarsModule,
     PerfilRoutingModule,
     CommonModule,
     MatCardModule,

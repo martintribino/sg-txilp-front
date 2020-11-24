@@ -31,6 +31,8 @@ export class ObraComponent implements OnInit {
   obra = this.obraSubject.asObservable();
   private loading: boolean = false;
   private id: number = null;
+  favorito: string = '';
+  selectable: boolean = false;
 
   constructor(
     private authService: AuthenticationService,
@@ -55,6 +57,12 @@ export class ObraComponent implements OnInit {
   }
 
   onSuccess(result: IObra) {
+    var usuario = this.authService.getUsuario(),
+      strClass = '';
+    result.usuariosFav.map((usuFav) => {
+      if (usuFav.nombreUsuario == usuario.nombreUsuario) strClass = 'favorito';
+    });
+    this.favorito = strClass;
     this.obraSubject.next(result);
     this.loading = false;
   }
@@ -81,6 +89,32 @@ export class ObraComponent implements OnInit {
       dialogRef.afterClosed().subscribe((result) => {
         this.ngOnInit();
       });
+    }
+  }
+
+  onToggleFavorito() {
+    this.loading = true;
+    let obra = this.obraSubject.value;
+    if (obra != null) {
+      this.obraServ.toggleObraFav(obra).subscribe(
+        () => {
+          this.mostrarMensaje(
+            `Se ha actualizado su interés correctamente`,
+            'success'
+          );
+          this.ngOnInit();
+        },
+        () => {
+          this.mostrarMensaje(
+            `No se ha actualizado su interés correctamente`,
+            'error'
+          );
+          this.loading = false;
+        },
+        () => {
+          this.loading = false;
+        }
+      );
     }
   }
 
@@ -166,6 +200,7 @@ export class ObraComponent implements OnInit {
       let eti: IEtiqueta = {
           id: null,
           nombre: nombreSel,
+          usuariosFav: [],
         },
         etiAux = [...obra.etiquetas];
       this.loading = true;

@@ -1,13 +1,36 @@
 <div *ngIf="(perfil | async) != null; then ifBlock; else elseBlock"></div>
 <ng-template #ifBlock>
   <mat-card class="default-card">
-    <div class="avatar-upload">
-      <img
-        mat-card-image
-        class="default-avatar"
-        [src]="imgPath"
-        alt="Foto de perfil"
-      />
+    <div class="avatar-upload perfil">
+      <app-noavatar
+        (click)="onChooseAvatar()"
+        *ngIf="!avatars.includes((perfil | async).avatar)"
+      ></app-noavatar>
+      <app-avatar1
+        (click)="onChooseAvatar()"
+        *ngIf="(perfil | async).avatar == 'avatar1'"
+      ></app-avatar1>
+      <app-avatar2
+        (click)="onChooseAvatar()"
+        *ngIf="(perfil | async).avatar == 'avatar2'"
+      ></app-avatar2>
+      <app-avatar3
+        (click)="onChooseAvatar()"
+        *ngIf="(perfil | async).avatar == 'avatar3'"
+      ></app-avatar3>
+      <app-avatar4
+        (click)="onChooseAvatar()"
+        *ngIf="(perfil | async).avatar == 'avatar4'"
+      ></app-avatar4>
+      <app-avatar5
+        (click)="onChooseAvatar()"
+        *ngIf="(perfil | async).avatar == 'avatar5'"
+      ></app-avatar5>
+      <app-avatar6
+        (click)="onChooseAvatar()"
+        *ngIf="(perfil | async).avatar == 'avatar6'"
+      ></app-avatar6>
+      <mat-icon class="photo-icon-svg-back">add_a_photo</mat-icon>
     </div>
     <mat-card-header>
       <mat-card-title>{{ (perfil | async)?.nombreUsuario }}</mat-card-title>
@@ -30,7 +53,18 @@
       </div>
       <mat-divider></mat-divider>
       <div class="card-row">
-        <strong>Rol</strong><span>{{ (usuario | async)?.rol.nombre }}</span>
+        <strong>Rol</strong><span>{{ (perfil | async)?.rol.nombre }}</span>
+      </div>
+      <mat-divider></mat-divider>
+      <div class="card-row" *ngIf="(perfil | async)?.direccion != null">
+        <strong>Dirección</strong
+        ><span
+          >{{ (perfil | async)?.direccion.calle }} ,
+          {{ (perfil | async)?.direccion.ciudad }} ,
+          {{ (perfil | async)?.direccion.estado }} ({{
+            (perfil | async)?.direccion.codigoPostal
+          }})</span
+        >
       </div>
       <mat-divider></mat-divider>
     </mat-card-content>

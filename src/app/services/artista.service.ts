@@ -48,6 +48,14 @@ export class ArtistaService {
     return this.http.put<Array<IArtista>>(url, artista, options);
   }
 
+  toggleArtistaFav(artista: IArtista): Observable<Array<IArtista>> {
+    let url = `${this.endpoints.artistas}${artista.id}/meinteresa`,
+      options = {
+        headers: this.headers,
+      };
+    return this.http.put<Array<IArtista>>(url, artista, options);
+  }
+
   agregarEtiqueta(
     nombre: string,
     artista: IArtista

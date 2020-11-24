@@ -1,0 +1,62 @@
+<h4 mat-dialog-title>Elija su avatar</h4>
+<mat-dialog-content class="edita-comp">
+  <mat-radio-group
+    (change)="onChange($event)"
+    aria-labelledby="avatars"
+    class="avatar-rg"
+    name="avatar"
+  >
+    <mat-radio-button
+      [checked]="usuario.avatar == 'avatar1'"
+      labelPosition="before"
+      value="avatar1"
+    >
+      <app-avatar1></app-avatar1>
+    </mat-radio-button>
+    <mat-radio-button
+      [checked]="usuario.avatar == 'avatar2'"
+      labelPosition="before"
+      value="avatar2"
+    >
+      <app-avatar2></app-avatar2>
+    </mat-radio-button>
+    <mat-radio-button
+      [checked]="usuario.avatar == 'avatar3'"
+      labelPosition="before"
+      value="avatar3"
+    >
+      <app-avatar3></app-avatar3>
+    </mat-radio-button>
+    <mat-radio-button
+      [checked]="usuario.avatar == 'avatar4'"
+      labelPosition="before"
+      value="avatar4"
+    >
+      <app-avatar4></app-avatar4>
+    </mat-radio-button>
+    <mat-radio-button
+      [checked]="usuario.avatar == 'avatar5'"
+      labelPosition="before"
+      value="avatar5"
+    >
+      <app-avatar5></app-avatar5>
+    </mat-radio-button>
+    <mat-radio-button
+      [checked]="usuario.avatar == 'avatar6'"
+      labelPosition="before"
+      value="avatar6"
+    >
+      <app-avatar6></app-avatar6>
+    </mat-radio-button>
+  </mat-radio-group>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button
+    type="submit"
+    class="submit-button"
+    [disabled]="isDisabled()"
+    (click)="onSubmit()"
+  >
+    Submit
+  </button></mat-dialog-actions
+>

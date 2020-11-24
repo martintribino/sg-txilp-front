@@ -130,6 +130,7 @@ export class ObrasComponent implements OnInit {
       fotos: [],
       artistas: [],
       etiquetas: [],
+      usuariosFav: [],
     };
     const body = { action: ActionTipo.crear, data: obra },
       dialogRef = this.dialog.open(FormObraComponent, {

@@ -1,13 +1,16 @@
 <div *ngIf="(usuario | async) != null; then ifBlock; else elseBlock"></div>
 <ng-template #ifBlock>
   <mat-card class="default-card">
-    <div class="avatar-upload">
-      <img
-        mat-card-image
-        class="default-avatar"
-        [src]="imgPath"
-        alt="Foto del usuario"
-      />
+    <div class="avatar-upload usuarios">
+      <app-noavatar
+        *ngIf="!avatars.includes((usuario | async).avatar)"
+      ></app-noavatar>
+      <app-avatar1 *ngIf="(usuario | async).avatar == 'avatar1'"></app-avatar1>
+      <app-avatar2 *ngIf="(usuario | async).avatar == 'avatar2'"></app-avatar2>
+      <app-avatar3 *ngIf="(usuario | async).avatar == 'avatar3'"></app-avatar3>
+      <app-avatar4 *ngIf="(usuario | async).avatar == 'avatar4'"></app-avatar4>
+      <app-avatar5 *ngIf="(usuario | async).avatar == 'avatar5'"></app-avatar5>
+      <app-avatar6 *ngIf="(usuario | async).avatar == 'avatar6'"></app-avatar6>
     </div>
     <mat-card-header>
       <mat-card-title>{{ (usuario | async)?.nombreUsuario }}</mat-card-title>
@@ -31,6 +34,17 @@
       <mat-divider></mat-divider>
       <div class="card-row">
         <strong>Rol</strong><span>{{ (usuario | async)?.rol.nombre }}</span>
+      </div>
+      <mat-divider></mat-divider>
+      <div class="card-row" *ngIf="(usuario | async)?.direccion != null">
+        <strong>Dirección</strong
+        ><span
+          >{{ (usuario | async)?.direccion.calle }} ,
+          {{ (usuario | async)?.direccion.ciudad }} ,
+          {{ (usuario | async)?.direccion.estado }} ({{
+            (usuario | async)?.direccion.codigoPostal
+          }})</span
+        >
       </div>
       <mat-divider></mat-divider>
     </mat-card-content>

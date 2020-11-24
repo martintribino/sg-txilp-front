@@ -144,6 +144,7 @@ export class EspacioComponent implements OnInit {
       let eti: IEtiqueta = {
           id: null,
           nombre: nombreSel,
+          usuariosFav: [],
         },
         etiAux = [...espacio.etiquetas];
       this.loading = true;

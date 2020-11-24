@@ -23,6 +23,14 @@ export class ObraService {
     return this.http.get<Array<IObra>>(url, options);
   }
 
+  getObrasPorArtista(id: number): Observable<Array<IObra>> {
+    let url = `${this.endpoints.obras}artista/${id}`,
+      options = {
+        headers: this.headers,
+      };
+    return this.http.get<Array<IObra>>(url, options);
+  }
+
   getObra(id: number): Observable<IObra> {
     let url = `${this.endpoints.obras}${id}`,
       options = {
@@ -41,6 +49,14 @@ export class ObraService {
 
   actualizarObra(obra: IObra): Observable<Array<IObra>> {
     let url = this.endpoints.obras,
+      options = {
+        headers: this.headers,
+      };
+    return this.http.put<Array<IObra>>(url, obra, options);
+  }
+
+  toggleObraFav(obra: IObra): Observable<Array<IObra>> {
+    let url = `${this.endpoints.obras}${obra.id}/meinteresa`,
       options = {
         headers: this.headers,
       };

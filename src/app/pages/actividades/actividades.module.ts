@@ -13,6 +13,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FiltroTablaModule } from 'src/app/shared/filtro-tabla/filtro-tabla.module';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   imports: [
@@ -20,6 +21,7 @@ import { FiltroTablaModule } from 'src/app/shared/filtro-tabla/filtro-tabla.modu
     CommonModule,
     MatTableModule,
     MatPaginatorModule,
+    MatSortModule,
     MatIconModule,
     MatDialogModule,
     MatButtonModule,

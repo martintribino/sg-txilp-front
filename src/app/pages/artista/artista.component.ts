@@ -19,6 +19,7 @@ import {
   IDialogBody,
   IEtiqueta,
   IDialogConfirmBody,
+  IObra,
 } from 'src/app/interface/interface.model';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormArtistaComponent } from 'src/app/dialog/form-artista/form-artista.component';
@@ -27,6 +28,7 @@ import { isArray } from 'util';
 import { FormUploadImageComponent } from 'src/app/dialog/form-upload-image/form-upload-image.component';
 import { ArchivosService } from 'src/app/services/archivos.service';
 import { ConfirmarComponent } from 'src/app/dialog/confirmar/confirmar.component';
+import { ObraService } from 'src/app/services/obra.service';
 
 @Component({
   selector: 'app-artista',
@@ -36,13 +38,18 @@ import { ConfirmarComponent } from 'src/app/dialog/confirmar/confirmar.component
 export class ArtistaComponent implements AfterViewInit, AfterViewChecked {
   private artistaSubject = new BehaviorSubject<IArtista>(null);
   artista = this.artistaSubject.asObservable();
+  private obrasSubject = new BehaviorSubject<Array<IObra>>([]);
+  obras = this.obrasSubject.asObservable();
   private loading: boolean = false;
   private id: number = null;
+  favorito: string = '';
+  selectable: boolean = false;
   imgPath: string = `ng/assets/images/user.png`;
 
   constructor(
     private authService: AuthenticationService,
     private artistaServ: ArtistaService,
+    private obraServ: ObraService,
     private archivoServ: ArchivosService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
@@ -54,6 +61,7 @@ export class ArtistaComponent implements AfterViewInit, AfterViewChecked {
       this.id = parseInt(params['id']);
     });
   }
+
   ngAfterViewChecked(): void {
     this.changeDetector.detectChanges();
   }
@@ -65,9 +73,23 @@ export class ArtistaComponent implements AfterViewInit, AfterViewChecked {
       (error) => this.onError(error),
       () => (this.loading = false)
     );
+    this.obraServ.getObrasPorArtista(this.id).subscribe(
+      (result) => {
+        this.obrasSubject.next(result);
+      },
+      (error) =>  {
+        this.obrasSubject.next([]);
+      }
+    );
   }
 
   onSuccess(result: IArtista) {
+    var usuario = this.authService.getUsuario(),
+      strClass = '';
+    result.usuariosFav.map((usuFav) => {
+      if (usuFav.nombreUsuario == usuario.nombreUsuario) strClass = 'favorito';
+    });
+    this.favorito = strClass;
     this.artistaSubject.next(result);
     this.loading = false;
   }
@@ -79,7 +101,7 @@ export class ArtistaComponent implements AfterViewInit, AfterViewChecked {
 
   getFotos() {
     let art: IArtista = this.artistaSubject.value;
-    if (art == null || !isArray(art.fotos)) return [];
+    if (art == null || !Array.isArray(art.fotos)) return [];
     else return art.fotos;
   }
 
@@ -100,6 +122,28 @@ export class ArtistaComponent implements AfterViewInit, AfterViewChecked {
       dialogRef.afterClosed().subscribe((result) => {
         this.ngAfterViewInit();
       });
+    }
+  }
+
+  onToggleFavorito() {
+    let art = this.artistaSubject.value;
+    if (art != null) {
+      this.artistaServ.toggleArtistaFav(art).subscribe(
+        () => {
+          this.mostrarMensaje(
+            `Se ha actualizado su interés correctamente`,
+            'success'
+          );
+          this.ngAfterViewInit();
+        },
+        () => {
+          this.mostrarMensaje(
+            `No se ha actualizado su interés correctamente`,
+            'error'
+          );
+          this.loading = false;
+        }
+      );
     }
   }
 
@@ -184,6 +228,7 @@ export class ArtistaComponent implements AfterViewInit, AfterViewChecked {
       let eti: IEtiqueta = {
           id: null,
           nombre: nombreSel,
+          usuariosFav: [],
         },
         etiAux = [...art.etiquetas];
       this.loading = true;

@@ -12,9 +12,11 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { UsuarioComponent } from './usuario.component';
 import { UsuarioRoutingModule } from './usuario-routing.module';
+import { AvatarsModule } from 'src/assets/svg/avatars.module';
 
 @NgModule({
   imports: [
+    AvatarsModule,
     UsuarioRoutingModule,
     CommonModule,
     MatCardModule,

@@ -59,7 +59,7 @@ const routes: Routes = [
       ),
     canLoad: [RolGuard],
     data: {
-      allowedRoles: [RolTipo.Administrador, RolTipo.Operador],
+      allowedRoles: [RolTipo.Administrador, RolTipo.Participante],
     },
   },
   {

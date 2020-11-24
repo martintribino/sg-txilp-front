@@ -47,6 +47,14 @@ export class EtiquetaService {
     return this.http.put<Array<IEtiqueta>>(url, etiqueta, options);
   }
 
+  toggleEtiquetaFav(etiqueta: IEtiqueta): Observable<Array<IEtiqueta>> {
+    let url = `${this.endpoints.etiquetas}${etiqueta.id}/meinteresa`,
+      options = {
+        headers: this.headers,
+      };
+    return this.http.put<Array<IEtiqueta>>(url, etiqueta, options);
+  }
+
   eliminarEtiqueta(etiqueta: IEtiqueta): Observable<IEtiqueta> {
     let url = `${this.endpoints.etiquetas}${etiqueta.nombre}`,
       options = {

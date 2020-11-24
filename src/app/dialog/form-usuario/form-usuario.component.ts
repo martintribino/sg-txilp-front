@@ -9,6 +9,7 @@ import {
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { regexEmail, regexPhone } from 'src/app/helpers/constants';
+import { AuthenticationService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-form-usuario',
@@ -32,18 +33,15 @@ export class FormUsuarioComponent {
   private action: ActionTipo;
   roles: Array<IRol> = [];
   hide: boolean = true;
+  requerido: boolean = true;
   private selectedRol: RolTipo | null = null;
 
   constructor(
     public dialogRef: MatDialogRef<FormUsuarioComponent>,
+    private authService: AuthenticationService,
     @Inject(MAT_DIALOG_DATA) public body: IDialogBody<IUsuario>
   ) {
-    Object.keys(RolTipo).map((rol) => {
-      this.roles.push({
-        nombre: rol,
-        tipo: RolTipo[rol],
-      });
-    });
+    let usuario = this.authService.getUsuario();
     this.usuariosForm = new FormGroup({
       id: new FormControl(''),
       nombreUsuario: new FormControl(''),
@@ -59,6 +57,7 @@ export class FormUsuarioComponent {
     this.hide = true;
     this.usuario = body.data;
     this.action = body.action;
+    this.requerido = this.action == ActionTipo.crear;
     this.crearUsuarioForm.id.setValue(this.usuario.id);
     this.crearUsuarioForm.nombreUsuario.setValue(this.usuario.nombreUsuario);
     this.crearUsuarioForm.nombre.setValue(this.usuario.nombre);
@@ -71,6 +70,20 @@ export class FormUsuarioComponent {
     if (this.usuario.rol && this.usuario.rol.tipo) {
       if (this.action == ActionTipo.editar)
         this.selectedRol = this.usuario.rol.tipo;
+    }
+    if(usuario != null && usuario.rol == RolTipo.Administrador && usuario.id != this.usuario.id)
+      Object.keys(RolTipo).map((rol) => {
+        if (RolTipo[rol] != RolTipo.Administrador)
+          this.roles.push({
+            nombre: rol,
+            tipo: RolTipo[rol],
+          });
+      });
+    else {
+      this.roles.push({
+        nombre: this.usuario.rol.nombre,
+        tipo: this.usuario.rol.tipo,
+      });
     }
   }
 
@@ -94,5 +107,9 @@ export class FormUsuarioComponent {
 
   compare(a1, a2) {
     return a1 != null && a2 != null && a1.nombre == a2.nombre ? a1 : null;
+  }
+
+  isAdmin() {
+    return this.usuario != null && this.usuario.rol.tipo == RolTipo.Administrador;
   }
 }

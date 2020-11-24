@@ -8,9 +8,14 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { IEtiqueta } from 'src/app/interface/interface.model';
+import { IEtiqueta, MSGTIME } from 'src/app/interface/interface.model';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { isPlatformBrowser } from '@angular/common';
+import { EtiquetaService } from 'src/app/services/etiqueta.service';
+import {
+  MatSnackBar,
+  MatSnackBarVerticalPosition,
+} from '@angular/material/snack-bar';
+import { AuthenticationService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-etiquetas-entidad',
@@ -20,15 +25,22 @@ import { isPlatformBrowser } from '@angular/common';
 export class EtiquetasEntidadComponent implements OnInit, OnChanges {
   @Input() etiquetas: Array<IEtiqueta> = [];
   @Input() loading: boolean = false;
+  @Input() selectable: boolean = false;
   @Output() agregar = new EventEmitter<string>();
+  @Output() seleccionar = new EventEmitter<IEtiqueta>();
   @Output() eliminar = new EventEmitter<IEtiqueta>();
-  private removable = true;
-  addOnBlur = true;
+  removable: boolean = true;
+  addOnBlur: boolean = true;
+  etiquetaclase: string = '';
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
-  constructor() {}
+  constructor(private authService: AuthenticationService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.selectable) {
+      this.etiquetaclase = 'selectable-chip';
+    }
+  }
 
   ngOnChanges(changes: SimpleChanges) {}
 
@@ -44,7 +56,19 @@ export class EtiquetasEntidadComponent implements OnInit, OnChanges {
     }
   }
 
+  select(etiqueta: IEtiqueta): void {
+    this.seleccionar.emit(etiqueta);
+  }
+
   remove(etiqueta: IEtiqueta): void {
     this.eliminar.emit(etiqueta);
+  }
+
+  isSelected(etiqueta: IEtiqueta): Boolean {
+    let usuario = this.authService.getUsuario();
+    return (
+      usuario != null &&
+      etiqueta.usuariosFav.some((usu) => usu.id === usuario.id)
+    );
   }
 }

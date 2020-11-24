@@ -14,6 +14,7 @@ import {
   ActionTipo,
   RolTipo,
   IDialogConfirmBody,
+  AvatarTipo,
 } from 'src/app/interface/interface.model';
 import { UsuariosService } from 'src/app/services/usuarios.service';
 import {
@@ -25,6 +26,7 @@ import { FormDireccionComponent } from 'src/app/dialog/form-direccion/form-direc
 import { FormUsuarioComponent } from 'src/app/dialog/form-usuario/form-usuario.component';
 import { AuthenticationService } from 'src/app/services/auth.service';
 import { ConfirmarComponent } from 'src/app/dialog/confirmar/confirmar.component';
+import { ChooseAvatarComponent } from 'src/app/dialog/choose-avatar/choose-avatar.component';
 
 @Component({
   selector: 'app-usuario',
@@ -36,7 +38,7 @@ export class UsuarioComponent implements AfterViewInit, AfterViewChecked {
   usuario = this.usuarioSubject.asObservable();
   private loading: boolean = false;
   private id: number = null;
-  imgPath: string = `ng/assets/images/user.png`;
+  avatars: Array<string> = Object.keys(AvatarTipo);
 
   constructor(
     private router: Router,
@@ -89,6 +91,8 @@ export class UsuarioComponent implements AfterViewInit, AfterViewChecked {
         if (direccion != null) {
           this.loading = true;
           usu.direccion = direccion;
+          //no queremos editar la clave
+          usu.clave = null;
           this.usuarioServ.actualizarUsuario(usu).subscribe(
             () => {
               this.mostrarMensaje(

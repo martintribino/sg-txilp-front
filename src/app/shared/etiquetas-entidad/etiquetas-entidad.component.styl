@@ -5,3 +5,12 @@
   padding 1em 2em
   .mat-chip
     background-color backRed
+    &.selectable-chip
+      background-color backGray
+      cursor pointer
+      label
+        cursor pointer
+      &.mat-chip-selected
+        background-color backRed
+      &:hover
+        background-color backRed

@@ -30,7 +30,7 @@ export class NavbarComponent implements OnInit {
     if (result == null) {
       this.urlMap.set('iniciar-sesion', 'Iniciar Sesión');
     } else {
-      this.urlMap.set('perfil', 'Perfil');
+      this.urlMap.set('perfil', result.nombreUsuario);
       this.urlMap.set('cerrar-sesion', 'Cerrar Sesión');
     }
   }

@@ -3,6 +3,8 @@
 <app-etiquetas-entidad
   [etiquetas]="etiquetas | async"
   [loading]="loading"
+  [selectable]="selectable"
   (agregar)="agregarEtiqueta($event)"
+  (seleccionar)="seleccionarEtiqueta($event)"
   (eliminar)="eliminarEtiqueta($event)"
 ></app-etiquetas-entidad>
