@@ -83,7 +83,9 @@ export interface IActividad {
   desde: Date;
   hasta: Date;
   entradasVendidas: number;
+  obraId?: number;
   obra?: IObra;
+  espacioId?: number;
   espacio?: IEspacio;
   edicion?: IEdicion;
 }

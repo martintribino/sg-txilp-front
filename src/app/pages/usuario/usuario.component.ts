@@ -133,6 +133,7 @@ export class UsuarioComponent implements AfterViewInit, AfterViewChecked {
           this.loading = true;
           //queremos actualizar la direccion aparte
           usu.direccion = usuario.direccion;
+          usu.avatar = usuario.avatar;
           this.usuarioServ.actualizarUsuario(usu).subscribe(
             () => {
               this.mostrarMensaje(

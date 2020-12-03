@@ -116,8 +116,19 @@ export class ActividadesComponent implements OnInit {
   }
 
   onSuccess(result: Array<IActividad>) {
-    this.actividadesSubject.next(result);
-    this.changeDataSource(result);
+    let actividades = [];
+    if (result!=null)
+      result.map((ac:IActividad) => {
+        if(ac.obraId!=null) {
+          ac.obra = this.obrasSubject.value.find((o:IObra) => o.id == ac.obraId);
+        }
+        if(ac.espacioId!=null) {
+          ac.espacio = this.espaciosSubject.value.find((e:IEspacio) => e.id == ac.espacioId);
+        }
+        actividades.push(ac);
+      });
+    this.actividadesSubject.next(actividades);
+    this.changeDataSource(actividades);
     this.loading = false;
   }
 

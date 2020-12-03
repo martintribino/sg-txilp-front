@@ -88,6 +88,14 @@ export class ActividadComponent implements OnInit {
   }
 
   onSuccess(result: IActividad) {
+    if (result != null) {
+      if(result.obraId!=null) {
+        result.obra = this.obrasSubject.value.find((o:IObra) => o.id == result.obraId);
+      }
+      if(result.espacioId!=null) {
+        result.espacio = this.espaciosSubject.value.find((e:IEspacio) => e.id == result.espacioId);
+      }
+    }
     this.actividadSubject.next(result);
     this.loading = false;
   }

@@ -9,9 +9,13 @@
         formControlName="calle"
         autocomplete="off"
         maxlength="100"
+        required
       />
       <mat-error *ngIf="crearDireccionForm.calle?.errors?.maxlength">
         El campo debe tener como máximo 100 caracteres
+      </mat-error>
+      <mat-error *ngIf="crearDireccionForm.calle?.errors?.required">
+        Campo requerido
       </mat-error>
     </mat-form-field>
     <mat-form-field>

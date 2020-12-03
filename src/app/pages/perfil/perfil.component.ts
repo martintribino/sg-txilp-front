@@ -153,9 +153,10 @@ export class PerfilComponent implements OnInit {
       dialogRef.afterClosed().subscribe((result) => {
         let usu: IUsuario = result;
         if (usu != null) {
-          //queremos actualizar la direccion aparte
+          //queremos actualizar los siguentes campos aparte
           usu.direccion = usuario.direccion;
           usu.rol = usuario.rol;
+          usu.avatar = usuario.avatar;
           this.usuService.actualizarUsuario(usu).subscribe(
             () => {
               this.mostrarMensaje(
